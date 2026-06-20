@@ -48,11 +48,14 @@ across sessions, and to onboard newcomers. Self-contained, not dependent on glob
 - [x] New session → MEMORY.md + HANDOFF.md injected (hook output verified)
 - [x] After editing files → Stop hook nudges exactly once (fire-once + guard verified)
 - [x] /save-memory produces the right files and updates the index (ran end-to-end)
-- [ ] Fresh `git clone` → a reader understands the system from the README (pending commit)
+- [x] Live verify: a real new session auto-injected MEMORY.md + HANDOFF.md via the SessionStart hook
+- [ ] Fresh `git clone` → a reader understands the system from the README (optional onboarding check)
 
 ## Status
 - [x] Design + structure
 - [x] Hooks + skill
 - [x] Hook-level verify (SessionStart inject, Stop fire-once + guard, valid JSON)
 - [x] All artifacts converted to English
-- [ ] Live verify: real new session + decide whether to commit `.claude/` to git (user decision)
+- [x] Committed `.claude/` to git (commit 3fc3fd5)
+- [x] Live verify: real new session confirmed the hook injects
+- **COMPLETE** — system is functional end-to-end and version-controlled
