@@ -20,7 +20,7 @@ classDiagram
         +bool waterproof
         +string color
         +string surface
-        +string[] roomTypes
+        +string roomTypes
         +string status
     }
     class Collection {
@@ -31,8 +31,8 @@ classDiagram
     class Article {
         +string title
         +string slug
-        +richtext body
-        +string[] tags
+        +string body
+        +string tags
         +datetime publishedAt
         +string status
     }
@@ -45,11 +45,11 @@ classDiagram
         +string name
         +string phone
         +string email
-        +LeadSource source
+        +string source
         +number area
         +number estimatedCost
         +string message
-        +LeadStatus status
+        +string status
         +datetime createdAt
     }
     class Settings {
@@ -62,33 +62,11 @@ classDiagram
     }
     class User {
         +string email
-        +UserRole role
+        +string role
     }
     class Media {
         +string url
         +string alt
-    }
-
-    class LeadSource {
-        <<enumeration>>
-        calculator
-        survey
-        quote
-        zalo
-    }
-    class LeadStatus {
-        <<enumeration>>
-        new
-        contacted
-        quoted
-        won
-        lost
-    }
-    class UserRole {
-        <<enumeration>>
-        admin
-        editor
-        sale
     }
 
     Collection "1" o-- "0..*" Product : groups
@@ -99,17 +77,15 @@ classDiagram
     Project "1" --> "0..*" Media : images
     Article "1" --> "0..1" Media : cover
     Collection "1" --> "0..1" Media : cover
-
-    Lead ..> LeadSource : uses
-    Lead ..> LeadStatus : uses
-    User ..> UserRole : uses
 ```
+
+> Các trường kiểu enum (`source`, `status`, `role`) để kiểu `string` cho sơ đồ gọn; **giá trị hợp lệ** liệt kê ở §2.1.
 
 ---
 
 ## 2. Thực thể (Entities)
 
-Hệ thống Phase 1 có **8 thực thể** + **3 enum**:
+Hệ thống Phase 1 có **8 thực thể** (3 nhóm giá trị enum mô tả ở §2.1):
 
 | # | Thực thể | Vai trò | Sinh ra từ use case |
 |---|---|---|---|
@@ -122,7 +98,15 @@ Hệ thống Phase 1 có **8 thực thể** + **3 enum**:
 | 7 | **User** | Tài khoản nội bộ (Admin/Editor/Sale) | UC-17, UC-30 |
 | 8 | **Media** | Ảnh dùng chung (upload) | gắn vào SP/dự án/bài viết |
 
-**Enum:** `LeadSource`, `LeadStatus`, `UserRole`.
+### 2.1 Giá trị enum (lưu kiểu `string`, ràng buộc ở tầng ứng dụng)
+
+| Trường | Thực thể | Giá trị hợp lệ |
+|---|---|---|
+| `source` | Lead | `calculator` · `survey` · `quote` · `zalo` |
+| `status` | Lead | `new` · `contacted` · `quoted` · `won` · `lost` |
+| `role` | User | `admin` · `editor` · `sale` |
+
+> Để gọn & tương thích mọi viewer, sơ đồ không vẽ class `<<enumeration>>`; các giá trị trên được kiểm soát bằng Zod/Payload select ở code.
 
 ---
 
