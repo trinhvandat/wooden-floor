@@ -1,33 +1,30 @@
 # HANDOFF — master — 2026-06-20
 
 ## Current goal
-Set up the Claude Code harness for the FUKIONE project — **Tier 1 done**.
+Define the git-flow workflow for agent-driven development — **done, codified, awaiting commit**.
 
 ## Done (settled, do not redo)
-- Project memory system (`.claude/memory/` + hooks + `/save-memory`) — complete & shipped (commit 3fc3fd5)
-- Ran `/shipwithai-starter:init` → **Tier 1 harness**:
-  - `CLAUDE.md` (stack, conventions, gotchas, pnpm commands, scope boundaries)
-  - `docs/architecture.md` (SSOT distilled from the design doc)
-  - `.claude/starter-context.json` (interview answers for future harness skills)
-  - `.claude/settings.json` — added Node/pnpm `permissions` block, **merged** so memory hooks survived (valid JSON, both verified)
+- Project memory system + Tier 1 harness (earlier this day) — shipped (commits 3fc3fd5, 8cb6a10).
+- **Git-flow researched & decided:** trunk-based (`master` always deployable + short-lived `feat/*`,`fix/*`,`chore/*` → PR → squash-merge → delete branch); parallel agents use git worktrees; review is a separate pass; NOT classic GitFlow.
+- Codified into memory: decision `0004-git-flow-trunk-based`, conventions `git-flow-agent` + `where-to-codify-rules`; MEMORY.md index updated.
+- **CLAUDE.md §Conventions:** added a Branching line (rule + pointer) so the flow reaches subagents too.
 
 ## In progress / Next steps
-- Commit the harness files (this session's changes) — in progress alongside save-memory.
-- Optional future: `/shipwithai-starter:review` to add Tier 2 (format/lint hooks, `.mcp.json`) and Tier 3 (agents, ADRs, CODEMAPS) **once Next.js/Payload code is scaffolded** (greenfield now → nothing for those to act on yet).
-- Then: scaffold the app (M1 — Next.js + Payload + Postgres + Vercel) per `docs/architecture.md` §7.
+- **Commit** this session's changes (CLAUDE.md + .claude/memory/ additions) — not yet committed.
+- Optional: add a PreToolUse hook to hard-block commits on `master` (machine-enforcement). User has NOT decided yet — was offered, no answer.
+- Then: scaffold the app (M1 — Next.js + Payload + Postgres + Vercel) per `docs/architecture.md` §7, applying the new git-flow (branch `feat/scaffold-nextjs-payload` → PR → squash).
 
 ## Settled decisions + rationale
-- Tier 1 chosen because project is greenfield/docs-only — see [[0003-adopt-shipwithai-tier1-harness]]
-- Permissions merged (not overwritten) into settings.json to keep memory hooks
-- Adding permission allow-rules needs explicit user approval — see [[settings-permission-grant-needs-approval]]
-- Stack of record: Next.js 14+ + Payload 3 (embedded) + Postgres + Tailwind/shadcn + Zod + Resend + Vercel; pnpm; TS strict; 80% coverage
-- English for all artifacts; Vietnamese only for user-Claude chat
+- Trunk-based, not GitFlow — solo + greenfield + Vercel CD makes `develop`/`release/*` pure overhead — see [[0004-git-flow-trunk-based]].
+- Per-branch Vercel preview + Lighthouse gate is why PRs are kept even though solo.
+- Rules that must always apply (incl. for subagents) belong in CLAUDE.md, detail in memory — the memory hook does NOT reach subagents — see [[where-to-codify-rules]].
+- Earlier-settled: Tier 1 harness [[0003-adopt-shipwithai-tier1-harness]]; stack = Next.js 14+ + Payload 3 + Postgres + Tailwind/shadcn + Zod + Resend + Vercel; pnpm; TS strict; 80% coverage; English-only artifacts.
 
 ## Context to Load (paths only, do NOT paste contents)
 - CLAUDE.md
+- .claude/memory/conventions/git-flow-agent.md
+- .claude/memory/decisions/0004-git-flow-trunk-based.md
 - docs/architecture.md
-- .claude/starter-context.json
-- docs/superpowers/specs/2026-06-20-fukione-wooden-floor-ecommerce-design.md
 
 ## Blocked / Needs user input
-- None.
+- Decide whether to add the PreToolUse hard-block hook (optional) and whether to commit now.

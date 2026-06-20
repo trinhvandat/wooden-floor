@@ -47,6 +47,7 @@ pnpm test:e2e           # Playwright golden flows
 
 - **Language:** All repo artifacts (code, docs, `.claude/**`, commits) in **English**. Vietnamese is only for user↔Claude chat.
 - **Commits:** Conventional Commits, English (`feat:`, `fix:`, `chore:`…). Use the `/git-commit` skill.
+- **Branching (git-flow):** Trunk-based — `master` is always deployable; **never commit risky work directly to it, branch first** (`feat/*`, `fix/*`, `chore/*`) → PR → squash-merge → delete branch. Parallel agents each use their own git worktree. Review is a separate pass (code-reviewer agent), never self-approve in the authoring context. Full pipeline: `.claude/memory/conventions/git-flow-agent.md` (rationale: `decisions/0004-git-flow-trunk-based.md`).
 - **Mermaid diagrams:** No emoji and no `« »` guillemets (tofu-font rendering issue); validate with `mmdc` before committing.
 - **Code style:** Many small, focused files; immutable data; validate at boundaries with Zod.
 
