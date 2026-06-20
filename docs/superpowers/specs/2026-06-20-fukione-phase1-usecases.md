@@ -49,9 +49,22 @@ flowchart LR
         UC16(["UC-16 Gọi điện/liên hệ nhanh"])
     end
 
-    visitor --- UC01 & UC02 & UC03 & UC04 & UC05 & UC06
-    visitor --- UC07 & UC08 & UC09 & UC10 & UC11 & UC12
-    visitor --- UC13 & UC14 & UC15 & UC16
+    visitor --- UC01
+    visitor --- UC02
+    visitor --- UC03
+    visitor --- UC04
+    visitor --- UC05
+    visitor --- UC06
+    visitor --- UC07
+    visitor --- UC08
+    visitor --- UC09
+    visitor --- UC10
+    visitor --- UC11
+    visitor --- UC12
+    visitor --- UC13
+    visitor --- UC14
+    visitor --- UC15
+    visitor --- UC16
     UC10 --- zalo
 ```
 
@@ -92,10 +105,24 @@ flowchart LR
     editor --- UC17
     admin --- UC17
 
-    sale --- UC18 & UC19 & UC20 & UC21 & UC22 & UC23
-    editor --- UC24 & UC25 & UC26 & UC27 & UC28
-    admin --- UC29 & UC30 & UC31
-    admin -.kế thừa.-> editor
+    sale --- UC18
+    sale --- UC19
+    sale --- UC20
+    sale --- UC21
+    sale --- UC22
+    sale --- UC23
+
+    editor --- UC24
+    editor --- UC25
+    editor --- UC26
+    editor --- UC27
+    editor --- UC28
+
+    admin --- UC29
+    admin --- UC30
+    admin --- UC31
+
+    admin -.ke thua.-> editor
     UC22 --- mail
 ```
 
