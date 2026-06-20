@@ -8,78 +8,32 @@
 
 ---
 
-## 1. Sơ đồ lớp
+## 1. Sơ đồ lớp (Domain Model)
+
+> Vẽ bằng `flowchart` thay cho `classDiagram` để tương thích viewer (một số viewer không render được classDiagram). Mỗi ô = một thực thể + field cốt lõi; mũi tên = quan hệ. **Lực lượng (cardinality)** xem bảng §3.
 
 ```mermaid
-classDiagram
-    class Product {
-        +string name
-        +string slug
-        +int thickness
-        +number pricePerM2
-        +bool waterproof
-        +string color
-        +string surface
-        +string roomTypes
-        +string status
-    }
-    class Collection {
-        +string name
-        +string slug
-        +string description
-    }
-    class Article {
-        +string title
-        +string slug
-        +string body
-        +string tags
-        +datetime publishedAt
-        +string status
-    }
-    class Project {
-        +string title
-        +string slug
-        +string description
-    }
-    class Lead {
-        +string name
-        +string phone
-        +string email
-        +string source
-        +number area
-        +number estimatedCost
-        +string message
-        +string status
-        +datetime createdAt
-    }
-    class Settings {
-        +number installPricePerM2
-        +number trimEstimate
-        +string showroomAddress
-        +string businessHours
-        +string mapEmbed
-        +string zaloOA
-    }
-    class User {
-        +string email
-        +string role
-    }
-    class Media {
-        +string url
-        +string alt
-    }
+flowchart TD
+    Product["Product<br/>name · slug · thickness<br/>pricePerM2 · waterproof<br/>color · surface · roomTypes · status"]
+    Collection["Collection<br/>name · slug · description"]
+    Article["Article<br/>title · slug · body<br/>tags · publishedAt · status"]
+    Project["Project<br/>title · slug · description"]
+    Lead["Lead<br/>name · phone · email · source<br/>area · estimatedCost · message<br/>status · createdAt"]
+    Settings["Settings - global<br/>installPricePerM2 · trimEstimate<br/>showroomAddress · businessHours · zaloOA"]
+    User["User<br/>email · role"]
+    Media["Media<br/>url · alt"]
 
-    Collection "1" o-- "0..*" Product : groups
-    Project "0..*" --> "0..*" Product : uses
-    Lead "0..*" --> "0..1" Product : interestedIn
-    User "1" --> "0..*" Lead : manages
-    Product "1" --> "0..*" Media : images
-    Project "1" --> "0..*" Media : images
-    Article "1" --> "0..1" Media : cover
-    Collection "1" --> "0..1" Media : cover
+    Collection -->|groups| Product
+    Project -->|uses| Product
+    Lead -->|interestedIn| Product
+    User -->|manages| Lead
+    Product -->|images| Media
+    Project -->|images| Media
+    Article -->|cover| Media
+    Collection -->|cover| Media
 ```
 
-> Các trường kiểu enum (`source`, `status`, `role`) để kiểu `string` cho sơ đồ gọn; **giá trị hợp lệ** liệt kê ở §2.1.
+> Các trường kiểu enum (`source`, `status`, `role`) để kiểu `string`; **giá trị hợp lệ** liệt kê ở §2.1. `Settings` là cấu hình toàn cục độc lập (không quan hệ FK).
 
 ---
 
