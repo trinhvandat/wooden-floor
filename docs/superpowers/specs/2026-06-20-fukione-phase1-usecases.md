@@ -26,10 +26,10 @@
 
 ```mermaid
 flowchart LR
-    visitor(("👤 Khách<br/>tham quan"))
+    visitor(("Khách<br/>tham quan"))
     zalo(("Zalo OA"))
 
-    subgraph SYS["🏠 Website FUKIONE"]
+    subgraph SYS["Website FUKIONE"]
         direction TB
         UC01(["UC-01 Duyệt danh mục SP"])
         UC02(["UC-02 Lọc sản phẩm"])
@@ -61,12 +61,12 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    sale(("👤 Sale<br/>CSKH"))
-    editor(("👤 Editor"))
-    admin(("👤 Admin"))
+    sale(("Sale<br/>CSKH"))
+    editor(("Editor"))
+    admin(("Admin"))
     mail(("Email<br/>Service"))
 
-    subgraph SYS["🔒 Khu quản trị (/admin)"]
+    subgraph SYS["Khu quan tri - /admin"]
         direction TB
         UC17(["UC-17 Đăng nhập hệ thống"])
 
@@ -103,7 +103,7 @@ flowchart LR
 
 ---
 
-## 4. Quan hệ «include» / «extend»
+## 4. Quan hệ [include] / [extend]
 
 Các use case lõi và phần dùng chung / mở rộng:
 
@@ -113,13 +113,13 @@ flowchart TB
     UC08(["UC-08 Gửi yêu cầu báo giá"])
     UC09(["UC-09 Đặt lịch khảo sát"])
 
-    INC_VAL(["«include»<br/>Kiểm tra hợp lệ đầu vào"])
-    INC_SPAM(["«include»<br/>Chống spam (honeypot+rate-limit)"])
-    INC_SAVE(["«include»<br/>Lưu Lead vào DB"])
-    EXT_MAIL(["«extend»<br/>Gửi email báo lead"])
-    EXT_THANKS(["«extend»<br/>Hiển thị màn hình cảm ơn"])
+    INC_VAL(["[include]<br/>Kiểm tra hợp lệ đầu vào"])
+    INC_SPAM(["[include]<br/>Chống spam: honeypot + rate-limit"])
+    INC_SAVE(["[include]<br/>Lưu Lead vào DB"])
+    EXT_MAIL(["[extend]<br/>Gửi email báo lead"])
+    EXT_THANKS(["[extend]<br/>Hiển thị màn hình cảm ơn"])
 
-    UC07 -. «extend» .-> UC08
+    UC07 -. extend .-> UC08
 
     UC08 --> INC_VAL
     UC08 --> INC_SPAM
@@ -128,8 +128,8 @@ flowchart TB
     UC09 --> INC_SPAM
     UC09 --> INC_SAVE
 
-    INC_SAVE -. «extend» .-> EXT_MAIL
-    INC_SAVE -. «extend» .-> EXT_THANKS
+    INC_SAVE -. extend .-> EXT_MAIL
+    INC_SAVE -. extend .-> EXT_THANKS
 ```
 
 **Diễn giải:**
@@ -206,9 +206,9 @@ flowchart TB
   1. Khách bấm "Nhận báo giá".
   2. Hệ thống mở form (Tên*, SĐT*, Email?, Ghi chú?), tự đính SP/diện tích/tạm tính nếu đến từ calculator.
   3. Khách nhập & gửi.
-  4. Hệ thống «include» kiểm tra hợp lệ + chống spam.
-  5. Hệ thống «include» lưu Lead vào DB (status=`new`).
-  6. «extend» gửi email cho sale; «extend» hiển thị màn hình cảm ơn.
+  4. Hệ thống [include] kiểm tra hợp lệ + chống spam.
+  5. Hệ thống [include] lưu Lead vào DB (status=`new`).
+  6. [extend] gửi email cho sale; [extend] hiển thị màn hình cảm ơn.
 - **Luồng phụ:**
   - 4a. Dữ liệu sai → báo lỗi inline, giữ nguyên dữ liệu đã nhập.
   - 6a. Email lỗi → lead vẫn lưu, hệ thống retry + ghi log (NFR-REL-01/02).
