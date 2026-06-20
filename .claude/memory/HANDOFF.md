@@ -1,30 +1,33 @@
 # HANDOFF — master — 2026-06-20
 
 ## Current goal
-Build a project memory system (cross-session catch-up) that lives in `.claude/memory/`.
+Set up the Claude Code harness for the FUKIONE project — **Tier 1 done**.
 
 ## Done (settled, do not redo)
-- Architecture: separate durable (decisions/conventions) from ephemeral (HANDOFF/sessions)
-- SessionStart hook (load-memory.sh) + Stop hook (remind-save.sh) at project level
-- `/save-memory` skill; seeded decisions/conventions from repo history
-- All project artifacts converted to English (chat stays Vietnamese)
-- ECC summary left on for A/B testing
+- Project memory system (`.claude/memory/` + hooks + `/save-memory`) — complete & shipped (commit 3fc3fd5)
+- Ran `/shipwithai-starter:init` → **Tier 1 harness**:
+  - `CLAUDE.md` (stack, conventions, gotchas, pnpm commands, scope boundaries)
+  - `docs/architecture.md` (SSOT distilled from the design doc)
+  - `.claude/starter-context.json` (interview answers for future harness skills)
+  - `.claude/settings.json` — added Node/pnpm `permissions` block, **merged** so memory hooks survived (valid JSON, both verified)
 
 ## In progress / Next steps
-- [x] Hook-level verify: SessionStart inject OK, Stop fire-once + guard OK, valid JSON
-- [x] Ran /save-memory end-to-end (produced decision 0002 + stop-hook-loop-guard convention)
-- [ ] **User decision:** commit `.claude/` to git or not (the core of the "lives with git" idea)
-- [ ] Live verify: open a NEW real session to confirm the hook injects (so far only tested by running the script by hand)
+- Commit the harness files (this session's changes) — in progress alongside save-memory.
+- Optional future: `/shipwithai-starter:review` to add Tier 2 (format/lint hooks, `.mcp.json`) and Tier 3 (agents, ADRs, CODEMAPS) **once Next.js/Payload code is scaffolded** (greenfield now → nothing for those to act on yet).
+- Then: scaffold the app (M1 — Next.js + Payload + Postgres + Vercel) per `docs/architecture.md` §7.
 
 ## Settled decisions + rationale
-- Self-contained system in the repo, NOT wrapped around OMC/ECC (external plugins; OMC inert, ECC low quality)
-- Skill placed locally in `.claude/skills/` (not global)
+- Tier 1 chosen because project is greenfield/docs-only — see [[0003-adopt-shipwithai-tier1-harness]]
+- Permissions merged (not overwritten) into settings.json to keep memory hooks
+- Adding permission allow-rules needs explicit user approval — see [[settings-permission-grant-needs-approval]]
+- Stack of record: Next.js 14+ + Payload 3 (embedded) + Postgres + Tailwind/shadcn + Zod + Resend + Vercel; pnpm; TS strict; 80% coverage
 - English for all artifacts; Vietnamese only for user-Claude chat
 
 ## Context to Load (paths only, do NOT paste contents)
-- .claude/memory/README.md
-- .claude/skills/save-memory/SKILL.md
-- PLAN.md
+- CLAUDE.md
+- docs/architecture.md
+- .claude/starter-context.json
+- docs/superpowers/specs/2026-06-20-fukione-wooden-floor-ecommerce-design.md
 
 ## Blocked / Needs user input
-- Commit decision (see above)
+- None.

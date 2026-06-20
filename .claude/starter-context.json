@@ -1,0 +1,76 @@
+{
+  "version": "1.0",
+  "tier": "essential",
+  "stack": {
+    "language": "TypeScript (strict)",
+    "framework": "Next.js 14+ App Router",
+    "cms": "Payload CMS 3 (embedded in the Next.js app)",
+    "build_tool": "next",
+    "test_framework": "Vitest/Jest (unit+integration) + Playwright (e2e)",
+    "package_manager": "pnpm",
+    "database": "PostgreSQL (Neon/Supabase free tier)",
+    "ui": "Tailwind CSS + shadcn/ui",
+    "validation": "Zod",
+    "email": "Resend",
+    "hosting": "Vercel",
+    "detected_tools": []
+  },
+  "project": {
+    "name": "FUKIONE — Website Bán Lẻ Sàn Gỗ (wooden-floor)",
+    "type": "web-app",
+    "team_size": 1,
+    "stage": "greenfield",
+    "model": "B2C lead-gen-first, Hà Nội, Phase 1"
+  },
+  "architecture": {
+    "style": "modular-monolith",
+    "summary": "Single Next.js deploy with Payload CMS 3 embedded (web + CMS + /admin + REST/GraphQL API in one app); PostgreSQL-owned data designed to evolve to a Phase-2 Spring Boot service sharing the same DB.",
+    "key_layers": [
+      { "name": "Pages/UI", "dir": "app/", "responsibility": "Next.js App Router routes (SSG/ISR), Tailwind + shadcn/ui" },
+      { "name": "CMS/Data", "dir": "src/collections/ (Payload)", "responsibility": "Payload collections: Products, Collections, Articles, Projects, Leads, Settings" },
+      { "name": "Lead handler", "dir": "app/api/ or Payload hooks", "responsibility": "Save lead to DB first, then send email (Resend), anti-spam" }
+    ],
+    "entry_points": ["app/ (Next.js App Router)", "/admin (Payload admin)"],
+    "external_deps": [
+      { "service": "PostgreSQL", "purpose": "primary data store (owned)", "env_var": "DATABASE_URI" },
+      { "service": "Resend", "purpose": "lead notification email", "env_var": "RESEND_API_KEY" },
+      { "service": "Vercel", "purpose": "hosting + CDN", "env_var": null },
+      { "service": "Zalo OA", "purpose": "chat widget (primary consult channel)", "env_var": null },
+      { "service": "GA4 / Google Search Console / Business Profile", "purpose": "analytics + local SEO", "env_var": null }
+    ],
+    "gotchas": [
+      "English for all repo artifacts (docs, code, .claude/**); only user-Claude chat is Vietnamese",
+      "No emoji or « » guillemets in Mermaid diagrams (tofu-font rendering issue); validate with mmdc",
+      "Prices/unit-costs live in the Payload `Settings` collection — never hardcode them",
+      "Lead must never be lost: write to DB first, send email as a separate step with retry",
+      "Public URLs are Vietnamese-no-accent (/san-pham, /bao-gia) for VN SEO",
+      "Payload-generated artifacts (migrations, generated types, /admin) are not hand-edited"
+    ],
+    "build_order": ["Payload codegen (types) before tsc/next build"],
+    "test_isolation": ["Integration/e2e need a Postgres instance + env vars"],
+    "sensitive_areas": ["lead capture + email", "cost calculator (wrong number = lost trust)", "Payload admin auth", "form rate-limit / anti-spam"]
+  },
+  "conventions": {
+    "language_policy": "English-only artifacts; Vietnamese only in user-Claude chat",
+    "formatter": "prettier (to be added with code)",
+    "branch_strategy": "trunk-based (solo)",
+    "commit_format": "conventional (English)",
+    "coverage_target": "80%",
+    "test_priorities": ["cost calculator (unit)", "form submit -> lead -> email (integration)", "2 golden flows (Playwright e2e)", "Lighthouse CI gate"]
+  },
+  "permissions": {
+    "preset": "nodejs-pnpm",
+    "disallowed_tools": [],
+    "readonly_paths": [".env", ".env.local"]
+  },
+  "hooks_selected": [],
+  "mcp_selected": [],
+  "agents_selected": [],
+  "ssot": {
+    "architecture_doc": true,
+    "adr": false,
+    "codemaps": false
+  },
+  "memory_system": "Pre-existing custom project-memory at .claude/memory/ (decisions/, conventions/, HANDOFF.md, sessions/) with SessionStart + Stop hooks and a save-memory skill. Left intact.",
+  "collected_at": "2026-06-20"
+}
