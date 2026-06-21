@@ -78,7 +78,7 @@ export function LeadFormSheet({
               placeholder="Nguyễn Văn A"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="rounded-input border-line bg-[#F4F1EB] text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
+              className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
             />
           </div>
 
@@ -94,7 +94,7 @@ export function LeadFormSheet({
               placeholder="0900 000 000"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="rounded-input border-line bg-[#F4F1EB] text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
+              className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
             />
           </div>
 
@@ -110,7 +110,7 @@ export function LeadFormSheet({
               placeholder="email@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="rounded-input border-line bg-[#F4F1EB] text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
+              className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
             />
           </div>
 
@@ -126,7 +126,7 @@ export function LeadFormSheet({
               placeholder="Thông tin thêm về yêu cầu của bạn..."
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="w-full resize-none rounded-input border border-line bg-[#F4F1EB] px-2.5 py-2 text-sm text-ink outline-none placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-2 focus-visible:ring-trust/20"
+              className="w-full resize-none rounded-input border border-line bg-field px-2.5 py-2 text-sm text-ink outline-none placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-2 focus-visible:ring-trust/20"
             />
           </div>
 

@@ -154,6 +154,8 @@
   --shadow-card: 0 4px 14px rgba(0,0,0,.05);
   --shadow-bar: 0 -2px 12px rgba(0,0,0,.05);
   --shadow-sheet: 0 -10px 30px rgba(0,0,0,.2);
+  --color-field: #F4F1EB;
+  --color-wood-soft: #C8A97A;
 }
 
 @layer base {

@@ -15,7 +15,7 @@ export function ProductCard({ product }: ProductCardProps) {
       className="group flex flex-col overflow-hidden rounded-card border border-line bg-surface shadow-card transition-shadow hover:shadow-[0_6px_20px_rgba(0,0,0,.1)]"
     >
       {/* Image block — wood-tone gradient placeholder when no real photo */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-[#C8A97A] to-[#8B5E3C]">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-wood-soft to-wood">
         {product.images[0] && (
           <Image
             src={product.images[0]}

@@ -57,7 +57,7 @@ export function CalculatorWidget({ product, variant }: CalculatorWidgetProps) {
               id="calc-product"
               value={selectedId}
               onChange={(e) => setSelectedId(e.target.value)}
-              className="h-10 w-full rounded-input border border-line bg-[#F4F1EB] px-2.5 text-sm text-ink outline-none focus:border-trust focus:ring-2 focus:ring-trust/20"
+              className="h-10 w-full rounded-input border border-line bg-field px-2.5 text-sm text-ink outline-none focus:border-trust focus:ring-2 focus:ring-trust/20"
             >
               {PRODUCTS.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -70,7 +70,7 @@ export function CalculatorWidget({ product, variant }: CalculatorWidgetProps) {
 
         {/* Embedded variant: show locked product name */}
         {variant === "embedded" && (
-          <div className="flex items-center justify-between rounded-input border border-line bg-[#F4F1EB] px-3 py-2">
+          <div className="flex items-center justify-between rounded-input border border-line bg-field px-3 py-2">
             <span className="text-[12.5px] font-bold text-ink">
               {activeProduct.name}
             </span>
@@ -100,7 +100,7 @@ export function CalculatorWidget({ product, variant }: CalculatorWidgetProps) {
                 setAreaM2(isNaN(val) ? 0 : Math.max(0, val));
               }}
               placeholder="25"
-              className="h-10 w-full rounded-input border border-line bg-[#F4F1EB] px-2.5 text-sm text-ink outline-none focus:border-trust focus:ring-2 focus:ring-trust/20"
+              className="h-10 w-full rounded-input border border-line bg-field px-2.5 text-sm text-ink outline-none focus:border-trust focus:ring-2 focus:ring-trust/20"
             />
             <span className="shrink-0 text-sm font-medium text-muted">m²</span>
           </div>
@@ -169,13 +169,14 @@ export function CalculatorWidget({ product, variant }: CalculatorWidgetProps) {
                 </span>
               </div>
 
-              {/* Mandatory disclaimer note */}
-              <p className="mt-2 text-[10.5px] italic text-muted">
-                * giá cuối phụ thuộc khảo sát thực tế
-              </p>
             </>
           )}
         </div>
+
+        {/* Disclaimer note — always visible */}
+        <p className="text-[10.5px] italic text-muted">
+          * giá cuối phụ thuộc khảo sát thực tế
+        </p>
 
         {/* ── CTA ────────────────────────────────────────────── */}
         <button
