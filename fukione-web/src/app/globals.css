@@ -128,3 +128,34 @@
     @apply font-sans;
   }
 }
+
+@theme {
+  --color-bg: #FAF7F2;
+  --color-surface: #FFFFFF;
+  --color-surface-warm: #F2EEE7;
+  --color-ink: #241F1B;
+  --color-muted: #6B6259;
+  --color-cta: #E8852B;
+  --color-cta-ink: #9C5A16;
+  --color-trust: #0F766E;
+  --color-wood: #6B4A2E;
+  --color-line: #ECE5DC;
+  --color-cta-soft-from: #FBEFE0;
+  --color-cta-soft-to: #F6E2CC;
+  --color-trust-soft: #EAF5F3;
+  --color-trust-soft-border: #D3ECE8;
+  --color-result-bg: #FBF6EF;
+  --color-result-border: #E6C9A6;
+  --radius-pill: 999px;
+  --radius-card: 14px;
+  --radius-input: 10px;
+  --radius-sheet: 22px;
+  --shadow-cta: 0 8px 20px rgba(232,133,43,.32);
+  --shadow-card: 0 4px 14px rgba(0,0,0,.05);
+  --shadow-bar: 0 -2px 12px rgba(0,0,0,.05);
+  --shadow-sheet: 0 -10px 30px rgba(0,0,0,.2);
+}
+
+@layer base {
+  html, body { background-color: var(--color-bg); color: var(--color-ink); }
+}
