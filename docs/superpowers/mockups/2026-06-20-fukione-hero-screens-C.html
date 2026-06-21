@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FUKIONE — Hero screens · Direction C (disciplined)</title>
+<!--
+  Phase B · chosen direction = "C có kỷ luật" (Trust Commerce, tempered toward premium).
+  3 hero screens: Home, Product detail, Calculator (+ bottom-sheet lead form state).
+  Throwaway mockup; real build = Next.js + Tailwind + shadcn. Offline-safe, no external assets.
+
+  TOKENS (disciplined C):
+    bg warm paper  #FAF7F2     surface #FFFFFF      ink (warm) #241F1B    muted #6B6259
+    CTA amber      #E8852B  (PRIMARY BUTTONS ONLY)  trust teal #0F766E    walnut accent #6B4A2E
+    border (warm)  #ECE5DC
+  Discipline rules: amber only on primary CTAs; warm-paper bg (not stark white); one walnut
+  touch for premium; trust-framed copy ("tư vấn miễn phí", "khảo sát tận nơi"), no urgency.
+-->
+<style>
+  :root{
+    --bg:#FAF7F2; --surface:#FFFFFF; --ink:#241F1B; --muted:#6B6259;
+    --cta:#E8852B; --trust:#0F766E; --wood:#6B4A2E; --line:#ECE5DC;
+    --frame:380px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:#e9eaee;color:var(--ink);padding:28px 18px 60px}
+  .page-head{max-width:1280px;margin:0 auto 24px}
+  .page-head h1{font-size:22px;font-weight:800}
+  .page-head p{color:#5b5f66;font-size:14px;margin-top:6px;max-width:820px}
+  .swatches{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .sw{font-size:11px;color:#444;display:flex;align-items:center;gap:6px}
+  .sw i{width:16px;height:16px;border-radius:4px;display:inline-block;border:1px solid rgba(0,0,0,.1)}
+
+  .row{display:flex;gap:34px;justify-content:center;flex-wrap:wrap;max-width:1320px;margin:0 auto}
+  .col{width:var(--frame)}
+  .col>.tag{text-align:center;font-weight:800;margin-bottom:4px;font-size:15px;color:var(--ink)}
+  .col>.sub{text-align:center;font-size:12px;color:#6b7079;margin-bottom:14px}
+
+  .phone{width:var(--frame);height:780px;border-radius:38px;background:#000;padding:10px;
+    box-shadow:0 22px 50px rgba(0,0,0,.28);position:relative}
+  .screen{width:100%;height:100%;border-radius:30px;overflow-y:auto;overflow-x:hidden;
+    position:relative;background:var(--bg);scrollbar-width:thin}
+  .screen::-webkit-scrollbar{width:5px}
+  .screen::-webkit-scrollbar-thumb{background:rgba(0,0,0,.18);border-radius:4px}
+
+  .topbar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;
+    padding:13px 16px;background:rgba(250,247,242,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .topbar .logo{font-weight:800;letter-spacing:.5px;color:var(--wood)}
+  .topbar .logo span{color:var(--cta)}
+  .topbar .ic{display:flex;gap:12px;font-size:17px}
+
+  /* buttons */
+  .btn{display:block;text-align:center;padding:14px;border-radius:999px;font-weight:800;font-size:14.5px;
+    margin-bottom:10px;background:var(--cta);color:#fff;box-shadow:0 8px 20px rgba(232,133,43,.32)}
+  .btn-2{display:block;text-align:center;padding:12px;border-radius:999px;font-weight:700;font-size:14px;
+    background:#fff;color:var(--trust);border:2px solid var(--trust)}
+  .bypass{text-align:center;font-size:12.5px;color:var(--muted);margin-top:2px}
+  .bypass b{color:var(--trust)}
+
+  .hero{padding:22px 18px 24px}
+  .hero .pic{height:188px;border-radius:16px;margin-bottom:16px;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#a9805a,#6B4A2E 72%);box-shadow:inset 0 -34px 60px rgba(0,0,0,.28)}
+  .hero .pic::after{content:"ảnh sàn gỗ thật";position:absolute;right:10px;bottom:8px;font-size:10px;color:rgba(255,255,255,.65)}
+  .hero h2{font-size:25px;line-height:1.2;margin-bottom:8px;font-weight:800}
+  .hero p.lead{font-size:13.5px;margin-bottom:16px;color:var(--muted)}
+  .trust{display:flex;gap:16px;justify-content:center;margin-top:16px;font-size:11.5px}
+  .trust span{color:var(--trust);font-weight:700}
+
+  .sec{padding:20px 18px}
+  .sec h3{font-size:17px;margin-bottom:14px;font-weight:800}
+  .sec h3 .u{border-bottom:3px solid var(--wood);padding-bottom:3px}
+  .reasons{display:flex;gap:10px}
+  .reasons .r{flex:1;border-radius:14px;padding:14px 9px;text-align:center;font-size:11px;
+    background:#F2EFE9;color:#5a5149;border:1px solid var(--line)}
+  .reasons .r .e{font-size:22px;display:block;margin-bottom:6px}
+  .hscroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px}
+  .card{min-width:148px;border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line);
+    box-shadow:0 4px 14px rgba(0,0,0,.05)}
+  .card .img{height:100px;background:linear-gradient(135deg,#b8966e,#6B4A2E)}
+  .card .body{padding:11px}
+  .card .nm{font-size:12.5px;font-weight:800}
+  .card .pr{font-size:13px;margin-top:3px;color:var(--cta);font-weight:800}
+  .card .wp{font-size:10px;margin-top:6px;color:var(--trust);font-weight:700}
+  .collections{display:flex;gap:10px}
+  .collections .c{flex:1;height:90px;border-radius:14px;display:flex;align-items:flex-end;padding:11px;
+    font-size:12px;font-weight:800;color:#fff;background:linear-gradient(135deg,#7a5733,#3d2c18)}
+  .proj{height:152px;border-radius:14px;display:flex;align-items:flex-end;padding:14px;color:#fff;
+    font-weight:800;font-size:14px;background:linear-gradient(135deg,#5e4128,#2f2114)}
+  .ctastrip{margin:6px 18px 18px;border-radius:18px;padding:22px 16px;text-align:center;
+    background:linear-gradient(135deg,#FBEFE0,#F6E2CC)}
+  .ctastrip h4{font-size:16px;margin-bottom:12px;color:#9c5a16;font-weight:800}
+  .footer{padding:22px 18px 96px;font-size:11.5px;line-height:1.75;background:#F2EEE7;color:#5a5149;border-top:1px solid var(--line)}
+  .footer b{display:block;font-size:13px;margin-bottom:6px;color:var(--ink)}
+
+  .actionbar{position:sticky;bottom:0;z-index:6;display:flex;gap:10px;align-items:center;padding:11px 14px;
+    background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-top:1px solid var(--line);box-shadow:0 -2px 12px rgba(0,0,0,.05)}
+  .actionbar .main{flex:1;text-align:center;padding:14px;border-radius:999px;font-weight:800;font-size:14.5px;
+    background:var(--cta);color:#fff}
+  .actionbar .zalo{width:50px;height:50px;border-radius:999px;display:flex;align-items:center;justify-content:center;
+    font-size:19px;background:var(--trust);color:#fff}
+
+  /* product detail bits */
+  .gallery{height:280px;background:linear-gradient(135deg,#a9805a,#6B4A2E 75%);position:relative}
+  .gallery .back{position:absolute;top:14px;left:14px;width:34px;height:34px;border-radius:999px;background:rgba(255,255,255,.9);
+    display:flex;align-items:center;justify-content:center;font-size:16px}
+  .gallery .dots{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#fff;font-size:11px;letter-spacing:3px}
+  .pd-head{padding:16px 18px 6px}
+  .pd-head h2{font-size:21px;font-weight:800}
+  .pd-price{font-size:20px;color:var(--cta);font-weight:800;margin-top:4px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .chips .ch{font-size:11px;padding:5px 10px;border-radius:999px;background:#EAF5F3;color:var(--trust);font-weight:700;border:1px solid #d3ece8}
+  .calcbox{margin:14px 18px;border-radius:18px;border:1px solid var(--line);background:#fff;padding:16px;box-shadow:0 6px 18px rgba(0,0,0,.05)}
+  .calcbox .h{font-weight:800;font-size:14px;margin-bottom:12px}
+  .field{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;font-size:13px;color:var(--muted)}
+  .field .inp{background:#F4F1EB;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-weight:800;color:var(--ink);min-width:88px;text-align:center}
+  .switch{width:46px;height:26px;border-radius:999px;background:var(--trust);position:relative}
+  .switch::after{content:"";position:absolute;width:20px;height:20px;border-radius:999px;background:#fff;top:3px;right:3px}
+  .result{background:#FBF6EF;border:1px dashed #E6C9A6;border-radius:12px;padding:12px;margin:6px 0 12px;font-size:12.5px}
+  .result .ln{display:flex;justify-content:space-between;margin-bottom:5px;color:#6a5c4c}
+  .result .tot{display:flex;justify-content:space-between;font-weight:800;font-size:15px;color:var(--ink);border-top:1px solid #E6C9A6;padding-top:8px;margin-top:6px}
+  .result .note{font-size:10.5px;color:#9a8a76;margin-top:6px;font-style:italic}
+  .spec-table{margin:0 18px;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:12.5px}
+  .spec-table .tr{display:flex;justify-content:space-between;padding:10px 13px;border-bottom:1px solid var(--line)}
+  .spec-table .tr:last-child{border-bottom:0}
+  .spec-table .tr .k{color:var(--muted)}
+  .spec-table .tr .v{font-weight:700}
+
+  /* calculator page */
+  .calc-page{padding:20px 18px}
+  .calc-page h2{font-size:21px;font-weight:800}
+  .calc-page .sublead{color:var(--muted);font-size:13px;margin:4px 0 18px}
+
+  /* bottom-sheet form overlay */
+  .sheet-wrap{position:absolute;inset:0;border-radius:30px;overflow:hidden;pointer-events:none}
+  .scrim{position:absolute;inset:0;background:rgba(20,15,10,.4)}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:22px 22px 0 0;padding:16px 18px 22px;
+    box-shadow:0 -10px 30px rgba(0,0,0,.2)}
+  .sheet .grab{width:42px;height:5px;border-radius:999px;background:#E0D8CC;margin:0 auto 12px}
+  .sheet h4{font-size:16px;font-weight:800}
+  .sheet .s{font-size:12px;color:var(--muted);margin:3px 0 14px}
+  .sheet .in{background:#F4F1EB;border:1px solid var(--line);border-radius:10px;padding:11px 12px;font-size:13px;color:#9a8a76;margin-bottom:9px}
+  .sheet .attach{font-size:11.5px;color:var(--trust);background:#EAF5F3;border:1px solid #d3ece8;border-radius:10px;padding:9px 11px;margin-bottom:12px}
+  .badge-soft{display:inline-block;font-size:10.5px;color:#9c5a16;background:#FBEFE0;border-radius:999px;padding:3px 9px;margin-bottom:8px;font-weight:700}
+
+  @media (max-width:720px){body{padding:18px 8px 50px}.row{gap:42px}}
+</style>
+</head>
+<body>
+  <div class="page-head">
+    <h1>FUKIONE — 3 màn hero · hướng "C có kỷ luật"</h1>
+    <p>Trust Commerce nhưng tiết chế cho premium: cam <b style="color:#E8852B">#E8852B</b> chỉ ở CTA chính,
+       nền giấy ấm <b style="color:#8a6a45">#FAF7F2</b> (không trắng gắt), một chạm gỗ óc chó cho logo/đường kẻ,
+       teal <b style="color:#0F766E">#0F766E</b> cho tin cậy, copy nghiêng "tư vấn miễn phí" thay vì giục mua.</p>
+    <div class="swatches">
+      <span class="sw"><i style="background:#FAF7F2"></i>nền giấy ấm</span>
+      <span class="sw"><i style="background:#E8852B"></i>CTA cam (chỉ nút chính)</span>
+      <span class="sw"><i style="background:#0F766E"></i>teal tin cậy</span>
+      <span class="sw"><i style="background:#6B4A2E"></i>nhấn gỗ óc chó</span>
+      <span class="sw"><i style="background:#241F1B"></i>chữ ấm</span>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <!-- ===== HOME ===== -->
+    <div class="col">
+      <div class="tag">① Trang chủ</div>
+      <div class="sub">cuộn để xem hết</div>
+      <div class="phone"><div class="screen">
+        <div class="topbar"><span style="font-size:17px">&#9776;</span><span class="logo">FUKI<span>ONE</span></span><span class="ic">&#9742; &#128172;</span></div>
+        <div class="hero">
+          <div class="pic"></div>
+          <h2>Sàn gỗ cao cấp, lắp đặt trọn gói tại Hà Nội</h2>
+          <p class="lead">Tư vấn miễn phí, báo giá nhanh, khảo sát tận nơi.</p>
+          <a class="btn">🧮 Tính chi phí ngay</a>
+          <a class="btn-2">Xem 52 mẫu sàn</a>
+          <div class="trust"><span>✓ Showroom Hà Nội</span><span>✓ Bảo hành dài hạn</span></div>
+        </div>
+        <div class="sec"><h3><span class="u">Vì sao chọn FUKIONE</span></h3>
+          <div class="reasons"><div class="r"><span class="e">🌳</span>Gỗ nhập, bền đẹp</div><div class="r"><span class="e">🛠️</span>Thợ lắp lành nghề</div><div class="r"><span class="e">💬</span>Tư vấn tận nơi</div></div>
+        </div>
+        <div class="sec"><h3>Sản phẩm nổi bật</h3>
+          <div class="hscroll">
+            <div class="card"><div class="img"></div><div class="body"><div class="nm">FUKIONE F8-12mm</div><div class="pr">450.000đ/m²</div><div class="wp">✓ chống nước</div></div></div>
+            <div class="card"><div class="img"></div><div class="body"><div class="nm">FUKIONE O-Sồi</div><div class="pr">520.000đ/m²</div><div class="wp">✓ chống nước</div></div></div>
+            <div class="card"><div class="img"></div><div class="body"><div class="nm">FUKIONE Walnut</div><div class="pr">610.000đ/m²</div><div class="wp">✓ chống nước</div></div></div>
+          </div>
+        </div>
+        <div class="sec"><h3>Bộ sưu tập theo phòng</h3>
+          <div class="collections"><div class="c">Phòng khách</div><div class="c">Phòng ngủ</div></div>
+        </div>
+        <div class="sec"><h3>Dự án thực tế</h3>
+          <div class="proj">Thi công sàn gỗ — Cầu Giấy, HN</div>
+        </div>
+        <div class="ctastrip"><h4>Cần tư vấn chọn sàn?</h4><a class="btn">🧮 Tính chi phí miễn phí</a><a class="btn-2">💬 Chat Zalo</a></div>
+        <div class="footer"><b>FUKIONE</b>📍 Số 12 đường ABC, Cầu Giấy, Hà Nội<br>☎ 0900 000 000 · 🕐 8:00–18:00 hằng ngày<br>💬 Zalo OA · 🗺️ Xem trên Google Maps</div>
+        <div class="actionbar"><span class="main">🧮 Tính chi phí</span><span class="zalo">💬</span></div>
+      </div></div>
+    </div>
+
+    <!-- ===== PRODUCT DETAIL ===== -->
+    <div class="col">
+      <div class="tag">② Chi tiết sản phẩm</div>
+      <div class="sub">có calculator nhúng + bypass</div>
+      <div class="phone"><div class="screen">
+        <div class="gallery"><div class="back">&#8592;</div><div class="dots">● ○ ○ ○</div></div>
+        <div class="pd-head">
+          <h2>Sàn gỗ FUKIONE F8-12mm</h2>
+          <div class="pd-price">450.000đ/m²</div>
+          <div class="chips"><span class="ch">✓ Chống nước</span><span class="ch">Vân sồi</span><span class="ch">Dày 12mm</span><span class="ch">Bảo hành 15 năm</span></div>
+        </div>
+        <div class="calcbox">
+          <div class="h">🧮 Tính chi phí trọn gói</div>
+          <div class="field"><span>Diện tích phòng</span><span class="inp">25 m²</span></div>
+          <div class="field"><span>Có lắp đặt?</span><span class="switch"></span></div>
+          <div class="result">
+            <div class="ln"><span>Vật liệu</span><span>11.250.000đ</span></div>
+            <div class="ln"><span>Lắp đặt</span><span>2.000.000đ</span></div>
+            <div class="ln"><span>Phào nẹp (ước tính)</span><span>~800.000đ</span></div>
+            <div class="tot"><span>Tạm tính</span><span>~14.050.000đ</span></div>
+            <div class="note">* giá cuối phụ thuộc khảo sát thực tế</div>
+          </div>
+          <a class="btn">Nhận báo giá chính xác</a>
+          <div class="bypass">hoặc <b>💬 tư vấn ngay qua Zalo</b></div>
+        </div>
+        <div class="sec"><h3>Thông số kỹ thuật</h3></div>
+        <div class="spec-table">
+          <div class="tr"><span class="k">Độ dày</span><span class="v">12mm</span></div>
+          <div class="tr"><span class="k">Cốt gỗ</span><span class="v">HDF chống ẩm</span></div>
+          <div class="tr"><span class="k">Bề mặt</span><span class="v">Vân sồi tự nhiên</span></div>
+          <div class="tr"><span class="k">Chống nước</span><span class="v">Có (AC4)</span></div>
+          <div class="tr"><span class="k">Xuất xứ</span><span class="v">Nhập khẩu</span></div>
+        </div>
+        <div class="sec"><h3>Sản phẩm liên quan</h3>
+          <div class="hscroll">
+            <div class="card"><div class="img"></div><div class="body"><div class="nm">O-Sồi</div><div class="pr">520.000đ/m²</div><div class="wp">✓ chống nước</div></div></div>
+            <div class="card"><div class="img"></div><div class="body"><div class="nm">Walnut</div><div class="pr">610.000đ/m²</div><div class="wp">✓ chống nước</div></div></div>
+          </div>
+        </div>
+        <div style="height:80px"></div>
+        <div class="actionbar"><span class="main">Nhận báo giá</span><span class="zalo">💬</span></div>
+      </div></div>
+    </div>
+
+    <!-- ===== CALCULATOR + BOTTOM SHEET ===== -->
+    <div class="col">
+      <div class="tag">③ Calculator + form</div>
+      <div class="sub">bottom-sheet đang mở</div>
+      <div class="phone">
+        <div class="screen">
+          <div class="topbar"><span style="font-size:17px">&#8592;</span><span class="logo">FUKI<span>ONE</span></span><span class="ic">&#9742; &#128172;</span></div>
+          <div class="calc-page">
+            <h2>Tính chi phí trọn gói</h2>
+            <div class="sublead">Ước tính nhanh, miễn phí — biết trước con số.</div>
+            <div class="calcbox" style="margin:0 0 16px">
+              <div class="field"><span>Diện tích phòng</span><span class="inp">25 m²</span></div>
+              <div class="field"><span>Chọn sản phẩm</span><span class="inp" style="min-width:120px">F8-12mm ▾</span></div>
+              <div class="field"><span>Có lắp đặt?</span><span class="switch"></span></div>
+              <div class="result">
+                <div class="ln"><span>Vật liệu</span><span>11.250.000đ</span></div>
+                <div class="ln"><span>Lắp đặt</span><span>2.000.000đ</span></div>
+                <div class="ln"><span>Phào nẹp (ước tính)</span><span>~800.000đ</span></div>
+                <div class="tot"><span>Tạm tính</span><span>~14.050.000đ</span></div>
+                <div class="note">* giá cuối phụ thuộc khảo sát thực tế</div>
+              </div>
+              <a class="btn">Nhận báo giá chính xác</a>
+              <div class="bypass">hoặc <b>💬 tư vấn ngay</b></div>
+            </div>
+          </div>
+        </div>
+        <!-- bottom-sheet form state -->
+        <div class="sheet-wrap">
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div class="grab"></div>
+            <span class="badge-soft">Bước cuối</span>
+            <h4>Nhận báo giá chính xác</h4>
+            <div class="s">Sale FUKIONE sẽ gọi lại trong ~15 phút.</div>
+            <div class="in">Họ và tên *</div>
+            <div class="in">Số điện thoại *</div>
+            <div class="in">Email (không bắt buộc)</div>
+            <div class="attach">📎 Đã đính kèm: F8-12mm · 25m² · ~14.050.000đ</div>
+            <a class="btn" style="margin-bottom:8px">Gửi yêu cầu</a>
+            <div class="bypass">hoặc <b>💬 Zalo</b> · <b>☎ Gọi ngay</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
