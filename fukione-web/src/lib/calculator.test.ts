@@ -18,8 +18,19 @@ describe("estimateCost", () => {
     expect(r.total).toBe(12050000);
   });
 
-  it("returns zeros for zero/negative area", () => {
+  it("returns all zeros for zero area", () => {
     const r = estimateCost({ areaM2: 0, pricePerM2: 450000, withInstall: true }, settings);
+    expect(r.material).toBe(0);
+    expect(r.install).toBe(0);
+    expect(r.trim).toBe(0);
+    expect(r.total).toBe(0);
+  });
+
+  it("clamps negative area to all zeros (no negative price)", () => {
+    const r = estimateCost({ areaM2: -5, pricePerM2: 450000, withInstall: true }, settings);
+    expect(r.material).toBe(0);
+    expect(r.install).toBe(0);
+    expect(r.trim).toBe(0);
     expect(r.total).toBe(0);
   });
 });
