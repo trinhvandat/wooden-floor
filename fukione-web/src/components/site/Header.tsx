@@ -8,7 +8,7 @@ export function Header() {
         {/* Hamburger — mobile nav trigger (state lives in a future drawer) */}
         <button
           aria-label="Mở menu"
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-ink transition-colors hover:bg-line"
+          className="flex h-11 w-11 items-center justify-center rounded-lg text-ink transition-colors hover:bg-line"
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -28,7 +28,7 @@ export function Header() {
           <a
             href={`tel:${SETTINGS.nap.phone.replace(/\s/g, "")}`}
             aria-label="Gọi điện"
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-trust transition-colors hover:bg-line"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-trust transition-colors hover:bg-line"
           >
             <Phone className="h-5 w-5" />
           </a>
@@ -37,7 +37,7 @@ export function Header() {
             aria-label="Chat Zalo"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-trust transition-colors hover:bg-line"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-trust transition-colors hover:bg-line"
           >
             <MessageCircle className="h-5 w-5" />
           </a>

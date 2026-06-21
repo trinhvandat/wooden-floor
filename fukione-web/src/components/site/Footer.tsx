@@ -44,7 +44,7 @@ export function Footer() {
             href={zaloUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-pill border-2 border-trust px-4 py-2 text-sm font-bold text-trust transition-colors hover:bg-trust hover:text-white"
+            className="flex items-center gap-1.5 rounded-pill border-2 border-trust px-4 py-3 text-sm font-bold text-trust transition-colors hover:bg-trust hover:text-white"
           >
             <MessageCircle className="h-4 w-4" />
             Chat Zalo
@@ -53,7 +53,7 @@ export function Footer() {
             href={mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-pill border-2 border-line px-4 py-2 text-sm font-bold text-muted transition-colors hover:border-trust hover:text-trust"
+            className="flex items-center gap-1.5 rounded-pill border-2 border-line px-4 py-3 text-sm font-bold text-muted transition-colors hover:border-trust hover:text-trust"
           >
             <MapPin className="h-4 w-4" />
             Xem bản đồ
