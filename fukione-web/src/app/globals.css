@@ -156,8 +156,31 @@
   --shadow-sheet: 0 -10px 30px rgba(0,0,0,.2);
   --color-field: #F4F1EB;
   --color-wood-soft: #C8A97A;
+  --font-display: var(--font-fraunces), Georgia, serif;
 }
 
 @layer base {
   html, body { background-color: var(--color-bg); color: var(--color-ink); }
+}
+
+/* ── Editorial motion + atmosphere ─────────────────────────────────────── */
+@keyframes fk-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@layer utilities {
+  /* Staggered load reveal — set delay inline via style={{ animationDelay }} */
+  .fk-rise {
+    opacity: 0;
+    animation: fk-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  /* Film-grain overlay: apply to a fixed, pointer-events-none element */
+  .fk-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fk-rise { animation: none; opacity: 1; transform: none; }
 }

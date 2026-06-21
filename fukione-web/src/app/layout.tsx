@@ -1,17 +1,30 @@
 import type { Metadata } from "next";
-import { Be_Vietnam_Pro } from "next/font/google";
+import { Be_Vietnam_Pro, Fraunces } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 
-const font = Be_Vietnam_Pro({
+// Body / UI — clean, reliable Vietnamese diacritics
+const sans = Be_Vietnam_Pro({
   subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "700", "800"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+// Display — warm, high-character serif for editorial headlines
+const display = Fraunces({
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700", "900"],
+  style: ["normal", "italic"],
+  variable: "--font-fraunces",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "FUKIONE",
-  description: "FUKIONE - Sàn gỗ cao cấp",
+  title: "FUKIONE — Sàn gỗ cao cấp tại Hà Nội",
+  description:
+    "Sàn gỗ cao cấp, lắp đặt trọn gói tại Hà Nội. Tư vấn miễn phí, báo giá nhanh, khảo sát tận nơi.",
 };
 
 export default function RootLayout({
@@ -20,8 +33,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className="h-full antialiased">
-      <body className={`${font.className} min-h-full flex flex-col`}>
+    <html
+      lang="vi"
+      className={`${sans.variable} ${display.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col font-sans">
         <Header />
         {/* pb-24 reserves space so the mobile bottom action bar never covers content */}
         <main className="flex flex-1 flex-col pb-24 md:pb-0">

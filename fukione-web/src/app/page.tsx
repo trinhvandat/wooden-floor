@@ -1,163 +1,394 @@
 import Link from "next/link";
+import { ArrowRight, MapPin, ShieldCheck, Hammer, MessageCircle } from "lucide-react";
 import { PRODUCTS, COLLECTIONS, PROJECTS } from "@/lib/mock-data";
 import { SETTINGS } from "@/lib/settings";
-import { ProductCard } from "@/components/ProductCard";
-import { SectionHeading } from "@/components/SectionHeading";
-import { CtaStrip } from "@/components/CtaStrip";
+import { formatVnd } from "@/lib/format";
 import { BottomActionBar } from "@/components/site/BottomActionBar";
-import { TrustStrip } from "@/components/site/TrustStrip";
+
+const featured = PRODUCTS.slice(0, 3);
+const heroProduct = PRODUCTS[0];
+const collections = COLLECTIONS.slice(0, 2);
+const projects = PROJECTS.slice(0, 4);
+const leadProject = projects[0];
 
 const REASONS = [
   {
-    icon: "🏠",
-    title: "Showroom thực tế tại Hà Nội",
-    desc: "Xem và chọn hàng trực tiếp — không mua mèo trong bao.",
+    n: "01",
+    title: "Gỗ tuyển, bền theo năm tháng",
+    body: "Cốt gỗ HDF chống ẩm, bề mặt chịu xước AC4–AC5. Mỗi tấm ván là một lựa chọn kỹ.",
   },
   {
-    icon: "🔧",
-    title: "Lắp đặt trọn gói, bảo hành dài hạn",
-    desc: "Đội thi công chuyên nghiệp, cam kết tiến độ và chất lượng.",
+    n: "02",
+    title: "Thợ lắp đặt lành nghề",
+    body: "Đội thi công riêng của FUKIONE, đo đạc tận nơi, hoàn thiện phẳng phiu trong 24 giờ.",
   },
   {
-    icon: "💬",
-    title: "Tư vấn miễn phí, báo giá trong ngày",
-    desc: "Chuyên gia sàn gỗ tư vấn 1-1, không mất phí tư vấn.",
+    n: "03",
+    title: "Minh bạch từ con số đầu tiên",
+    body: "Tính chi phí trọn gói ngay trên web. Báo giá rõ ràng, không phát sinh ẩn.",
   },
 ];
 
+const MARQUEE = [
+  "Showroom tại Hà Nội",
+  "Khảo sát tận nhà miễn phí",
+  "Lắp đặt trọn gói 24h",
+  "Bảo hành dài hạn",
+  "Tư vấn qua Zalo",
+];
+
 export default function HomePage() {
-  const featured = PRODUCTS.slice(0, 4);
-  const project = PROJECTS[0];
-
   return (
-    <div className="flex flex-col gap-8 bg-bg pb-8">
-      {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="bg-gradient-to-br from-wood-soft to-bg px-4 py-10">
-        <h1 className="text-[25px] font-extrabold leading-tight tracking-[-0.5px] text-ink">
-          Sàn gỗ cao cấp tại Hà Nội
-          <br />
-          Tư vấn &amp; Báo giá nhanh
-        </h1>
-        <p className="mt-3 text-[14px] leading-relaxed text-muted">
-          FUKIONE — Showroom sàn gỗ Hà Nội. Lắp đặt trọn gói, bảo hành chính hãng.
-        </p>
+    <div className="relative overflow-hidden">
+      {/* Atmosphere: warm glow + film grain */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(60rem_40rem_at_70%_-10%,var(--color-cta-soft-from),transparent_60%)] opacity-70"
+      />
+      <div
+        aria-hidden
+        className="fk-grain pointer-events-none fixed inset-0 z-[1] opacity-[0.04] mix-blend-multiply"
+      />
 
-        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <a
-            href="/bao-gia"
-            className="inline-flex h-12 items-center justify-center rounded-pill bg-cta px-7 text-sm font-extrabold text-white shadow-cta transition-opacity hover:opacity-90 active:opacity-80"
-          >
-            🧮 Tính chi phí
-          </a>
-          <Link
-            href="/san-pham"
-            className="inline-flex h-11 items-center justify-center rounded-pill border-2 border-trust px-6 text-sm font-bold text-trust transition-colors hover:bg-trust-soft"
-          >
-            Xem sản phẩm
-          </Link>
-        </div>
-
-        <div className="mt-5">
-          <TrustStrip
-            items={["Showroom tại Hà Nội", "Lắp đặt trọn gói", "Tư vấn miễn phí"]}
-          />
-        </div>
-      </section>
-
-      {/* ── Vì sao FUKIONE ───────────────────────────────────── */}
-      <section className="px-4">
-        <SectionHeading withUnderline>Vì sao chọn FUKIONE?</SectionHeading>
-        <div className="mt-4 flex flex-col gap-3">
-          {REASONS.map((r) => (
-            <div
-              key={r.title}
-              className="flex gap-3 rounded-card border border-line bg-surface p-4 shadow-card"
+      {/* ════════════════════ HERO ════════════════════ */}
+      <section className="mx-auto max-w-[1280px] px-6 pb-16 pt-10 lg:px-10 lg:pb-28 lg:pt-20">
+        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+          {/* Text column */}
+          <div className="lg:col-span-7">
+            <p
+              className="fk-rise flex items-center gap-2.5 text-[12.5px] font-bold uppercase tracking-[0.22em] text-muted"
+              style={{ animationDelay: "0ms" }}
             >
-              <span className="text-2xl leading-none">{r.icon}</span>
-              <div>
-                <p className="text-[13.5px] font-extrabold leading-snug text-ink">
-                  {r.title}
+              <span className="h-px w-8 bg-cta" />
+              Sàn gỗ cao cấp · Hà Nội
+            </p>
+
+            <h1
+              className="fk-rise mt-6 font-display text-[2.6rem] font-medium leading-[1.04] tracking-[-0.01em] text-ink sm:text-6xl lg:text-[5rem]"
+              style={{ animationDelay: "80ms" }}
+            >
+              Nền nhà đẹp bắt đầu
+              <br className="hidden sm:block" /> từ một sàn gỗ{" "}
+              <em className="font-display font-semibold italic text-cta">tử tế</em>.
+            </h1>
+
+            <p
+              className="fk-rise mt-6 max-w-xl text-[15.5px] leading-relaxed text-muted"
+              style={{ animationDelay: "160ms" }}
+            >
+              FUKIONE mang đến sàn gỗ tuyển chọn cùng dịch vụ lắp đặt trọn gói tại
+              Hà Nội — tư vấn tận tâm, báo giá nhanh, khảo sát tận nơi.
+            </p>
+
+            <div
+              className="fk-rise mt-9 flex flex-wrap items-center gap-4"
+              style={{ animationDelay: "240ms" }}
+            >
+              <Link
+                href="/bao-gia"
+                className="group inline-flex h-13 items-center gap-2 rounded-pill bg-cta px-7 py-3.5 text-[15px] font-bold text-white shadow-cta transition-all hover:-translate-y-0.5 hover:shadow-lg"
+              >
+                Tính chi phí ngay
+                <ArrowRight className="h-[18px] w-[18px] transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link
+                href="/san-pham"
+                className="group relative text-[15px] font-bold text-ink"
+              >
+                Xem 52 mẫu sàn
+                <span className="absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-100 bg-wood transition-transform group-hover:scale-x-0" />
+                <span className="absolute -bottom-1 left-0 h-[2px] w-full origin-right scale-x-0 bg-cta transition-transform delay-100 group-hover:scale-x-100" />
+              </Link>
+            </div>
+
+            {/* Stat row */}
+            <div
+              className="fk-rise mt-12 flex flex-wrap gap-x-10 gap-y-6 border-t border-line pt-8"
+              style={{ animationDelay: "320ms" }}
+            >
+              {[
+                { num: "12", unit: "năm", label: "kinh nghiệm nghề sàn" },
+                { num: "1.200", unit: "+", label: "công trình tại Hà Nội" },
+                { num: "52", unit: "mẫu", label: "sàn gỗ trong bộ sưu tập" },
+              ].map((s) => (
+                <div key={s.label}>
+                  <p className="font-display text-3xl font-semibold text-ink">
+                    {s.num}
+                    <span className="text-cta">{s.unit}</span>
+                  </p>
+                  <p className="mt-1 text-[12.5px] text-muted">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Image column */}
+          <div className="fk-rise lg:col-span-5" style={{ animationDelay: "200ms" }}>
+            <div className="relative">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-wood-soft to-wood shadow-[0_30px_60px_-20px_rgba(36,31,27,0.45)]">
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/35 via-transparent to-transparent" />
+                <span className="absolute left-5 top-5 rounded-pill bg-bg/85 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-wood backdrop-blur">
+                  Vân sồi tự nhiên
+                </span>
+              </div>
+              {/* Floating product caption */}
+              <div className="absolute -bottom-6 -left-6 hidden w-60 rounded-2xl border border-line bg-surface/95 p-4 shadow-card backdrop-blur sm:block">
+                <p className="text-[12px] font-medium text-muted">Đang bán chạy</p>
+                <p className="mt-0.5 font-display text-lg font-semibold text-ink">
+                  {heroProduct.name}
                 </p>
-                <p className="mt-0.5 text-[12.5px] leading-snug text-muted">
-                  {r.desc}
+                <p className="mt-1 text-[15px] font-extrabold text-cta">
+                  {formatVnd(heroProduct.pricePerM2)}
+                  <span className="text-[12px] font-medium text-muted">/m²</span>
                 </p>
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </section>
 
-      {/* ── Sản phẩm nổi bật — horizontal scroll carousel ─── */}
-      <section className="px-4">
-        <div className="flex items-center justify-between">
-          <SectionHeading>Sản phẩm nổi bật</SectionHeading>
-          <Link
-            href="/san-pham"
-            className="text-[12.5px] font-bold text-trust hover:underline"
-          >
-            Xem tất cả →
-          </Link>
+      {/* ════════════════════ TRUST MARQUEE ════════════════════ */}
+      <div className="border-y border-line bg-surface-warm/60">
+        <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-center gap-x-8 gap-y-2 px-6 py-4 lg:px-10">
+          {MARQUEE.map((item) => (
+            <span
+              key={item}
+              className="flex items-center gap-2 text-[13px] font-semibold text-ink/70"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-cta" />
+              {item}
+            </span>
+          ))}
         </div>
-        <div className="mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [-webkit-overflow-scrolling:touch]">
-          {featured.map((p) => (
-            <div key={p.id} className="w-44 shrink-0 snap-start">
-              <ProductCard product={p} />
+      </div>
+
+      {/* ════════════════════ WHY FUKIONE ════════════════════ */}
+      <section className="mx-auto max-w-[1280px] px-6 py-20 lg:px-10 lg:py-28">
+        <div className="max-w-2xl">
+          <p className="text-[12.5px] font-bold uppercase tracking-[0.22em] text-cta">
+            Vì sao FUKIONE
+          </p>
+          <h2 className="mt-4 font-display text-3xl font-medium leading-tight text-ink lg:text-[2.75rem]">
+            Một sàn gỗ tốt là khoản đầu tư cho cả thập kỷ.
+          </h2>
+        </div>
+
+        <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3">
+          {REASONS.map((r) => (
+            <div key={r.n} className="bg-bg p-8 transition-colors hover:bg-surface-warm/50">
+              <p className="font-display text-5xl font-semibold text-wood-soft">{r.n}</p>
+              <h3 className="mt-5 text-[17px] font-extrabold text-ink">{r.title}</h3>
+              <p className="mt-2.5 text-[14px] leading-relaxed text-muted">{r.body}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── Bộ sưu tập ───────────────────────────────────────── */}
-      <section className="px-4">
-        <SectionHeading>Bộ sưu tập</SectionHeading>
-        <div className="mt-4 grid grid-cols-2 gap-3">
-          {COLLECTIONS.map((c) => (
+      {/* ════════════════════ FEATURED PRODUCTS ════════════════════ */}
+      <section className="mx-auto max-w-[1280px] px-6 pb-20 lg:px-10 lg:pb-28">
+        <div className="flex items-end justify-between gap-6">
+          <div>
+            <p className="text-[12.5px] font-bold uppercase tracking-[0.22em] text-cta">
+              Bán chạy
+            </p>
+            <h2 className="mt-4 font-display text-3xl font-medium text-ink lg:text-[2.5rem]">
+              Những mẫu sàn được chọn nhiều nhất
+            </h2>
+          </div>
+          <Link
+            href="/san-pham"
+            className="group hidden shrink-0 items-center gap-2 text-[14px] font-bold text-ink sm:inline-flex"
+          >
+            Xem tất cả
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
+
+        <div className="mt-12 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((p) => (
+            <Link key={p.id} href={`/san-pham/${p.slug}`} className="group block">
+              <div className="relative aspect-[5/6] overflow-hidden rounded-2xl bg-gradient-to-br from-wood-soft to-wood">
+                <div className="absolute inset-0 scale-100 bg-gradient-to-t from-ink/25 to-transparent transition-transform duration-700 group-hover:scale-110" />
+                {p.waterproof && (
+                  <span className="absolute left-4 top-4 rounded-pill bg-trust-soft px-2.5 py-1 text-[11px] font-bold text-trust">
+                    ✓ Chống nước
+                  </span>
+                )}
+                <span className="absolute bottom-4 right-4 flex h-11 w-11 translate-y-2 items-center justify-center rounded-full bg-cta text-white opacity-0 shadow-cta transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  <ArrowRight className="h-5 w-5" />
+                </span>
+              </div>
+              <div className="mt-4 flex items-baseline justify-between gap-3">
+                <h3 className="font-display text-xl font-semibold text-ink transition-colors group-hover:text-wood">
+                  {p.name}
+                </h3>
+                <p className="shrink-0 text-[15px] font-extrabold text-cta">
+                  {formatVnd(p.pricePerM2)}
+                  <span className="text-[11px] font-medium text-muted">/m²</span>
+                </p>
+              </div>
+              <p className="mt-1 text-[13px] text-muted">
+                {p.surface} · dày {p.thicknessMm}mm
+              </p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ════════════════════ ROOM COLLECTIONS ════════════════════ */}
+      <section
+        id="bo-suu-tap"
+        className="mx-auto max-w-[1280px] scroll-mt-20 px-6 pb-20 lg:px-10 lg:pb-28"
+      >
+        <p className="text-[12.5px] font-bold uppercase tracking-[0.22em] text-cta">
+          Bộ sưu tập
+        </p>
+        <h2 className="mt-4 max-w-xl font-display text-3xl font-medium text-ink lg:text-[2.5rem]">
+          Chọn sàn theo không gian sống
+        </h2>
+
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          {collections.map((c, i) => (
             <Link
               key={c.id}
               href={`/bo-suu-tap/${c.slug}`}
-              className="group flex flex-col overflow-hidden rounded-card border border-line bg-surface shadow-card transition-shadow hover:shadow-[0_6px_20px_rgba(0,0,0,.1)]"
+              className="group relative flex aspect-[16/10] items-end overflow-hidden rounded-3xl p-8"
             >
-              {/* Cover image placeholder */}
-              <div className="aspect-[4/3] w-full bg-gradient-to-br from-wood-soft to-wood" />
-              <div className="p-3">
-                <p className="text-[12.5px] font-extrabold leading-snug text-ink">
+              <div
+                className={`absolute inset-0 transition-transform duration-700 group-hover:scale-105 ${
+                  i % 2 === 0
+                    ? "bg-gradient-to-br from-wood to-ink"
+                    : "bg-gradient-to-br from-wood-soft to-wood"
+                }`}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-ink/10 to-transparent" />
+              <div className="relative">
+                <h3 className="font-display text-2xl font-semibold text-bg lg:text-3xl">
                   {c.name}
-                </p>
-                <p className="mt-0.5 line-clamp-2 text-[11px] text-muted">
-                  {c.description}
-                </p>
+                </h3>
+                <p className="mt-2 max-w-sm text-[13.5px] text-bg/80">{c.description}</p>
+                <span className="mt-4 inline-flex items-center gap-2 text-[13.5px] font-bold text-bg">
+                  Khám phá
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </span>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* ── Dự án thực tế ─────────────────────────────────────── */}
-      {project && (
-        <section className="px-4">
-          <SectionHeading>Dự án thực tế</SectionHeading>
-          <Link
-            href={`/du-an/${project.slug}`}
-            className="mt-4 flex flex-col overflow-hidden rounded-card border border-line bg-surface shadow-card transition-shadow hover:shadow-[0_6px_20px_rgba(0,0,0,.1)]"
-          >
-            <div className="aspect-video w-full bg-gradient-to-br from-wood-soft to-wood" />
-            <div className="p-4">
-              <p className="text-[14px] font-extrabold text-ink">{project.title}</p>
-              <p className="mt-1 text-[12.5px] text-muted">
-                📍 {project.location} · {project.areaM2} m²
+      {/* ════════════════════ PROJECTS (dark walnut) ════════════════════ */}
+      <section id="du-an" className="scroll-mt-20 bg-ink text-bg">
+        <div className="mx-auto max-w-[1280px] px-6 py-20 lg:px-10 lg:py-28">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div className="max-w-xl">
+              <p className="text-[12.5px] font-bold uppercase tracking-[0.22em] text-cta">
+                Công trình thực tế
               </p>
+              <h2 className="mt-4 font-display text-3xl font-medium leading-tight text-bg lg:text-[2.75rem]">
+                Hàng nghìn ngôi nhà Hà Nội đã chọn FUKIONE
+              </h2>
             </div>
-          </Link>
-        </section>
-      )}
+            <Link
+              href="/du-an"
+              className="group inline-flex items-center gap-2 text-[14px] font-bold text-bg"
+            >
+              Xem tất cả công trình
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
 
-      {/* ── CTA strip ─────────────────────────────────────────── */}
-      <section className="px-4">
-        <CtaStrip
-          heading="Cần tư vấn chọn sàn?"
-          subCopy="Tư vấn miễn phí · Khảo sát tận nơi · Báo giá trong ngày"
-          secondaryHref={SETTINGS.zaloUrl}
-        />
+          <div className="mt-12 grid gap-6 lg:grid-cols-12">
+            {/* Lead project */}
+            {leadProject && (
+              <div className="group relative aspect-[16/11] overflow-hidden rounded-3xl lg:col-span-7">
+                <div className="absolute inset-0 bg-gradient-to-br from-wood-soft to-wood transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-8">
+                  <p className="flex items-center gap-1.5 text-[12.5px] font-semibold text-bg/80">
+                    <MapPin className="h-3.5 w-3.5" /> {leadProject.location}
+                  </p>
+                  <h3 className="mt-2 font-display text-2xl font-semibold text-bg lg:text-3xl">
+                    {leadProject.title}
+                  </h3>
+                  <p className="mt-1 text-[13.5px] text-bg/75">
+                    Diện tích {leadProject.areaM2}m²
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Secondary projects */}
+            <div className="grid gap-6 sm:grid-cols-2 lg:col-span-5">
+              {projects.slice(1, 4).map((pr) => (
+                <div
+                  key={pr.id}
+                  className="group relative aspect-[16/10] overflow-hidden rounded-2xl"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-wood to-ink transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/65 to-transparent" />
+                  <div className="absolute bottom-0 left-0 p-5">
+                    <p className="text-[11.5px] font-semibold text-bg/70">{pr.location}</p>
+                    <h4 className="mt-0.5 font-display text-[17px] font-semibold text-bg">
+                      {pr.title}
+                    </h4>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════ CALCULATOR CTA ════════════════════ */}
+      <section className="mx-auto max-w-[1280px] px-6 py-20 lg:px-10 lg:py-28">
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-cta-soft-from to-cta-soft-to px-8 py-14 text-center lg:px-16 lg:py-20">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-cta/10 blur-3xl"
+          />
+          <p className="text-[12.5px] font-bold uppercase tracking-[0.22em] text-cta-ink">
+            Báo giá nhanh
+          </p>
+          <h2 className="mx-auto mt-4 max-w-2xl font-display text-3xl font-medium leading-tight text-ink lg:text-[2.75rem]">
+            Biết trước chi phí trọn gói chỉ trong 30 giây
+          </h2>
+          <p className="mx-auto mt-4 max-w-md text-[14.5px] text-muted">
+            Nhập diện tích phòng, chọn mẫu sàn — nhận ngay con số tạm tính. Sale gọi
+            lại tư vấn miễn phí.
+          </p>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/bao-gia"
+              className="group inline-flex h-13 items-center gap-2 rounded-pill bg-cta px-8 py-3.5 text-[15px] font-bold text-white shadow-cta transition-all hover:-translate-y-0.5 hover:shadow-lg"
+            >
+              Tính chi phí ngay
+              <ArrowRight className="h-[18px] w-[18px] transition-transform group-hover:translate-x-1" />
+            </Link>
+            <a
+              href={SETTINGS.zaloUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-[14.5px] font-bold text-trust"
+            >
+              <MessageCircle className="h-[18px] w-[18px]" />
+              Hoặc tư vấn ngay qua Zalo
+            </a>
+          </div>
+
+          {/* Trust micro-row */}
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-2 text-[12.5px] font-semibold text-ink/70">
+            <span className="flex items-center gap-1.5">
+              <MapPin className="h-4 w-4 text-trust" /> Showroom Hà Nội
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Hammer className="h-4 w-4 text-trust" /> Lắp đặt trọn gói
+            </span>
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="h-4 w-4 text-trust" /> Bảo hành dài hạn
+            </span>
+          </div>
+        </div>
       </section>
 
       <BottomActionBar primaryLabel="Tính chi phí" primaryHref="/bao-gia" />
