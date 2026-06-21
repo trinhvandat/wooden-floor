@@ -77,50 +77,54 @@ git commit -m "chore: scaffold Next.js app with Tailwind and shadcn"
 ### Task 2: Wire design tokens into the theme
 
 **Files:**
-- Modify: `fukione-web/src/app/globals.css` (CSS variables + base layer)
-- Modify: `fukione-web/tailwind.config.ts` (map tokens to Tailwind colors, radius, shadow)
+- Modify: `fukione-web/src/app/globals.css` (Tailwind v4 `@theme` tokens + base layer)
 - Modify: `fukione-web/src/app/layout.tsx` (load Be Vietnam Pro via `next/font`, set `<html lang="vi">`, base bg)
 - Test: none (verified visually + build)
+
+> **Tailwind v4 note:** this project uses Tailwind v4 (CSS-first). There is **no `tailwind.config.ts`** — design tokens are declared in an `@theme` block inside `globals.css`, which auto-generates the matching utilities. Do not create a JS/TS Tailwind config.
 
 **Interfaces:**
 - Produces: Tailwind utilities `bg-bg`, `bg-surface`, `text-ink`, `text-muted`, `bg-cta`, `text-cta`, `bg-trust`, `border-line`, `bg-wood`; radius `rounded-pill`; shadow `shadow-cta`, `shadow-card`. These are consumed by every later component.
 
-- [ ] **Step 1: Define CSS variables** — add to `globals.css` `@layer base { :root { ... } }`, copied verbatim from the visual-design doc §2:
+- [ ] **Step 1: Declare design tokens in a Tailwind v4 `@theme` block** — in `globals.css`, after `@import "tailwindcss";`, add the block below. In v4 these `--color-*` / `--radius-*` / `--shadow-*` variables AUTO-GENERATE the utilities (`bg-bg`, `text-ink`, `border-line`, `rounded-pill`, `shadow-cta`, `bg-result-bg`, …). Values copied verbatim from the visual-design doc §2:
 
 ```css
-:root {
-  --bg: #FAF7F2; --surface: #FFFFFF; --surface-warm: #F2EEE7;
-  --ink: #241F1B; --muted: #6B6259;
-  --cta: #E8852B; --cta-ink: #9C5A16; --trust: #0F766E; --wood: #6B4A2E;
-  --line: #ECE5DC;
-  --cta-soft-from: #FBEFE0; --cta-soft-to: #F6E2CC;
-  --trust-soft: #EAF5F3; --trust-soft-border: #D3ECE8;
-  --result-bg: #FBF6EF; --result-border: #E6C9A6;
+@theme {
+  --color-bg: #FAF7F2;
+  --color-surface: #FFFFFF;
+  --color-surface-warm: #F2EEE7;
+  --color-ink: #241F1B;
+  --color-muted: #6B6259;
+  --color-cta: #E8852B;
+  --color-cta-ink: #9C5A16;
+  --color-trust: #0F766E;
+  --color-wood: #6B4A2E;
+  --color-line: #ECE5DC;
+  --color-cta-soft-from: #FBEFE0;
+  --color-cta-soft-to: #F6E2CC;
+  --color-trust-soft: #EAF5F3;
+  --color-trust-soft-border: #D3ECE8;
+  --color-result-bg: #FBF6EF;
+  --color-result-border: #E6C9A6;
+  --radius-pill: 999px;
+  --radius-card: 14px;
+  --radius-input: 10px;
+  --radius-sheet: 22px;
+  --shadow-cta: 0 8px 20px rgba(232,133,43,.32);
+  --shadow-card: 0 4px 14px rgba(0,0,0,.05);
+  --shadow-bar: 0 -2px 12px rgba(0,0,0,.05);
+  --shadow-sheet: 0 -10px 30px rgba(0,0,0,.2);
 }
-html, body { background: var(--bg); color: var(--ink); }
 ```
 
-- [ ] **Step 2: Map tokens in `tailwind.config.ts`**
+- [ ] **Step 2: Set base page colors** — also in `globals.css`:
 
-```ts
-theme: {
-  extend: {
-    colors: {
-      bg: "var(--bg)", surface: "var(--surface)", "surface-warm": "var(--surface-warm)",
-      ink: "var(--ink)", muted: "var(--muted)",
-      cta: "var(--cta)", "cta-ink": "var(--cta-ink)", trust: "var(--trust)", wood: "var(--wood)",
-      line: "var(--line)",
-    },
-    borderRadius: { pill: "999px", card: "14px", input: "10px", sheet: "22px" },
-    boxShadow: {
-      cta: "0 8px 20px rgba(232,133,43,.32)",
-      card: "0 4px 14px rgba(0,0,0,.05)",
-      bar: "0 -2px 12px rgba(0,0,0,.05)",
-      sheet: "0 -10px 30px rgba(0,0,0,.2)",
-    },
-  },
-},
+```css
+@layer base {
+  html, body { background-color: var(--color-bg); color: var(--color-ink); }
+}
 ```
+This makes `bg-cta`, `text-trust`, `text-muted`, `border-line`, `rounded-pill`, `shadow-cta`, `bg-result-bg`, `border-result-border`, etc. available to every later component. (Reminder: NO `tailwind.config.ts` in Tailwind v4.)
 
 - [ ] **Step 3: Load the font** — in `layout.tsx`:
 
@@ -137,7 +141,7 @@ Run: `cd fukione-web && pnpm dev` → check the diacritics render in all weights
 - [ ] **Step 5: Commit**
 
 ```bash
-git add fukione-web/src/app/globals.css fukione-web/tailwind.config.ts fukione-web/src/app/layout.tsx
+git add fukione-web/src/app/globals.css fukione-web/src/app/layout.tsx
 git commit -m "feat: wire FUKIONE design tokens into Tailwind theme"
 ```
 
@@ -308,7 +312,7 @@ git commit -m "feat: add site shell (header, action bar, footer)"
   - `<LeadFormSheet open onOpenChange context?={{productName;areaM2;total}} />` — Tên*/SĐT*/Email + teal "📎 Đã đính kèm" line + "Gửi yêu cầu" → routes to `/cam-on` + `<BypassConsult/>`. (No real submit yet — navigates to thank-you; backend later.)
 
 - [ ] **Step 1: Build `SpecChip`, `SectionHeading` (optional wood underline), `CtaStrip`, `ProductCard`** per visual-design §5.
-- [ ] **Step 2: Build `CalculatorWidget`** (client): inputs area (number) + product select (when `variant="page"`) + install toggle; compute with `estimateCost(SETTINGS)` live; result box `bg-[var(--result-bg)] border-dashed border-[var(--result-border)]`; total `formatVnd`; note italic muted; primary opens the sheet.
+- [ ] **Step 2: Build `CalculatorWidget`** (client): inputs area (number) + product select (when `variant="page"`) + install toggle; compute with `estimateCost(SETTINGS)` live; result box `bg-result-bg border border-dashed border-result-border` (Tailwind v4 utilities from the `@theme` tokens); total `formatVnd`; note italic muted; primary opens the sheet.
 - [ ] **Step 3: Build `LeadFormSheet`** using shadcn `Sheet` (side="bottom"); fields + context block; "Gửi yêu cầu" calls `router.push("/cam-on")`.
 - [ ] **Step 4: Verify** on a scratch route or via Storybook-less quick page: calculator recomputes live; sheet slides up; bypass links present.
 - [ ] **Step 5: Commit**
