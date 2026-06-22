@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { leadInputSchema } from "@/lib/leads/schema";
@@ -51,10 +51,10 @@ export async function POST(req: Request): Promise<Response> {
     );
   }
 
-  // Best-effort notification — never let it affect the response (defence in depth;
-  // notifyLead is already designed not to throw).
-  try {
-    await notifyLead({
+  // Notify AFTER the response is flushed so the user isn't blocked on email.
+  // notifyLead is best-effort and never throws; the lead is already persisted (gotcha #1).
+  after(() =>
+    notifyLead({
       id: leadId,
       name: data.name,
       phone: data.phone,
@@ -63,10 +63,8 @@ export async function POST(req: Request): Promise<Response> {
       message: data.message,
       area: data.area,
       estimatedCost: data.estimatedCost,
-    });
-  } catch (err) {
-    console.error("[/api/leads] notify failed:", err);
-  }
+    }),
+  );
 
   return NextResponse.json({ success: true, data: { id: leadId } });
 }
