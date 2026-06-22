@@ -10,6 +10,21 @@ vi.mock("@payload-config", () => ({ default: {} }));
 vi.mock("payload", () => ({ getPayload: vi.fn(async () => ({ create: createMock })) }));
 vi.mock("@/lib/leads/notify", () => ({ notifyLead: notifyMock }));
 
+vi.mock("next/server", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("next/server")>();
+  return {
+    ...actual,
+    // No Next request context in unit tests: run the callback now and swallow its
+    // result so a best-effort notify failure can't become an unhandled rejection.
+    // NOTE: this runs the callback in microtask time, not truly post-response — the
+    // tests prove the response does not AWAIT notify, not Next's after-flush timing
+    // (that guarantee lives in Next.js's after() runtime and is not unit-testable here).
+    after: (cb: () => unknown) => {
+      Promise.resolve(cb()).catch(() => {});
+    },
+  };
+});
+
 import { POST } from "./route";
 
 function post(body: unknown): Request {
@@ -63,5 +78,14 @@ describe("POST /api/leads", () => {
     notifyMock.mockRejectedValue(new Error("resend down"));
     const res = await POST(post(valid));
     expect(res.status).toBe(200);
+  });
+
+  it("returns without waiting for the notification to finish", async () => {
+    createMock.mockResolvedValue({ id: 9 });
+    // notify never settles — the response must still come back.
+    notifyMock.mockReturnValue(new Promise<void>(() => {}));
+    const res = await POST(post(valid));
+    expect(res.status).toBe(200);
+    expect(notifyMock).toHaveBeenCalledOnce();
   });
 });
