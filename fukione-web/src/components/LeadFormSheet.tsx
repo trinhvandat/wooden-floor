@@ -42,12 +42,23 @@ export function LeadFormSheet({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Reset transient state when the sheet closes so reopening shows a clean slate.
+  function handleOpenChange(nextOpen: boolean) {
+    if (!nextOpen) {
+      setLoading(false);
+      setError(null);
+    }
+    onOpenChange(nextOpen);
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const website = String(new FormData(e.currentTarget).get("website") ?? "");
     setLoading(true);
     setError(null);
     try {
+      const productLine = context ? `Sản phẩm quan tâm: ${context.productName}` : "";
+      const composedMessage = [productLine, note].filter(Boolean).join("\n");
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -56,8 +67,8 @@ export function LeadFormSheet({
           name,
           phone,
           email,
-          message: note,
-          productId: context?.productId,
+          message: composedMessage,
+          // productId intentionally omitted until products are DB-backed (relationship to an unseeded table would fail). Product name is captured in message instead.
           area: context?.areaM2,
           estimatedCost: context?.total,
           website,
@@ -75,7 +86,7 @@ export function LeadFormSheet({
   }
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent
         side="bottom"
         showCloseButton={true}

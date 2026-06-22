@@ -9,7 +9,7 @@ export async function POST(req: Request): Promise<Response> {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ success: false, error: "Invalid JSON" }, { status: 400 });
+    return NextResponse.json({ success: false, error: "Yêu cầu không hợp lệ" }, { status: 400 });
   }
 
   // Honeypot: a filled "website" field means a bot — feign success, create nothing.
@@ -31,7 +31,9 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   // Drop the honeypot field; keep email separate so we only persist it when present.
-  const { website: _hp, email, ...data } = parsed.data;
+  const { email } = parsed.data;
+  const { name, phone, source, message, address, preferredTime, productId, area, estimatedCost } = parsed.data;
+  const data = { name, phone, source, message, address, preferredTime, productId, area, estimatedCost };
 
   let leadId: string | number;
   try {
