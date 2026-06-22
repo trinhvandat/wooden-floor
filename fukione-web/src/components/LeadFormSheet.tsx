@@ -16,6 +16,7 @@ import { BypassConsult } from "@/components/site/BypassConsult";
 import { formatVnd } from "@/lib/format";
 
 export interface LeadContext {
+  productId?: string;
   productName: string;
   areaM2: number;
   total: number;
@@ -38,14 +39,54 @@ export function LeadFormSheet({
   const [email, setEmail] = useState("");
   const [note, setNote] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Reset transient state when the sheet closes so reopening shows a clean slate.
+  function handleOpenChange(nextOpen: boolean) {
+    if (!nextOpen) {
+      setLoading(false);
+      setError(null);
+    }
+    onOpenChange(nextOpen);
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // No real backend yet — navigate to thank-you page
-    router.push("/cam-on");
+    const website = String(new FormData(e.currentTarget).get("website") ?? "");
+    setLoading(true);
+    setError(null);
+    try {
+      const productLine = context ? `Sản phẩm quan tâm: ${context.productName}` : "";
+      const composedMessage = [productLine, note].filter(Boolean).join("\n");
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source: context ? "calculator" : "quote",
+          name,
+          phone,
+          email,
+          message: composedMessage,
+          // productId intentionally omitted until products are DB-backed (relationship to an unseeded table would fail). Product name is captured in message instead.
+          area: context?.areaM2,
+          estimatedCost: context?.total,
+          website,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error ?? "Gửi không thành công, vui lòng thử lại.");
+      }
+      router.push("/cam-on");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Có lỗi xảy ra, vui lòng thử lại.");
+      setLoading(false);
+    }
   }
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent
         side="bottom"
         showCloseButton={true}
@@ -157,11 +198,17 @@ export function LeadFormSheet({
           />
 
           <SheetFooter className="mt-2 flex flex-col gap-3 p-0">
+            {error && (
+              <p className="text-[12.5px] font-semibold text-red-600" role="alert">
+                {error}
+              </p>
+            )}
             <button
               type="submit"
-              className="h-12 w-full rounded-pill bg-cta text-sm font-bold text-ink shadow-cta transition-opacity hover:opacity-90 active:opacity-80"
+              disabled={loading}
+              className="h-12 w-full rounded-pill bg-cta text-sm font-bold text-ink shadow-cta transition-opacity hover:opacity-90 active:opacity-80 disabled:opacity-60"
             >
-              Gửi yêu cầu
+              {loading ? "Đang gửi..." : "Gửi yêu cầu"}
             </button>
             <BypassConsult />
           </SheetFooter>
