@@ -12,7 +12,7 @@ export default function CamOnPage() {
   const { zaloUrl, nap } = SETTINGS;
 
   return (
-    <div className="flex min-h-[70dvh] flex-col items-center justify-center gap-8 bg-bg px-4 py-12 text-center">
+    <div className="flex flex-1 flex-col items-center justify-center gap-8 bg-bg px-4 py-12 text-center">
       {/* Fire GA4 event on mount */}
       <ConversionTracker event="lead_submitted" />
 
@@ -61,7 +61,7 @@ export default function CamOnPage() {
         <p className="font-semibold text-ink">Trong khi chờ đợi:</p>
         <div className="flex flex-wrap justify-center gap-4">
           <Link
-            href="/du-an"
+            href="/#du-an"
             className="font-bold text-trust hover:underline"
           >
             Xem dự án thực tế →
