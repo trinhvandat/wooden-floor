@@ -52,7 +52,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/block-master-commit.sh"
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/block-master-commit.sh\""
           }
         ]
       }
@@ -62,7 +62,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/load-memory.sh"
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/load-memory.sh\""
           }
         ]
       }
@@ -72,7 +72,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/remind-save.sh"
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/remind-save.sh\""
           }
         ]
       }
@@ -82,7 +82,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/clean-design-review-artifacts.sh"
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/clean-design-review-artifacts.sh\""
           }
         ]
       }
