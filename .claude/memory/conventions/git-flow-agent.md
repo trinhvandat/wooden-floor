@@ -16,7 +16,7 @@ The agent-driven git workflow for this repo. Decision + rationale in [[0004-git-
 2. Branch → `git worktree add ../wf-<slug> feat/<slug>` (worktree only when running agents in parallel; otherwise a plain branch is fine).
 3. TDD for high-risk paths first — cost calculator, lead→email — via `superpowers:test-driven-development`.
 4. Build → executor agent, or `Agent(..., isolation: "worktree")` for parallel work.
-5. **Review pass (separate context)** → code-reviewer / `typescript-reviewer` agent. Never self-approve in the authoring context.
+5. **Review pass (separate context)** → run `/review-pr <PR#>` (audits the PR against FUKIONE standards + posts a `gh` PR comment — see [[0007-adopt-code-review-pr]]), and/or a code-reviewer / `typescript-reviewer` agent. For UI changes also run `/design-review`. Never self-approve in the authoring context.
 6. Commit → `/git-commit` (atomic, Conventional Commits, English — see [[git-commit-english]]).
 7. Verify → `pnpm test`; Vercel preview deploy lands on the PR automatically.
 8. Merge → **squash** into `master`, then delete branch + worktree.

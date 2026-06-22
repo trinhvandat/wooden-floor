@@ -10,6 +10,7 @@
 - [0004 — trunk-based git-flow](decisions/0004-git-flow-trunk-based.md) — master + short-lived branch-per-task + PR + squash; worktrees isolate parallel agents; NOT classic GitFlow
 - [0005 — adopt OneRedOak design-review](decisions/0005-adopt-onredoak-design-review.md) — hybrid: reuse the Playwright-MCP engine, swap standards for FUKIONE principles; SubagentStop hook auto-cleans screenshots
 - [0006 — embed Payload backend](decisions/0006-embed-payload-backend.md) — Payload 3 embedded in Next.js; split `(app)`/`(payload)` route groups; 8 collections schema-as-code; scaffold-only (M1)
+- [0007 — adopt code review-pr](decisions/0007-adopt-code-review-pr.md) — hybrid: reuse Anthropic's /code-review engine (multi-agent + confidence ≥80 + gh pr comment), inject FUKIONE standards; ships as the /review-pr command
 
 ## Conventions (conventions + gotchas, durable)
 - [english-only-artifacts](conventions/english-only-artifacts.md) — all project files in English; only user-Claude chat is Vietnamese
@@ -21,6 +22,7 @@
 - [where-to-codify-rules](conventions/where-to-codify-rules.md) — always-apply rules go in CLAUDE.md (reaches subagents); memory hook does NOT reach subagents
 - [payload-next16-compat](conventions/payload-next16-compat.md) — Payload 3.85 supports Next 16, but tsx CLI breaks on Node 25 → pin Node 22; `--webpack` prod build; graphql `^16`
 - [hook-paths-claude-project-dir](conventions/hook-paths-claude-project-dir.md) — settings.json hooks must use `$CLAUDE_PROJECT_DIR/...`, not relative paths (fail from non-root cwd)
+- [review-pr-read-files-via-gh-api](conventions/review-pr-read-files-via-gh-api.md) — /review-pr reads PR-head files via `gh api contents?ref=SHA | base64 -d` (not `git show`) for accurate citation line numbers
 
 ## Current
 - [HANDOFF](HANDOFF.md) — latest WIP state (overwritten each session)

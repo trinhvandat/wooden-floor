@@ -1,46 +1,31 @@
-# HANDOFF — feat/scaffold-payload-backend — 2026-06-22
+# HANDOFF — feat/review-pr-command — 2026-06-22
 
 ## Current goal
-Scaffold the **Payload CMS 3 backend foundation** (M1) embedded in `fukione-web` —
-**scaffold-only** (no lead wiring, no mock migration). All files written; **blocked on a Node
-runtime switch before the codegen/build verification can run.**
+Add an automated **PR code-review** that audits a GitHub PR against FUKIONE standards and posts the result as a PR comment — **built, tested live, committed; PR #4 open into master (merge-conflict with master resolved).**
 
 ## Done (settled, do not redo)
-- **Design approved + spec written:** [`docs/superpowers/specs/2026-06-22-scaffold-payload-backend-design.md`](../../docs/superpowers/specs/2026-06-22-scaffold-payload-backend-design.md). Decision: [[0006-embed-payload-backend]].
-- **Hook bug fixed + verified:** all 4 hooks in `.claude/settings.json` now use
-  `$CLAUDE_PROJECT_DIR` (were relative paths → failed from non-root cwd). Committed `6c3cf38`.
-  See [[hook-paths-claude-project-dir]].
-- **All scaffold files written** (uncommitted):
-  - `fukione-web/payload.config.ts` (8 collections + Settings global, postgres adapter, lexical, sharp, types→`payload-types.ts`)
-  - `src/collections/{Users,Media,Products,Collections,Articles,Projects,Leads}.ts` + `src/globals/Settings.ts`
-  - `src/app/(payload)/…` route group (verbatim from Payload 3.x blank template — do NOT hand-edit)
-  - Existing UI **moved** into `src/app/(app)/…` via `git mv` (content unchanged; `favicon.ico` left at app root)
-  - `next.config.ts` wrapped with `withPayload` + `turbopack:{}`; `tsconfig.json` alias `@payload-config`
-  - `package.json`: scripts (`build` = `generate:importmap && next build --webpack`, `generate:types`, `generate:importmap`), deps (payload/@payloadcms/* 3.85.1, db-postgres, richtext-lexical, sharp, graphql **^16**, cross-env, sass), `pnpm.onlyBuiltDependencies: [sharp, esbuild]`
-  - `.env.example` (Neon pooled URL + `PAYLOAD_SECRET`); real `.env` is user-owned/read-only
-  - `.nvmrc` → **22**
+- **`/review-pr [PR#]` command shipped** — `.claude/commands/review-pr.md` (registers as the `review-pr` skill). Hybrid adoption of Anthropic's official `/code-review` engine (multi-agent + confidence ≥80 + `gh pr comment`), with FUKIONE standards injected. See [[0007-adopt-code-review-pr]].
+- **Investigated first:** no prior review-pr idea existed — git-flow only *promised* a separate review pass ([[git-flow-agent]]) with nothing wired up. The official `code-review` plugin (Boris Cherny) is installed + enabled and posts to GitHub, but only reads root `CLAUDE.md` — it misses FUKIONE's Gotchas + `.claude/memory/conventions/`. Hence the wrapper.
+- **Tested live on PR #3** (the Payload backend scaffold): 3 parallel agents (standards / bug / security). **0 issues cleared the ≥80 filter** → posted a "no blocking issues" comment with non-blocking notes: https://github.com/trinhvandat/wooden-floor/pull/3#issuecomment-4765199978
+  - Key result: the filter worked. Agents flagged "scary" security items (Users role privilege-escalation, Settings write, PAYLOAD_SECRET `|| ''`), but the `Users.ts:4` comment "`role` drives Phase-2 access control" + Payload secure-by-default revealed them as **intentional Phase-2 deferral** → confidence < 80 → not spammed onto the PR.
+- **Committed (2 commits) + pushed**; PR #4 opened. **PR #3 (scaffold backend) is now MERGED** to master; merged master back into this branch and resolved the memory conflicts (MEMORY/HANDOFF/sessions — kept both 0006 and 0007 lines, all conventions, all session entries).
 
-## In progress / Next steps (RESUME HERE)
-1. **User is installing Node 22 LTS** (`brew install node@22 && brew link --overwrite --force node@22`). Confirm `node -v` = v22.x.
-2. `pnpm install` (rebuild native deps e.g. sharp for Node 22).
-3. `pnpm generate:importmap` then `pnpm generate:types` → must produce `fukione-web/payload-types.ts` + `src/app/(payload)/admin/importMap.js`.
-4. `pnpm build` (webpack) must pass; `pnpm test` still 4/4.
-5. `/admin` boot check needs a real Neon `DATABASE_URL` + `PAYLOAD_SECRET` in `.env` (user supplies) → create-first-user screen, 7 collections + Settings in sidebar.
-6. **Commit** the scaffold (stage `(app)` renames + all new files) and open/append PR into `master`.
+## In progress / Next steps
+- **Merge PR #4** (squash, per [[0004-git-flow-trunk-based]]) once green.
+- Restore the user's stashed WIP if not already done: `git switch feat/scaffold-payload-backend && git stash pop` (their `.env` change is at `stash@{0}`) — though that branch is now merged, so the stash may be discardable.
+- Optional: run a real `/review-pr` on a PR that has genuine defects to confirm the ≥80 post path end-to-end (PR #3 was clean).
 
 ## Settled decisions + rationale
-- Embed Payload, split `(app)`/`(payload)` route groups, 8 collections schema-as-code — [[0006-embed-payload-backend]].
-- Node **22 LTS, not 25**: Payload's tsx CLI breaks on Node 25 ESM; Next 16 IS in Payload 3.85 peerDep range; prod build must use `--webpack`; graphql pinned `^16` — [[payload-next16-compat]].
-- Earlier: trunk-based git-flow [[0004-git-flow-trunk-based]]; design-review tooling [[0005-adopt-onredoak-design-review]]; English-only artifacts; mermaid-no-emoji.
+- Reuse the official `/code-review` engine, widen standards to FUKIONE — hybrid, mirrors the design-review adoption [[0005-adopt-onredoak-design-review]]. Full rationale: [[0007-adopt-code-review-pr]].
+- `/review-pr` is the **separate review pass** the trunk-based git-flow [[0004-git-flow-trunk-based]] mandates — run it from a non-authoring context, never self-approve.
+- Reading PR-head files for citations needs `gh api .../contents?ref=SHA | base64 -d` (not `git show`) — [[review-pr-read-files-via-gh-api]].
+- Backend now exists on master: Payload 3 embedded, `(app)`/`(payload)` route split, 8 collections — [[0006-embed-payload-backend]], [[payload-next16-compat]].
 
 ## Context to Load (paths only, do NOT paste contents)
-- docs/superpowers/specs/2026-06-22-scaffold-payload-backend-design.md
-- fukione-web/payload.config.ts
-- fukione-web/src/collections/ (+ src/globals/Settings.ts)
-- fukione-web/package.json
-- .claude/memory/conventions/payload-next16-compat.md
+- .claude/commands/review-pr.md
+- .claude/memory/decisions/0007-adopt-code-review-pr.md
+- .claude/memory/conventions/review-pr-read-files-via-gh-api.md
+- .claude/memory/conventions/git-flow-agent.md
 
 ## Blocked / Needs user input
-- **Node 22 install** (in progress, user-run). Until `node -v` = 22, steps 2–6 cannot run.
-- **Live `/admin` verify** needs user's real Neon credentials in `.env` (read-only to Claude).
-- Scaffold files are uncommitted — commit after build/test verification passes on Node 22.
+- None.
