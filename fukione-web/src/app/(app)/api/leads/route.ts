@@ -1,0 +1,70 @@
+import { NextResponse } from "next/server";
+import { getPayload } from "payload";
+import config from "@payload-config";
+import { leadInputSchema } from "@/lib/leads/schema";
+import { notifyLead } from "@/lib/leads/notify";
+
+export async function POST(req: Request): Promise<Response> {
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ success: false, error: "Invalid JSON" }, { status: 400 });
+  }
+
+  // Honeypot: a filled "website" field means a bot — feign success, create nothing.
+  if (
+    body &&
+    typeof body === "object" &&
+    "website" in body &&
+    (body as { website?: string }).website
+  ) {
+    return NextResponse.json({ success: true, data: null });
+  }
+
+  const parsed = leadInputSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { success: false, error: parsed.error.issues[0]?.message ?? "Dữ liệu không hợp lệ" },
+      { status: 400 },
+    );
+  }
+
+  // Drop the honeypot field; keep email separate so we only persist it when present.
+  const { website: _hp, email, ...data } = parsed.data;
+
+  let leadId: string | number;
+  try {
+    const payload = await getPayload({ config });
+    const created = await payload.create({
+      collection: "leads",
+      data: { ...data, ...(email ? { email } : {}), status: "new" },
+    });
+    leadId = created.id;
+  } catch (err) {
+    console.error("[/api/leads] DB create failed:", err);
+    return NextResponse.json(
+      { success: false, error: "Không thể lưu thông tin, vui lòng thử lại." },
+      { status: 500 },
+    );
+  }
+
+  // Best-effort notification — never let it affect the response (defence in depth;
+  // notifyLead is already designed not to throw).
+  try {
+    await notifyLead({
+      id: leadId,
+      name: data.name,
+      phone: data.phone,
+      source: data.source,
+      email,
+      message: data.message,
+      area: data.area,
+      estimatedCost: data.estimatedCost,
+    });
+  } catch (err) {
+    console.error("[/api/leads] notify failed:", err);
+  }
+
+  return NextResponse.json({ success: true, data: { id: leadId } });
+}
