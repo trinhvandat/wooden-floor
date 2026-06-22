@@ -33,7 +33,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.name}
         </p>
 
-        <p className="text-[15px] font-extrabold text-cta">
+        <p className="text-[15px] font-extrabold text-cta-ink">
           {formatVnd(product.pricePerM2)}
           <span className="text-[11px] font-medium text-muted">/m²</span>
         </p>

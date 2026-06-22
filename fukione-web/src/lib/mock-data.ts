@@ -20,7 +20,7 @@ export const PRODUCTS: Product[] = [
     color: "Nâu Sáng",
     surface: "Vân gỗ tự nhiên",
     roomTypes: ["phòng khách", "phòng ngủ"],
-    images: ["/images/products/san-go-f8-12mm.jpg"],
+    images: [],
     specs: [
       { k: "Độ dày", v: "12 mm" },
       { k: "Kháng nước", v: "Có" },
@@ -39,7 +39,7 @@ export const PRODUCTS: Product[] = [
     color: "Vàng Sồi",
     surface: "Bề mặt mờ",
     roomTypes: ["phòng ngủ", "phòng làm việc"],
-    images: ["/images/products/san-go-o-soi.jpg"],
+    images: [],
     specs: [
       { k: "Độ dày", v: "8 mm" },
       { k: "Kháng nước", v: "Không" },
@@ -58,7 +58,7 @@ export const PRODUCTS: Product[] = [
     color: "Nâu Đậm",
     surface: "Vân gỗ óc chó",
     roomTypes: ["phòng khách", "phòng ăn"],
-    images: ["/images/products/san-go-walnut.jpg"],
+    images: [],
     specs: [
       { k: "Độ dày", v: "12 mm" },
       { k: "Kháng nước", v: "Có" },
@@ -79,7 +79,7 @@ export const PRODUCTS: Product[] = [
     color: "Trắng Kem",
     surface: "Chống trơn trượt",
     roomTypes: ["phòng trẻ em", "phòng ngủ"],
-    images: ["/images/products/san-go-tre-em-8mm.jpg"],
+    images: [],
     specs: [
       { k: "Độ dày", v: "8 mm" },
       { k: "Kháng nước", v: "Có" },
@@ -98,7 +98,7 @@ export const PRODUCTS: Product[] = [
     color: "Đỏ Anh Đào",
     surface: "Bề mặt bóng",
     roomTypes: ["phòng làm việc", "phòng khách"],
-    images: ["/images/products/san-go-cherry-12mm.jpg"],
+    images: [],
     specs: [
       { k: "Độ dày", v: "12 mm" },
       { k: "Kháng nước", v: "Không" },
@@ -117,7 +117,7 @@ export const PRODUCTS: Product[] = [
     color: "Vàng Nhạt",
     surface: "Vân gỗ mịn",
     roomTypes: ["phòng ăn", "hành lang"],
-    images: ["/images/products/san-go-maple-8mm.jpg"],
+    images: [],
     specs: [
       { k: "Độ dày", v: "8 mm" },
       { k: "Kháng nước", v: "Không" },
@@ -136,7 +136,7 @@ export const PRODUCTS: Product[] = [
     color: "Xám Bạc",
     surface: "Vân bê tông hiện đại",
     roomTypes: ["hành lang", "bếp", "phòng khách"],
-    images: ["/images/products/san-go-xam-bac-12mm.jpg"],
+    images: [],
     specs: [
       { k: "Độ dày", v: "12 mm" },
       { k: "Kháng nước", v: "Có" },
@@ -155,7 +155,7 @@ export const PRODUCTS: Product[] = [
     color: "Nâu Đen",
     surface: "Vân gỗ đậm",
     roomTypes: ["bếp", "phòng ăn", "hành lang"],
-    images: ["/images/products/san-go-nau-den-8mm.jpg"],
+    images: [],
     specs: [
       { k: "Độ dày", v: "8 mm" },
       { k: "Kháng nước", v: "Có" },
@@ -201,7 +201,7 @@ export const PROJECTS: Project[] = [
     location: "Gia Lâm, Hà Nội",
     areaM2: 85,
     productId: "p3",
-    images: ["/images/projects/vinhomes-ocean-park.jpg"],
+    images: [],
   },
   {
     id: "j2",
@@ -210,6 +210,6 @@ export const PROJECTS: Project[] = [
     location: "Văn Giang, Hưng Yên",
     areaM2: 220,
     productId: "p7",
-    images: ["/images/projects/villa-ecopark.jpg"],
+    images: [],
   },
 ];

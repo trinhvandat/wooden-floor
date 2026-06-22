@@ -64,12 +64,12 @@ export default function HomePage() {
             </p>
 
             <h1
-              className="fk-rise mt-6 font-display text-[2.6rem] font-medium leading-[1.04] tracking-[-0.01em] text-ink sm:text-6xl lg:text-[5rem]"
+              className="fk-rise mt-6 font-display text-[2.6rem] font-medium leading-[1.04] tracking-[-0.01em] text-ink sm:text-6xl lg:text-[4.25rem]"
               style={{ animationDelay: "80ms" }}
             >
               Nền nhà đẹp bắt đầu
               <br className="hidden sm:block" /> từ một sàn gỗ{" "}
-              <em className="font-display font-semibold italic text-cta">tử tế</em>.
+              <em className="font-display font-semibold italic text-cta-ink">tử tế</em>.
             </h1>
 
             <p
@@ -86,7 +86,7 @@ export default function HomePage() {
             >
               <Link
                 href="/bao-gia"
-                className="group inline-flex h-13 items-center gap-2 rounded-pill bg-cta px-7 py-3.5 text-[15px] font-bold text-white shadow-cta transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                className="group inline-flex h-13 items-center gap-2 rounded-pill bg-cta px-7 py-3.5 text-[15px] font-bold text-ink shadow-cta transition-all hover:-translate-y-0.5 hover:shadow-lg"
               >
                 Tính chi phí ngay
                 <ArrowRight className="h-[18px] w-[18px] transition-transform group-hover:translate-x-1" />
@@ -114,7 +114,7 @@ export default function HomePage() {
                 <div key={s.label}>
                   <p className="font-display text-3xl font-semibold text-ink">
                     {s.num}
-                    <span className="text-cta">{s.unit}</span>
+                    <span className="text-cta-ink">{s.unit}</span>
                   </p>
                   <p className="mt-1 text-[12.5px] text-muted">{s.label}</p>
                 </div>
@@ -137,7 +137,7 @@ export default function HomePage() {
                 <p className="mt-0.5 font-display text-lg font-semibold text-ink">
                   {heroProduct.name}
                 </p>
-                <p className="mt-1 text-[15px] font-extrabold text-cta">
+                <p className="mt-1 text-[15px] font-extrabold text-cta-ink">
                   {formatVnd(heroProduct.pricePerM2)}
                   <span className="text-[12px] font-medium text-muted">/m²</span>
                 </p>
@@ -165,7 +165,7 @@ export default function HomePage() {
       {/* ════════════════════ WHY FUKIONE ════════════════════ */}
       <section className="mx-auto max-w-[1280px] px-6 py-20 lg:px-10 lg:py-28">
         <div className="max-w-2xl">
-          <p className="text-[12.5px] font-bold uppercase tracking-[0.22em] text-cta">
+          <p className="text-[12.5px] font-bold uppercase tracking-[0.22em] text-cta-ink">
             Vì sao FUKIONE
           </p>
           <h2 className="mt-4 font-display text-3xl font-medium leading-tight text-ink lg:text-[2.75rem]">
@@ -188,7 +188,7 @@ export default function HomePage() {
       <section className="mx-auto max-w-[1280px] px-6 pb-20 lg:px-10 lg:pb-28">
         <div className="flex items-end justify-between gap-6">
           <div>
-            <p className="text-[12.5px] font-bold uppercase tracking-[0.22em] text-cta">
+            <p className="text-[12.5px] font-bold uppercase tracking-[0.22em] text-cta-ink">
               Bán chạy
             </p>
             <h2 className="mt-4 font-display text-3xl font-medium text-ink lg:text-[2.5rem]">
@@ -214,7 +214,7 @@ export default function HomePage() {
                     ✓ Chống nước
                   </span>
                 )}
-                <span className="absolute bottom-4 right-4 flex h-11 w-11 translate-y-2 items-center justify-center rounded-full bg-cta text-white opacity-0 shadow-cta transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                <span className="absolute bottom-4 right-4 flex h-11 w-11 translate-y-2 items-center justify-center rounded-full bg-cta text-ink opacity-0 shadow-cta transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                   <ArrowRight className="h-5 w-5" />
                 </span>
               </div>
@@ -222,7 +222,7 @@ export default function HomePage() {
                 <h3 className="font-display text-xl font-semibold text-ink transition-colors group-hover:text-wood">
                   {p.name}
                 </h3>
-                <p className="shrink-0 text-[15px] font-extrabold text-cta">
+                <p className="shrink-0 text-[15px] font-extrabold text-cta-ink">
                   {formatVnd(p.pricePerM2)}
                   <span className="text-[11px] font-medium text-muted">/m²</span>
                 </p>
@@ -240,7 +240,7 @@ export default function HomePage() {
         id="bo-suu-tap"
         className="mx-auto max-w-[1280px] scroll-mt-20 px-6 pb-20 lg:px-10 lg:pb-28"
       >
-        <p className="text-[12.5px] font-bold uppercase tracking-[0.22em] text-cta">
+        <p className="text-[12.5px] font-bold uppercase tracking-[0.22em] text-cta-ink">
           Bộ sưu tập
         </p>
         <h2 className="mt-4 max-w-xl font-display text-3xl font-medium text-ink lg:text-[2.5rem]">
@@ -251,7 +251,7 @@ export default function HomePage() {
           {collections.map((c, i) => (
             <Link
               key={c.id}
-              href={`/bo-suu-tap/${c.slug}`}
+              href="/san-pham"
               className="group relative flex aspect-[16/10] items-end overflow-hidden rounded-3xl p-8"
             >
               <div
@@ -289,13 +289,6 @@ export default function HomePage() {
                 Hàng nghìn ngôi nhà Hà Nội đã chọn FUKIONE
               </h2>
             </div>
-            <Link
-              href="/du-an"
-              className="group inline-flex items-center gap-2 text-[14px] font-bold text-bg"
-            >
-              Xem tất cả công trình
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
           </div>
 
           <div className="mt-12 grid gap-6 lg:grid-cols-12">
@@ -360,7 +353,7 @@ export default function HomePage() {
           <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/bao-gia"
-              className="group inline-flex h-13 items-center gap-2 rounded-pill bg-cta px-8 py-3.5 text-[15px] font-bold text-white shadow-cta transition-all hover:-translate-y-0.5 hover:shadow-lg"
+              className="group inline-flex h-13 items-center gap-2 rounded-pill bg-cta px-8 py-3.5 text-[15px] font-bold text-ink shadow-cta transition-all hover:-translate-y-0.5 hover:shadow-lg"
             >
               Tính chi phí ngay
               <ArrowRight className="h-[18px] w-[18px] transition-transform group-hover:translate-x-1" />

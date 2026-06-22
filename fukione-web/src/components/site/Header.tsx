@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Menu, Phone, MessageCircle } from "lucide-react";
+import { Phone, MessageCircle } from "lucide-react";
 import { SETTINGS } from "@/lib/settings";
+import { MobileNav } from "@/components/site/MobileNav";
 
 const NAV = [
   { label: "Sản phẩm", href: "/san-pham" },
@@ -29,12 +30,7 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-line bg-bg/80 backdrop-blur-md">
       {/* ── Mobile chrome (hamburger · logo · icons) ───────────────── */}
       <div className="flex h-14 items-center px-4 md:hidden">
-        <button
-          aria-label="Mở menu"
-          className="flex h-11 w-11 items-center justify-center rounded-lg text-ink transition-colors hover:bg-line"
-        >
-          <Menu className="h-5 w-5" />
-        </button>
+        <MobileNav />
         <Wordmark className="flex flex-1 items-center justify-center" />
         <div className="flex items-center gap-1">
           <a
@@ -92,7 +88,7 @@ export function Header() {
           </a>
           <Link
             href="/bao-gia"
-            className="ml-1 inline-flex h-10 items-center rounded-pill bg-cta px-5 text-[13.5px] font-bold text-white shadow-cta transition-opacity hover:opacity-90"
+            className="ml-1 inline-flex h-10 items-center rounded-pill bg-cta px-5 text-[13.5px] font-bold text-ink shadow-cta transition-opacity hover:opacity-90"
           >
             Tính chi phí
           </Link>

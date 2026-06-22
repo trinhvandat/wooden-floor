@@ -20,7 +20,7 @@ const SURVEY_INCLUDES = [
     desc: "Vật liệu + lắp đặt + phào nẹp — không phát sinh chi phí ẩn.",
   },
   {
-    icon: "🆓",
+    icon: "🤝",
     title: "Hoàn toàn miễn phí",
     desc: "Khảo sát và tư vấn không mất phí, không ràng buộc.",
   },
@@ -70,7 +70,7 @@ export function SurveyForm() {
         {/* Tên */}
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="sf-name" className="text-[12.5px] font-bold text-ink">
-            Họ tên <span className="text-cta">*</span>
+            Họ tên <span className="text-cta-ink">*</span>
           </Label>
           <Input
             id="sf-name"
@@ -79,6 +79,8 @@ export function SurveyForm() {
             placeholder="Nguyễn Văn A"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            onInvalid={(e) => e.currentTarget.setCustomValidity("Vui lòng điền thông tin này")}
+            onInput={(e) => e.currentTarget.setCustomValidity("")}
             className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
           />
         </div>
@@ -89,7 +91,7 @@ export function SurveyForm() {
             htmlFor="sf-phone"
             className="text-[12.5px] font-bold text-ink"
           >
-            Số điện thoại <span className="text-cta">*</span>
+            Số điện thoại <span className="text-cta-ink">*</span>
           </Label>
           <Input
             id="sf-phone"
@@ -98,6 +100,8 @@ export function SurveyForm() {
             placeholder="0900 000 000"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            onInvalid={(e) => e.currentTarget.setCustomValidity("Vui lòng điền thông tin này")}
+            onInput={(e) => e.currentTarget.setCustomValidity("")}
             className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
           />
         </div>
@@ -108,7 +112,7 @@ export function SurveyForm() {
             htmlFor="sf-address"
             className="text-[12.5px] font-bold text-ink"
           >
-            Địa chỉ khảo sát <span className="text-cta">*</span>
+            Địa chỉ khảo sát <span className="text-cta-ink">*</span>
           </Label>
           <Input
             id="sf-address"
@@ -117,6 +121,8 @@ export function SurveyForm() {
             placeholder="Số nhà, đường, quận/huyện, thành phố"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
+            onInvalid={(e) => e.currentTarget.setCustomValidity("Vui lòng điền thông tin này")}
+            onInput={(e) => e.currentTarget.setCustomValidity("")}
             className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
           />
         </div>
@@ -171,7 +177,7 @@ export function SurveyForm() {
 
         <button
           type="submit"
-          className="mt-2 h-12 w-full rounded-pill bg-cta text-sm font-bold text-white shadow-cta transition-opacity hover:opacity-90 active:opacity-80"
+          className="mt-2 h-12 w-full rounded-pill bg-cta text-sm font-bold text-ink shadow-cta transition-opacity hover:opacity-90 active:opacity-80"
         >
           Đặt lịch khảo sát
         </button>

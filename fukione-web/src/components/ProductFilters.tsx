@@ -155,80 +155,84 @@ export function ProductFilters() {
     <>
       {/* ── Sticky filter bar ──────────────────────────────────── */}
       <div className="sticky top-14 z-40 border-b border-line bg-bg/95 px-4 py-3 backdrop-blur">
-        {/* Row 1: count + sort */}
-        <div className="flex items-center justify-between">
-          <span className="text-[13.5px] font-extrabold text-ink">
-            Sản phẩm ({filtered.length})
-          </span>
-          <button
-            type="button"
-            onClick={toggleSort}
-            className="flex items-center gap-1.5 rounded-pill border border-line bg-surface px-3 py-1.5 text-[12.5px] font-bold text-ink transition-colors hover:border-trust hover:text-trust"
-          >
-            <ArrowUpDown className="h-3.5 w-3.5" />
-            {sortLabel}
-          </button>
-        </div>
-
-        {/* Row 2: filter button + active chips */}
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={openSheet}
-            className="flex items-center gap-1.5 rounded-pill border border-line bg-surface px-3 py-1.5 text-[12.5px] font-bold text-ink transition-colors hover:border-trust hover:text-trust"
-          >
-            <SlidersHorizontal className="h-3.5 w-3.5" />
-            Lọc{activeCount > 0 ? ` (${activeCount})` : ""}
-          </button>
-
-          {activeChips.map((chip) => (
-            <button
-              key={chip.key}
-              type="button"
-              onClick={() => removeFilter(chip.key)}
-              className="flex items-center gap-1 rounded-pill border border-trust-soft-border bg-trust-soft px-2.5 py-1 text-[11px] font-bold text-trust"
-            >
-              {chip.label}
-              <X className="h-3 w-3" />
-            </button>
-          ))}
-
-          {activeCount > 0 && (
+        <div className="max-w-[1280px] mx-auto">
+          {/* Row 1: count + sort */}
+          <div className="flex items-center justify-between">
+            <span className="text-[13.5px] font-extrabold text-ink">
+              Sản phẩm ({filtered.length})
+            </span>
             <button
               type="button"
-              onClick={clearAll}
-              className="text-[11.5px] font-bold text-muted hover:text-ink"
+              onClick={toggleSort}
+              className="flex items-center gap-1.5 rounded-pill border border-line bg-surface px-3 py-1.5 text-[12.5px] font-bold text-ink transition-colors hover:border-trust hover:text-trust"
             >
-              Xóa tất cả
+              <ArrowUpDown className="h-3.5 w-3.5" />
+              {sortLabel}
             </button>
-          )}
+          </div>
+
+          {/* Row 2: filter button + active chips */}
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={openSheet}
+              className="flex items-center gap-1.5 rounded-pill border border-line bg-surface px-3 py-1.5 text-[12.5px] font-bold text-ink transition-colors hover:border-trust hover:text-trust"
+            >
+              <SlidersHorizontal className="h-3.5 w-3.5" />
+              Lọc{activeCount > 0 ? ` (${activeCount})` : ""}
+            </button>
+
+            {activeChips.map((chip) => (
+              <button
+                key={chip.key}
+                type="button"
+                onClick={() => removeFilter(chip.key)}
+                className="flex items-center gap-1 rounded-pill border border-trust-soft-border bg-trust-soft px-2.5 py-1 text-[11px] font-bold text-trust"
+              >
+                {chip.label}
+                <X className="h-3 w-3" />
+              </button>
+            ))}
+
+            {activeCount > 0 && (
+              <button
+                type="button"
+                onClick={clearAll}
+                className="text-[11.5px] font-bold text-muted hover:text-ink"
+              >
+                Xóa tất cả
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
       {/* ── Product grid ────────────────────────────────────────── */}
       <div className="px-4 py-4">
-        {filtered.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 py-16 text-center">
-            <span className="text-4xl">🪵</span>
-            <p className="text-[14px] font-bold text-ink">
-              Không tìm thấy sản phẩm phù hợp
-            </p>
-            <p className="text-[13px] text-muted">Thử bỏ bớt điều kiện lọc</p>
-            <button
-              type="button"
-              onClick={clearAll}
-              className="mt-2 rounded-pill border-2 border-trust px-5 py-2 text-[13px] font-bold text-trust hover:bg-trust-soft"
-            >
-              Xóa bộ lọc
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-3">
-            {filtered.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
-        )}
+        <div className="max-w-[1280px] mx-auto">
+          {filtered.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 py-16 text-center">
+              <span className="text-4xl">🪵</span>
+              <p className="text-[14px] font-bold text-ink">
+                Không tìm thấy sản phẩm phù hợp
+              </p>
+              <p className="text-[13px] text-muted">Thử bỏ bớt điều kiện lọc</p>
+              <button
+                type="button"
+                onClick={clearAll}
+                className="mt-2 rounded-pill border-2 border-trust px-5 py-2 text-[13px] font-bold text-trust hover:bg-trust-soft"
+              >
+                Xóa bộ lọc
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {filtered.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ── Filter bottom sheet ──────────────────────────────────── */}
@@ -365,7 +369,7 @@ export function ProductFilters() {
             <button
               type="button"
               onClick={applyDraft}
-              className="flex-1 rounded-pill bg-cta py-2.5 text-[13px] font-bold text-white shadow-cta transition-opacity hover:opacity-90"
+              className="flex-1 rounded-pill bg-cta py-2.5 text-[13px] font-bold text-ink shadow-cta transition-opacity hover:opacity-90"
             >
               Áp dụng ({draftCount})
             </button>

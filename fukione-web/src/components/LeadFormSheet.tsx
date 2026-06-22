@@ -69,7 +69,7 @@ export function LeadFormSheet({
           {/* Tên */}
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="lf-name" className="text-[12.5px] font-bold text-ink">
-              Họ tên <span className="text-cta">*</span>
+              Họ tên <span className="text-cta-ink">*</span>
             </Label>
             <Input
               id="lf-name"
@@ -78,6 +78,8 @@ export function LeadFormSheet({
               placeholder="Nguyễn Văn A"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              onInvalid={(e) => e.currentTarget.setCustomValidity("Vui lòng điền thông tin này")}
+              onInput={(e) => e.currentTarget.setCustomValidity("")}
               className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
             />
           </div>
@@ -85,7 +87,7 @@ export function LeadFormSheet({
           {/* SĐT */}
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="lf-phone" className="text-[12.5px] font-bold text-ink">
-              Số điện thoại <span className="text-cta">*</span>
+              Số điện thoại <span className="text-cta-ink">*</span>
             </Label>
             <Input
               id="lf-phone"
@@ -94,6 +96,8 @@ export function LeadFormSheet({
               placeholder="0900 000 000"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              onInvalid={(e) => e.currentTarget.setCustomValidity("Vui lòng điền thông tin này")}
+              onInput={(e) => e.currentTarget.setCustomValidity("")}
               className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
             />
           </div>
@@ -155,7 +159,7 @@ export function LeadFormSheet({
           <SheetFooter className="mt-2 flex flex-col gap-3 p-0">
             <button
               type="submit"
-              className="h-12 w-full rounded-pill bg-cta text-sm font-bold text-white shadow-cta transition-opacity hover:opacity-90 active:opacity-80"
+              className="h-12 w-full rounded-pill bg-cta text-sm font-bold text-ink shadow-cta transition-opacity hover:opacity-90 active:opacity-80"
             >
               Gửi yêu cầu
             </button>

@@ -47,10 +47,10 @@ export default async function ProductDetailPage({ params }: { params: PageParams
 
       {/* ── Product header ─────────────────────────────────────── */}
       <section className="px-4">
-        <h1 className="text-[21px] font-extrabold leading-tight text-ink">
+        <h1 className="font-display text-[21px] font-extrabold leading-tight text-ink">
           {product.name}
         </h1>
-        <p className="mt-1.5 text-[20px] font-extrabold text-cta">
+        <p className="mt-1.5 text-[20px] font-extrabold text-cta-ink">
           {formatVnd(product.pricePerM2)}
           <span className="ml-0.5 text-[14px] font-medium text-muted">/m²</span>
         </p>

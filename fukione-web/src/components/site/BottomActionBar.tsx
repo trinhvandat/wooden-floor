@@ -12,7 +12,7 @@ export function BottomActionBar({ primaryLabel, primaryHref }: BottomActionBarPr
       {/* Primary CTA — full width amber pill */}
       <a
         href={primaryHref}
-        className="flex flex-1 items-center justify-center rounded-pill bg-cta py-3 text-sm font-extrabold text-white shadow-cta"
+        className="flex flex-1 items-center justify-center rounded-pill bg-cta py-3 text-sm font-extrabold text-ink shadow-cta"
       >
         {primaryLabel}
       </a>

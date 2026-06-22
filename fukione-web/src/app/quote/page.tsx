@@ -1,5 +1,4 @@
 import { CalculatorWidget } from "@/components/CalculatorWidget";
-import { BottomActionBar } from "@/components/site/BottomActionBar";
 
 export const metadata = {
   title: "Tính chi phí sàn gỗ | FUKIONE",
@@ -9,10 +8,10 @@ export const metadata = {
 
 export default function BaoGiaPage() {
   return (
-    <div className="flex flex-col gap-6 bg-bg pb-24 px-4 pt-6">
+    <div className="flex flex-col gap-6 bg-bg px-4 pt-6 max-w-xl mx-auto">
       {/* ── Page header ─────────────────────────────────── */}
       <div className="flex flex-col gap-1.5">
-        <h1 className="text-[22px] font-extrabold leading-tight tracking-[-0.4px] text-ink">
+        <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-[-0.4px] text-ink">
           Tính chi phí sàn gỗ
         </h1>
         <p className="text-[13.5px] leading-relaxed text-muted">
@@ -24,8 +23,6 @@ export default function BaoGiaPage() {
 
       {/* ── Calculator ──────────────────────────────────── */}
       <CalculatorWidget variant="page" />
-
-      <BottomActionBar primaryLabel="Tính chi phí" primaryHref="/bao-gia" />
     </div>
   );
 }

@@ -174,7 +174,7 @@ export function CalculatorWidget({ product, variant }: CalculatorWidgetProps) {
         </div>
 
         {/* Disclaimer note — always visible */}
-        <p className="text-[10.5px] italic text-muted">
+        <p className="text-[12px] italic text-muted">
           * giá cuối phụ thuộc khảo sát thực tế
         </p>
 
@@ -182,7 +182,7 @@ export function CalculatorWidget({ product, variant }: CalculatorWidgetProps) {
         <button
           type="button"
           onClick={() => setSheetOpen(true)}
-          className="h-12 w-full rounded-pill bg-cta text-sm font-bold text-white shadow-cta transition-opacity hover:opacity-90 active:opacity-80"
+          className="h-12 w-full rounded-pill bg-cta text-sm font-bold text-ink shadow-cta transition-opacity hover:opacity-90 active:opacity-80"
         >
           Nhận báo giá
         </button>
