@@ -1,46 +1,41 @@
-# HANDOFF — feat/lead-funnel — 2026-06-22
+# HANDOFF — async lead notify shipped — 2026-06-22
 
 ## Current goal
-Wire the **lead funnel** end-to-end (core of this lead-gen-first site): both forms →
-`POST /api/leads` → Zod validate → create Lead in DB (source of truth) → best-effort Resend
-email → `/cam-on`. **Built, reviewed, all gates green — opening PR.**
+None active. Lead funnel + async-notify work is merged to `master`. This branch
+(`chore/save-memory-notify`) only records the session's decisions into memory.
 
 ## Done (settled, do not redo)
-- **All 5 plan tasks complete + per-task reviewed (Approved)** on branch `feat/lead-funnel`,
-  via subagent-driven-development. Plan/spec: `docs/superpowers/{plans,specs}/2026-06-22-lead-funnel*`.
-  - schema (`src/lib/leads/schema.ts`), notifier (`src/lib/leads/notify.ts`, never-throws),
-    route (`src/app/(app)/api/leads/route.ts` + `vitest.config.ts`), forms wired
-    (`SurveyForm`, `LeadFormSheet`, `CalculatorWidget`), Playwright e2e (`e2e/lead-funnel.spec.ts`).
-- **Whole-branch final review (opus)** caught 2 integration bugs the per-task passes missed,
-  both FIXED in `3da0cf1`:
-  - `pnpm test` was RED (Vitest collected the Playwright spec) → added e2e exclude. See [[vitest-exclude-e2e]].
-  - Calculator sent a mock-data `productId` into a Payload relationship on an unseeded table →
-    would 500 + LOSE the lead. Per user decision: dropped `productId` from the calculator
-    payload, capture `productName` in `message`, keep the schema/`LeadContext` plumbing.
-- **Gates green:** `pnpm lint` 0/0, `pnpm test` 17/17, `pnpm test:e2e` 1 passed.
-- Architecture + rationale: [[0008-lead-funnel-route-handler]]. Routing was already done: [[vn-urls-via-next-rewrites]].
+- **Lead funnel** (PR #5, merged): forms → `POST /api/leads` → Zod → DB-first → best-effort
+  Resend email → `/cam-on`. See [[0008-lead-funnel-route-handler]].
+- **Async notify** (PR #6, merged): the email now fires via **`after()` from `next/server`**
+  (post-response, user not blocked); DB write still synchronous + first. See
+  [[0009-async-notify-deferred-channels]], [[nextjs-after-for-background]].
+- **Research spike** captured why Zalo is NOT an automated channel and reliability is deferred:
+  `docs/superpowers/research/2026-06-22-lead-notify-fanout-research.md`.
+
+## Deliberately deferred (YAGNI — do NOT build without a new ask)
+- Automated Zalo notification channel — sales contact customers manually via Zalo (phone from
+  the email/admin). Rationale in [[0009-async-notify-deferred-channels]].
+- Multi-channel fan-out (`LeadNotifier` interface/dispatcher) — only email exists, so it'd be
+  speculative.
+- Email-failure durability (notify-status field + cron retry, or durable queue/outbox) — rare
+  case; `/admin` (DB) is the no-lead-lost backstop. Scale path: Vercel Queues / Upstash QStash.
 
 ## In progress / Next steps
-- Commit memory → push `feat/lead-funnel` → open PR → master → run **`/review-pr`** (separate
-  review pass) → squash-merge per [[0004-git-flow-trunk-based]].
-- **Fast-follow (post-merge, in PR body):** notify.test `!LEAD_NOTIFY_EMAIL`-alone branch;
-  schema phone 11-digit range + empty-name test. (Test/plan-mandated polish, low risk.)
-- **Future iteration (separate):** DB-back products (seed + read from Payload instead of
-  `mock-data.ts`), then re-enable sending `productId` from the calculator (plumbing is ready).
-- Real email delivery needs `RESEND_API_KEY` + `LEAD_NOTIFY_EMAIL` in `.env` (absent → lead
-  still saved, email skipped).
-
-## Settled decisions + rationale
-- Funnel architecture: [[0008-lead-funnel-route-handler]]. Don't downgrade zod: [[zod4-payload-no-conflict]].
-- Vitest gotchas hit this session: [[vitest-exclude-e2e]], [[vitest4-vi-hoisted]].
+- Merge this `chore/save-memory-notify` PR (memory only).
+- Possible future work when asked: DB-back the product catalog (seed + read from Payload
+  instead of `mock-data.ts`), then re-enable calculator `productId`; or the deferred items above.
+- Optional repo hygiene: several old merged local branches remain (`feat/scaffold-ui`,
+  `feat/scaffold-payload-backend`, `feat/design-review-agent`, `feat/review-pr-command`,
+  `docs/uiux-visual-design`) — safe to delete.
 
 ## Context to Load (paths only, do NOT paste contents)
-- docs/superpowers/plans/2026-06-22-lead-funnel.md
-- .superpowers/sdd/progress.md
-- .claude/memory/decisions/0008-lead-funnel-route-handler.md
+- .claude/memory/decisions/0009-async-notify-deferred-channels.md
+- docs/superpowers/research/2026-06-22-lead-notify-fanout-research.md
+- fukione-web/src/app/(app)/api/leads/route.ts
 
 ## Blocked / Needs user input
-- None. Branch is ready; PR is the next step.
+- None.
 
-ACTION: If resuming, the feature is complete on `feat/lead-funnel` (HEAD 3da0cf1). Check
-whether the PR was opened / `/review-pr` was run / it was squash-merged, then finish that.
+ACTION: Both features are live on master. If resuming, there is no pending feature work —
+pick from "Next steps" or wait for a new request.
