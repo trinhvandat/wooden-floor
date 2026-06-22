@@ -30,6 +30,12 @@ describe("notifyLead", () => {
     expect(sendMock).toHaveBeenCalledTimes(3); // initial + 2 retries
   });
 
+  it("handles send rejection and retries without throwing", async () => {
+    sendMock.mockRejectedValue(new Error("network down"));
+    await expect(notifyLead(lead, 1)).resolves.toBeUndefined();
+    expect(sendMock).toHaveBeenCalledTimes(2); // initial + 1 retry
+  });
+
   it("no-ops when env is missing", async () => {
     delete process.env.RESEND_API_KEY;
     await notifyLead(lead);

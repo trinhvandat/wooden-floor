@@ -42,20 +42,24 @@ export async function notifyLead(lead: NotifyLead, retries = 2): Promise<void> {
     return;
   }
 
-  const resend = new Resend(apiKey);
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      const { error } = await resend.emails.send({
-        from: FROM,
-        to,
-        subject: `Lead mới: ${lead.name} (${lead.phone})`,
-        html: buildHtml(lead),
-      });
-      if (!error) return;
-      console.warn(`[notifyLead] attempt ${attempt + 1} failed:`, error);
-    } catch (err) {
-      console.warn(`[notifyLead] attempt ${attempt + 1} threw:`, err);
+  try {
+    const resend = new Resend(apiKey);
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        const { error } = await resend.emails.send({
+          from: FROM,
+          to,
+          subject: `Lead mới: ${lead.name} (${lead.phone})`,
+          html: buildHtml(lead),
+        });
+        if (!error) return;
+        console.warn(`[notifyLead] attempt ${attempt + 1} failed:`, error);
+      } catch (err) {
+        console.warn(`[notifyLead] attempt ${attempt + 1} threw:`, err);
+      }
     }
+    console.error("[notifyLead] all attempts exhausted for lead", lead.id);
+  } catch (err) {
+    console.error("[notifyLead] outer exception (constructor or unexpected error):", err);
   }
-  console.error("[notifyLead] all attempts exhausted for lead", lead.id);
 }
