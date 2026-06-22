@@ -9,6 +9,7 @@
 - [0003 — adopt shipwithai Tier 1 harness](decisions/0003-adopt-shipwithai-tier1-harness.md) — CLAUDE.md + docs/architecture.md + pnpm permissions; greenfield → Tier 1 only
 - [0004 — trunk-based git-flow](decisions/0004-git-flow-trunk-based.md) — master + short-lived branch-per-task + PR + squash; worktrees isolate parallel agents; NOT classic GitFlow
 - [0005 — adopt OneRedOak design-review](decisions/0005-adopt-onredoak-design-review.md) — hybrid: reuse the Playwright-MCP engine, swap standards for FUKIONE principles; SubagentStop hook auto-cleans screenshots
+- [0007 — adopt code review-pr](decisions/0007-adopt-code-review-pr.md) — hybrid: reuse Anthropic's /code-review engine (multi-agent + confidence ≥80 + gh pr comment), inject FUKIONE standards; ships as the /review-pr command
 
 ## Conventions (conventions + gotchas, durable)
 - [english-only-artifacts](conventions/english-only-artifacts.md) — all project files in English; only user-Claude chat is Vietnamese
@@ -18,6 +19,7 @@
 - [settings-permission-grant-needs-approval](conventions/settings-permission-grant-needs-approval.md) — adding permission allow-rules needs explicit user approval; merge, don't overwrite settings.json
 - [git-flow-agent](conventions/git-flow-agent.md) — agent git workflow: branch-per-task, worktrees for parallel agents, separate review pass, squash-merge
 - [where-to-codify-rules](conventions/where-to-codify-rules.md) — always-apply rules go in CLAUDE.md (reaches subagents); memory hook does NOT reach subagents
+- [review-pr-read-files-via-gh-api](conventions/review-pr-read-files-via-gh-api.md) — /review-pr reads PR-head files via `gh api contents?ref=SHA | base64 -d` (not `git show`) for accurate citation line numbers
 
 ## Current
 - [HANDOFF](HANDOFF.md) — latest WIP state (overwritten each session)
