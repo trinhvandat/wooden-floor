@@ -1,30 +1,29 @@
-# HANDOFF — master — 2026-06-20
+# HANDOFF — feat/design-review-agent — 2026-06-22
 
 ## Current goal
-Define the git-flow workflow for agent-driven development — **done, codified, awaiting commit**.
+Ship an automated **design-review agent** for FUKIONE UI — **done, committed, PR #2 open into master.**
 
 ## Done (settled, do not redo)
-- Project memory system + Tier 1 harness (earlier this day) — shipped (commits 3fc3fd5, 8cb6a10).
-- **Git-flow researched & decided:** trunk-based (`master` always deployable + short-lived `feat/*`,`fix/*`,`chore/*` → PR → squash-merge → delete branch); parallel agents use git worktrees; review is a separate pass; NOT classic GitFlow.
-- Codified into memory: decision `0004-git-flow-trunk-based`, conventions `git-flow-agent` + `where-to-codify-rules`; MEMORY.md index updated.
-- **CLAUDE.md §Conventions:** added a Branching line (rule + pointer) so the flow reaches subagents too.
+- **Design-review agent shipped** (hybrid adoption of OneRedOak) — see [[0005-adopt-onredoak-design-review]]. Files: `.claude/agents/design-review.md`, `.claude/commands/design-review.md`, `.claude/context/design-principles.md` + `style-guide.md`; `CLAUDE.md` got a "Visual development" section.
+- **Auto-cleanup wired:** `SubagentStop` hook `.claude/hooks/clean-design-review-artifacts.sh` removes throwaway Playwright screenshots; artifacts gitignored (`/*.png`, `.playwright-mcp/`). Tested: cleaned 37 artifacts, tracked files untouched.
+- The agent **ran once** this session (user configured Playwright MCP) and produced a fix to `fukione-web/src/app/thank-you/page.tsx` (flex-1 centering + `/#du-an` anchor) — committed.
+- **PR #2** opened: `feat/design-review-agent` → `master` — https://github.com/trinhvandat/wooden-floor/pull/2. Per user, the scaffold-ui + design-review lines are treated as **one delivery**, so the PR bundles all 21 commits (full Phase 1 UI build + the design-review tooling).
 
 ## In progress / Next steps
-- **Commit** this session's changes (CLAUDE.md + .claude/memory/ additions) — not yet committed.
-- Optional: add a PreToolUse hook to hard-block commits on `master` (machine-enforcement). User has NOT decided yet — was offered, no answer.
-- Then: scaffold the app (M1 — Next.js + Payload + Postgres + Vercel) per `docs/architecture.md` §7, applying the new git-flow (branch `feat/scaffold-nextjs-payload` → PR → squash).
+- **Review + merge PR #2** into master (squash, per [[0004-git-flow-trunk-based]]).
+- **Delete the `/_scratch` route** (`fukione-web/src/app/_scratch/`) before prod — it is a component verification harness, not a shipped page.
+- Consider configuring Playwright MCP with `--output-dir /tmp/...` so screenshots never hit the repo at all (optional; the cleanup hook already covers it).
 
 ## Settled decisions + rationale
-- Trunk-based, not GitFlow — solo + greenfield + Vercel CD makes `develop`/`release/*` pure overhead — see [[0004-git-flow-trunk-based]].
-- Per-branch Vercel preview + Lighthouse gate is why PRs are kept even though solo.
-- Rules that must always apply (incl. for subagents) belong in CLAUDE.md, detail in memory — the memory hook does NOT reach subagents — see [[where-to-codify-rules]].
-- Earlier-settled: Tier 1 harness [[0003-adopt-shipwithai-tier1-harness]]; stack = Next.js 14+ + Payload 3 + Postgres + Tailwind/shadcn + Zod + Resend + Vercel; pnpm; TS strict; 80% coverage; English-only artifacts.
+- Design review needs to SEE rendered pages → Playwright MCP; reuse OneRedOak's engine, swap its SaaS-dashboard standards for FUKIONE-specific ones — [[0005-adopt-onredoak-design-review]].
+- Earlier-settled: trunk-based git-flow [[0004-git-flow-trunk-based]]; stack = Next.js 14+ / Payload 3 / Postgres / Tailwind v4 / shadcn / Zod / Resend / Vercel; English-only artifacts; mermaid-no-emoji.
 
 ## Context to Load (paths only, do NOT paste contents)
-- CLAUDE.md
-- .claude/memory/conventions/git-flow-agent.md
-- .claude/memory/decisions/0004-git-flow-trunk-based.md
-- docs/architecture.md
+- CLAUDE.md (§Visual development)
+- .claude/context/design-principles.md
+- .claude/context/style-guide.md
+- .claude/agents/design-review.md
+- .claude/hooks/clean-design-review-artifacts.sh
 
 ## Blocked / Needs user input
-- Decide whether to add the PreToolUse hard-block hook (optional) and whether to commit now.
+- None. (Note: `.claude/memory/` IS git-tracked — 15 files. The new `0005-*.md` + `sessions/2026-06-22.md` written this session are untracked-new until the next commit; `git add` them when committing.)

@@ -1,2 +1,6 @@
 .omc
 .idea
+
+# design-review artifacts (Playwright MCP screenshots) — throwaway, never commit
+.playwright-mcp/
+/*.png

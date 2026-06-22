@@ -8,6 +8,7 @@
 - [0002 — self-contained project memory](decisions/0002-project-memory-self-contained.md) — memory lives in the repo, not wrapped around OMC/ECC
 - [0003 — adopt shipwithai Tier 1 harness](decisions/0003-adopt-shipwithai-tier1-harness.md) — CLAUDE.md + docs/architecture.md + pnpm permissions; greenfield → Tier 1 only
 - [0004 — trunk-based git-flow](decisions/0004-git-flow-trunk-based.md) — master + short-lived branch-per-task + PR + squash; worktrees isolate parallel agents; NOT classic GitFlow
+- [0005 — adopt OneRedOak design-review](decisions/0005-adopt-onredoak-design-review.md) — hybrid: reuse the Playwright-MCP engine, swap standards for FUKIONE principles; SubagentStop hook auto-cleans screenshots
 
 ## Conventions (conventions + gotchas, durable)
 - [english-only-artifacts](conventions/english-only-artifacts.md) — all project files in English; only user-Claude chat is Vietnamese
