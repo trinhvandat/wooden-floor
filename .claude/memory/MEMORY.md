@@ -12,6 +12,7 @@
 - [0006 — embed Payload backend](decisions/0006-embed-payload-backend.md) — Payload 3 embedded in Next.js; split `(app)`/`(payload)` route groups; 8 collections schema-as-code; scaffold-only (M1)
 - [0007 — adopt code review-pr](decisions/0007-adopt-code-review-pr.md) — hybrid: reuse Anthropic's /code-review engine (multi-agent + confidence ≥80 + gh pr comment), inject FUKIONE standards; ships as the /review-pr command
 - [0008 — lead funnel route handler](decisions/0008-lead-funnel-route-handler.md) — funnel via `POST /api/leads` (not Server Action/Payload hook): honeypot → Zod → DB-first → best-effort Resend email; both forms; `LeadContext.productId`
+- [0009 — async notify, deferred channels](decisions/0009-async-notify-deferred-channels.md) — email sent via `after()` (post-response, best-effort); Zalo stays a MANUAL sales action (no automated channel/fan-out/queue — all YAGNI-deferred)
 
 ## Conventions (conventions + gotchas, durable)
 - [english-only-artifacts](conventions/english-only-artifacts.md) — all project files in English; only user-Claude chat is Vietnamese
@@ -28,6 +29,7 @@
 - [zod4-payload-no-conflict](conventions/zod4-payload-no-conflict.md) — keep zod@4; Payload isn't in the zod graph (zod@3 is shadcn-CLI tooling only); never passes a schema into Payload
 - [vitest-exclude-e2e](conventions/vitest-exclude-e2e.md) — Vitest collects Playwright e2e specs unless `exclude: [...configDefaults.exclude, "e2e/**"]`; otherwise `pnpm test` goes RED
 - [vitest4-vi-hoisted](conventions/vitest4-vi-hoisted.md) — Vitest 4 hoists `vi.mock` factories above imports; wrap mock `vi.fn()`s in `vi.hoisted()`
+- [nextjs-after-for-background](conventions/nextjs-after-for-background.md) — post-response background work uses `after()` from `next/server` (not `@vercel/functions`); best-effort, not crash-safe; how to mock in Vitest
 
 ## Current
 - [HANDOFF](HANDOFF.md) — latest WIP state (overwritten each session)
