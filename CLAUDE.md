@@ -59,6 +59,13 @@ Target **80% coverage**, with priority on the highest-risk paths:
 3. **2 golden e2e flows** (Playwright): "calculate cost → leave a lead" and "filter products → view detail".
 4. **Lighthouse CI** gate on SEO/Performance per deploy.
 
+## Visual development (design review)
+
+Front-end changes are graded against the project's own design system, not a generic one:
+- **Standards:** [`.claude/context/design-principles.md`](.claude/context/design-principles.md) (conversion, trust, VN localization, a11y) and [`.claude/context/style-guide.md`](.claude/context/style-guide.md) (real tokens/fonts/routes). Always consult these for UI work; `globals.css` wins on any token conflict.
+- **Quick check after any UI change:** with the dev server running (`cd fukione-web && pnpm dev`), navigate to the affected route via the Playwright MCP, screenshot at **375px first** (mobile-first), compare against the two files above, and check the console for errors.
+- **Full review:** run the `/design-review` command (reviews the branch diff vs `master` on the live site) or invoke the `design-review` subagent before finalizing a PR with visual changes. Requires the **Playwright MCP** to be configured.
+
 ## Gotchas (read before touching these areas)
 
 - **Prices/unit-costs** (install price, trim estimate, …) live in the Payload **`Settings` collection** — never hardcode them in code.
