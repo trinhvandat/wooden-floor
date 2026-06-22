@@ -16,6 +16,9 @@ vi.mock("next/server", async (importOriginal) => {
     ...actual,
     // No Next request context in unit tests: run the callback now and swallow its
     // result so a best-effort notify failure can't become an unhandled rejection.
+    // NOTE: this runs the callback in microtask time, not truly post-response — the
+    // tests prove the response does not AWAIT notify, not Next's after-flush timing
+    // (that guarantee lives in Next.js's after() runtime and is not unit-testable here).
     after: (cb: () => unknown) => {
       Promise.resolve(cb()).catch(() => {});
     },
