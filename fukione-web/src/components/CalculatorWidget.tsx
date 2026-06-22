@@ -196,6 +196,7 @@ export function CalculatorWidget({ product, variant }: CalculatorWidgetProps) {
         context={
           hasResult
             ? {
+                productId: activeProduct.id,
                 productName: activeProduct.name,
                 areaM2,
                 total: estimate.total,

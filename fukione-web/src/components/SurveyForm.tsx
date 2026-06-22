@@ -35,10 +35,37 @@ export function SurveyForm() {
   const [timeSlot, setTimeSlot] = useState<string>(TIME_SLOTS[0]);
   const [note, setNote] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // No backend yet — navigate to thank-you page
-    router.push("/cam-on");
+    const website = String(new FormData(e.currentTarget).get("website") ?? "");
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source: "survey",
+          name,
+          phone,
+          address,
+          preferredTime: timeSlot,
+          message: note,
+          website,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error ?? "Gửi không thành công, vui lòng thử lại.");
+      }
+      router.push("/cam-on");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Có lỗi xảy ra, vui lòng thử lại.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -175,11 +202,18 @@ export function SurveyForm() {
           autoComplete="off"
         />
 
+        {error && (
+          <p className="text-[12.5px] font-semibold text-red-600" role="alert">
+            {error}
+          </p>
+        )}
+
         <button
           type="submit"
-          className="mt-2 h-12 w-full rounded-pill bg-cta text-sm font-bold text-ink shadow-cta transition-opacity hover:opacity-90 active:opacity-80"
+          disabled={loading}
+          className="mt-2 h-12 w-full rounded-pill bg-cta text-sm font-bold text-ink shadow-cta transition-opacity hover:opacity-90 active:opacity-80 disabled:opacity-60"
         >
-          Đặt lịch khảo sát
+          {loading ? "Đang gửi..." : "Đặt lịch khảo sát"}
         </button>
 
         <BypassConsult />
