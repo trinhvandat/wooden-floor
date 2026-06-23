@@ -83,3 +83,5 @@ In: lead-gen site, 52-SKU catalog with filters, cost calculator, lead forms, ema
 ## Project memory system
 
 This repo carries a self-contained cross-session memory at [`.claude/memory/`](.claude/memory/) (durable `decisions/` + `conventions/`, ephemeral `HANDOFF.md` + `sessions/`), loaded by a SessionStart hook and nudged by a Stop hook. Run the **`/save-memory`** skill when ending a session. See `.claude/memory/README.md`.
+
+**Save memory on the feature branch _before pushing_ (not after merge)** so the memory commit ships in the **same PR** as the work — avoid the follow-up "save-memory" PR. A `git push` hook nudges you when a feature branch has work but no `.claude/memory/` update; if nothing is worth saving, just approve the push (or `ALLOW_PUSH_WITHOUT_MEMORY=1`).
