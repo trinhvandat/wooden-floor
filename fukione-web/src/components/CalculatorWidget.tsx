@@ -4,32 +4,35 @@ import { useState } from "react";
 import type { Product } from "@/lib/types";
 import { estimateCost } from "@/lib/calculator";
 import { SETTINGS } from "@/lib/settings";
-import { PRODUCTS } from "@/lib/mock-data";
 import { formatVnd } from "@/lib/format";
 import { BypassConsult } from "@/components/site/BypassConsult";
 import { LeadFormSheet } from "./LeadFormSheet";
 
 interface CalculatorWidgetProps {
   /**
-   * When provided (embedded variant): pre-fills and locks the product selector.
-   * When omitted (page variant): renders a product <select> over PRODUCTS.
+   * Embedded variant: pre-fills and locks the product selector.
+   * Page variant: renders a product <select> over `products`.
    */
   product?: Product;
+  /** Catalog for the page variant's <select>. Ignored when `product` is set. */
+  products?: Product[];
   variant: "embedded" | "page";
 }
 
-export function CalculatorWidget({ product, variant }: CalculatorWidgetProps) {
+export function CalculatorWidget({ product, products, variant }: CalculatorWidgetProps) {
+  const list = products ?? [];
   // Active product — locked when `product` prop is provided
-  const [selectedId, setSelectedId] = useState<string>(
-    product?.id ?? PRODUCTS[0].id,
-  );
+  const [selectedId, setSelectedId] = useState<string>(product?.id ?? list[0]?.id ?? "");
   const [areaM2, setAreaM2] = useState<number>(25);
   const [withInstall, setWithInstall] = useState<boolean>(true);
   const [sheetOpen, setSheetOpen] = useState(false);
 
   // Resolve the active product object
-  const activeProduct =
-    product ?? PRODUCTS.find((p) => p.id === selectedId) ?? PRODUCTS[0];
+  const activeProduct = product ?? list.find((p) => p.id === selectedId) ?? list[0];
+
+  // Nothing to calculate without a product (e.g. unseeded catalog on the page variant).
+  // All hooks are called unconditionally above — this early return is safe per React rules.
+  if (!activeProduct) return null;
 
   // Live estimate — recomputes on every render triggered by state change
   const estimate = estimateCost(
@@ -59,7 +62,7 @@ export function CalculatorWidget({ product, variant }: CalculatorWidgetProps) {
               onChange={(e) => setSelectedId(e.target.value)}
               className="h-10 w-full rounded-input border border-line bg-field px-2.5 text-sm text-ink outline-none focus:border-trust focus:ring-2 focus:ring-trust/20"
             >
-              {PRODUCTS.map((p) => (
+              {list.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name} — {formatVnd(p.pricePerM2)}/m²
                 </option>
