@@ -88,4 +88,15 @@ describe("POST /api/leads", () => {
     expect(res.status).toBe(200);
     expect(notifyMock).toHaveBeenCalledOnce();
   });
+
+  it("forwards productId (coerced to a number) to the DB create when provided", async () => {
+    createMock.mockResolvedValue({ id: 11 });
+    await POST(post({ ...valid, source: "calculator", productId: "3" }));
+    expect(createMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        collection: "leads",
+        data: expect.objectContaining({ productId: 3 }),
+      }),
+    );
+  });
 });

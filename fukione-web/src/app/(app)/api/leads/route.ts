@@ -33,7 +33,10 @@ export async function POST(req: Request): Promise<Response> {
   // Drop the honeypot field; keep email separate so we only persist it when present.
   const { email } = parsed.data;
   const { name, phone, source, message, address, preferredTime, productId, area, estimatedCost } = parsed.data;
-  const data = { name, phone, source, message, address, preferredTime, productId, area, estimatedCost };
+  const data = {
+    name, phone, source, message, address, preferredTime, area, estimatedCost,
+    productId: productId ? Number(productId) : undefined,
+  };
 
   let leadId: string | number;
   try {
