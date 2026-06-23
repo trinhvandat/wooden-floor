@@ -13,6 +13,7 @@
 - [0007 — adopt code review-pr](decisions/0007-adopt-code-review-pr.md) — hybrid: reuse Anthropic's /code-review engine (multi-agent + confidence ≥80 + gh pr comment), inject FUKIONE standards; ships as the /review-pr command
 - [0008 — lead funnel route handler](decisions/0008-lead-funnel-route-handler.md) — funnel via `POST /api/leads` (not Server Action/Payload hook): honeypot → Zod → DB-first → best-effort Resend email; both forms; `LeadContext.productId`
 - [0009 — async notify, deferred channels](decisions/0009-async-notify-deferred-channels.md) — email sent via `after()` (post-response, best-effort); Zalo stays a MANUAL sales action (no automated channel/fan-out/queue — all YAGNI-deferred)
+- [0010 — DB-back catalog repository](decisions/0010-db-back-catalog-repository.md) — catalog reads Payload via `lib/data/catalog.ts` + pure mappers, mapping docs back into existing types; ISR 3600; seed 8 SKUs; productId re-enabled (coerced to number, NaN dropped); mock-data kept as seed source only
 
 ## Conventions (conventions + gotchas, durable)
 - [english-only-artifacts](conventions/english-only-artifacts.md) — all project files in English; only user-Claude chat is Vietnamese
@@ -30,6 +31,8 @@
 - [vitest-exclude-e2e](conventions/vitest-exclude-e2e.md) — Vitest collects Playwright e2e specs unless `exclude: [...configDefaults.exclude, "e2e/**"]`; otherwise `pnpm test` goes RED
 - [vitest4-vi-hoisted](conventions/vitest4-vi-hoisted.md) — Vitest 4 hoists `vi.mock` factories above imports; wrap mock `vi.fn()`s in `vi.hoisted()`
 - [nextjs-after-for-background](conventions/nextjs-after-for-background.md) — post-response background work uses `after()` from `next/server` (not `@vercel/functions`); best-effort, not crash-safe; how to mock in Vitest
+- [payload-typed-api-data-widening](conventions/payload-typed-api-data-widening.md) — typed Payload API rejects a widened `const data={…}` (status/select/relationship/id); cast `as const`/union, type id maps `number`, coerce rel ids; run `tsc` not just lint+test on Payload writes
+- [payload-run-relative-imports](conventions/payload-run-relative-imports.md) — `payload run` (e.g. `pnpm seed`) does NOT resolve `@/`/`@payload-config` aliases; use relative imports in scripts
 
 ## Current
 - [HANDOFF](HANDOFF.md) — latest WIP state (overwritten each session)
