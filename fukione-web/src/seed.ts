@@ -9,7 +9,7 @@ async function seed() {
   const payload = await getPayload({ config });
 
   // 1. Collections
-  const collectionIdBySlug = new Map<string, number | string>();
+  const collectionIdBySlug = new Map<string, number>();
   for (const c of COLLECTIONS) {
     const data = { name: c.name, slug: c.slug, description: c.description };
     const existing = await payload.find({
@@ -30,7 +30,7 @@ async function seed() {
   }
 
   // 2. Products
-  const productIdByMockId = new Map<string, number | string>();
+  const productIdByMockId = new Map<string, number>();
   for (const p of PRODUCTS) {
     const colSlug = collectionSlugByProductMockId.get(p.id);
     const collectionRef = colSlug ? collectionIdBySlug.get(colSlug) : undefined;
@@ -38,13 +38,13 @@ async function seed() {
       name: p.name,
       slug: p.slug,
       pricePerM2: p.pricePerM2,
-      thicknessMm: String(p.thicknessMm), // select expects '8' | '12'
+      thicknessMm: String(p.thicknessMm) as "8" | "12", // select expects '8' | '12'
       waterproof: p.waterproof,
       color: p.color,
       surface: p.surface,
       roomTypes: p.roomTypes,
       specs: p.specs,
-      status: "published",
+      status: "published" as const,
       ...(collectionRef ? { collectionRef } : {}),
     };
     const existing = await payload.find({
