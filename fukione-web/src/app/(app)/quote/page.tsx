@@ -1,4 +1,7 @@
 import { CalculatorWidget } from "@/components/CalculatorWidget";
+import { getProducts } from "@/lib/data/catalog";
+
+export const revalidate = 3600;
 
 export const metadata = {
   title: "Tính chi phí sàn gỗ | FUKIONE",
@@ -6,10 +9,10 @@ export const metadata = {
     "Tính nhanh chi phí sàn gỗ theo diện tích — vật liệu, lắp đặt, phào nẹp. Nhận báo giá trong ngày.",
 };
 
-export default function BaoGiaPage() {
+export default async function BaoGiaPage() {
+  const products = await getProducts();
   return (
     <div className="flex flex-col gap-6 bg-bg px-4 pt-6 max-w-xl mx-auto">
-      {/* ── Page header ─────────────────────────────────── */}
       <div className="flex flex-col gap-1.5">
         <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-[-0.4px] text-ink">
           Tính chi phí sàn gỗ
@@ -21,8 +24,7 @@ export default function BaoGiaPage() {
         </p>
       </div>
 
-      {/* ── Calculator ──────────────────────────────────── */}
-      <CalculatorWidget variant="page" />
+      <CalculatorWidget variant="page" products={products} />
     </div>
   );
 }

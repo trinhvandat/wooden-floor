@@ -88,4 +88,24 @@ describe("POST /api/leads", () => {
     expect(res.status).toBe(200);
     expect(notifyMock).toHaveBeenCalledOnce();
   });
+
+  it("forwards productId (coerced to a number) to the DB create when provided", async () => {
+    createMock.mockResolvedValue({ id: 11 });
+    await POST(post({ ...valid, source: "calculator", productId: "3" }));
+    expect(createMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        collection: "leads",
+        data: expect.objectContaining({ productId: 3 }),
+      }),
+    );
+  });
+
+  it("still saves the lead (productId dropped) when productId is non-numeric", async () => {
+    createMock.mockResolvedValue({ id: 12 });
+    const res = await POST(post({ ...valid, source: "calculator", productId: "not-a-number" }));
+    expect(res.status).toBe(200);
+    expect(createMock).toHaveBeenCalledOnce();
+    const data = createMock.mock.calls[0][0].data;
+    expect(data.productId).toBeUndefined();
+  });
 });

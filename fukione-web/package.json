@@ -11,6 +11,7 @@
     "test": "vitest run",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed.ts",
     "test:e2e": "playwright test"
   },
   "dependencies": {

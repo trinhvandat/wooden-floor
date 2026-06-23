@@ -68,7 +68,7 @@ export function LeadFormSheet({
           phone,
           email,
           message: composedMessage,
-          // productId intentionally omitted until products are DB-backed (relationship to an unseeded table would fail). Product name is captured in message instead.
+          productId: context?.productId,
           area: context?.areaM2,
           estimatedCost: context?.total,
           website,
