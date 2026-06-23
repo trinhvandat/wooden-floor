@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { SlidersHorizontal, X, ArrowUpDown } from "lucide-react";
-import { PRODUCTS } from "@/lib/mock-data";
+import type { Product } from "@/lib/types";
 import { formatVnd } from "@/lib/format";
 import { ProductCard } from "@/components/ProductCard";
 import {
@@ -13,10 +13,6 @@ import {
 } from "@/components/ui/sheet";
 
 // ── Derived filter options ─────────────────────────────────────────────────
-const ALL_COLORS = Array.from(new Set(PRODUCTS.map((p) => p.color)));
-const ALL_ROOMS = Array.from(
-  new Set(PRODUCTS.flatMap((p) => p.roomTypes)),
-).sort();
 const PRICE_OPTIONS = [
   { label: `≤ ${formatVnd(400_000)}/m²`, value: 400_000 },
   { label: `≤ ${formatVnd(500_000)}/m²`, value: 500_000 },
@@ -42,9 +38,9 @@ const EMPTY_FILTERS: FilterState = {
   maxPrice: null,
 };
 
-// ── Helper: apply filters to PRODUCTS ─────────────────────────────────────
-function applyFilters(f: FilterState) {
-  return PRODUCTS.filter((p) => {
+// ── Helper: apply filters to products ─────────────────────────────────────
+function applyFilters(products: Product[], f: FilterState) {
+  return products.filter((p) => {
     if (f.color && p.color !== f.color) return false;
     if (f.thicknessMm !== null && p.thicknessMm !== f.thicknessMm) return false;
     if (f.waterproof !== null && p.waterproof !== f.waterproof) return false;
@@ -81,7 +77,16 @@ function FilterToggle({
 }
 
 // ── Main component ─────────────────────────────────────────────────────────
-export function ProductFilters() {
+export function ProductFilters({ products }: { products: Product[] }) {
+  const ALL_COLORS = useMemo(
+    () => Array.from(new Set(products.map((p) => p.color))),
+    [products],
+  );
+  const ALL_ROOMS = useMemo(
+    () => Array.from(new Set(products.flatMap((p) => p.roomTypes))).sort(),
+    [products],
+  );
+
   const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS);
   const [sort, setSort] = useState<SortOrder>("default");
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -90,14 +95,14 @@ export function ProductFilters() {
 
   // Filtered + sorted products
   const filtered = useMemo(() => {
-    const results = applyFilters(filters);
+    const results = applyFilters(products, filters);
     if (sort === "price-asc") return [...results].sort((a, b) => a.pricePerM2 - b.pricePerM2);
     if (sort === "price-desc") return [...results].sort((a, b) => b.pricePerM2 - a.pricePerM2);
     return results;
-  }, [filters, sort]);
+  }, [products, filters, sort]);
 
   // Preview count for the "Áp dụng" button
-  const draftCount = useMemo(() => applyFilters(draft).length, [draft]);
+  const draftCount = useMemo(() => applyFilters(products, draft).length, [products, draft]);
 
   const activeCount = Object.values(filters).filter((v) => v !== null).length;
 
