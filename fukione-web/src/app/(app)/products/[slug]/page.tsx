@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { PRODUCTS, COLLECTIONS } from "@/lib/mock-data";
+import type { Product } from "@/lib/types";
+import { getProducts, getProductBySlug, getCollections } from "@/lib/data/catalog";
 import { formatVnd } from "@/lib/format";
 import { ProductCard } from "@/components/ProductCard";
 import { SpecChip } from "@/components/SpecChip";
@@ -11,13 +12,16 @@ import { BottomActionBar } from "@/components/site/BottomActionBar";
 // Next.js 16: params is a Promise
 type PageParams = Promise<{ slug: string }>;
 
-export function generateStaticParams() {
-  return PRODUCTS.map((p) => ({ slug: p.slug }));
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  const products = await getProducts();
+  return products.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: PageParams }) {
   const { slug } = await params;
-  const product = PRODUCTS.find((p) => p.slug === slug);
+  const product = await getProductBySlug(slug);
   if (!product) return {};
   return {
     title: `${product.name} — FUKIONE`,
@@ -27,17 +31,15 @@ export async function generateMetadata({ params }: { params: PageParams }) {
 
 export default async function ProductDetailPage({ params }: { params: PageParams }) {
   const { slug } = await params;
-  const product = PRODUCTS.find((p) => p.slug === slug);
+  const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  // Related: prefer products in the same collection, fall back to other products
-  const collection = COLLECTIONS.find((c) => c.productIds.includes(product.id));
-  const related = (
+  const [collections, all] = await Promise.all([getCollections(), getProducts()]);
+  const collection = collections.find((c) => c.productIds.includes(product.id));
+  const related: Product[] = (
     collection
-      ? PRODUCTS.filter(
-          (p) => collection.productIds.includes(p.id) && p.id !== product.id,
-        )
-      : PRODUCTS.filter((p) => p.id !== product.id)
+      ? all.filter((p) => collection.productIds.includes(p.id) && p.id !== product.id)
+      : all.filter((p) => p.id !== product.id)
   ).slice(0, 4);
 
   return (
