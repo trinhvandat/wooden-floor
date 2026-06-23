@@ -33,9 +33,13 @@ export async function POST(req: Request): Promise<Response> {
   // Drop the honeypot field; keep email separate so we only persist it when present.
   const { email } = parsed.data;
   const { name, phone, source, message, address, preferredTime, productId, area, estimatedCost } = parsed.data;
+  // Coerce productId to the integer the Payload relationship expects. A malformed
+  // value is dropped (not sent) rather than allowed to become NaN and throw — the
+  // lead must still be saved (leads must never be lost).
+  const productIdNum = productId ? Number(productId) : undefined;
   const data = {
     name, phone, source, message, address, preferredTime, area, estimatedCost,
-    productId: productId ? Number(productId) : undefined,
+    productId: Number.isInteger(productIdNum) ? productIdNum : undefined,
   };
 
   let leadId: string | number;
