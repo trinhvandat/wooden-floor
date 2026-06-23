@@ -1,15 +1,9 @@
 import Link from "next/link";
 import { ArrowRight, MapPin, ShieldCheck, Hammer, MessageCircle } from "lucide-react";
-import { PRODUCTS, COLLECTIONS, PROJECTS } from "@/lib/mock-data";
+import { getProducts, getCollections, getProjects } from "@/lib/data/catalog";
 import { SETTINGS } from "@/lib/settings";
 import { formatVnd } from "@/lib/format";
 import { BottomActionBar } from "@/components/site/BottomActionBar";
-
-const featured = PRODUCTS.slice(0, 3);
-const heroProduct = PRODUCTS[0];
-const collections = COLLECTIONS.slice(0, 2);
-const projects = PROJECTS.slice(0, 4);
-const leadProject = projects[0];
 
 const REASONS = [
   {
@@ -37,7 +31,20 @@ const MARQUEE = [
   "Tư vấn qua Zalo",
 ];
 
-export default function HomePage() {
+export const revalidate = 3600;
+
+export default async function HomePage() {
+  const [products, allCollections, allProjects] = await Promise.all([
+    getProducts(),
+    getCollections(),
+    getProjects(),
+  ]);
+  const featured = products.slice(0, 3);
+  const heroProduct = products[0];
+  const collections = allCollections.slice(0, 2);
+  const projects = allProjects.slice(0, 4);
+  const leadProject = projects[0];
+
   return (
     <div className="relative overflow-hidden">
       {/* Atmosphere: warm glow + film grain */}
@@ -132,16 +139,18 @@ export default function HomePage() {
                 </span>
               </div>
               {/* Floating product caption */}
-              <div className="absolute -bottom-6 -left-6 hidden w-60 rounded-2xl border border-line bg-surface/95 p-4 shadow-card backdrop-blur sm:block">
-                <p className="text-[12px] font-medium text-muted">Đang bán chạy</p>
-                <p className="mt-0.5 font-display text-lg font-semibold text-ink">
-                  {heroProduct.name}
-                </p>
-                <p className="mt-1 text-[15px] font-extrabold text-cta-ink">
-                  {formatVnd(heroProduct.pricePerM2)}
-                  <span className="text-[12px] font-medium text-muted">/m²</span>
-                </p>
-              </div>
+              {heroProduct && (
+                <div className="absolute -bottom-6 -left-6 hidden w-60 rounded-2xl border border-line bg-surface/95 p-4 shadow-card backdrop-blur sm:block">
+                  <p className="text-[12px] font-medium text-muted">Đang bán chạy</p>
+                  <p className="mt-0.5 font-display text-lg font-semibold text-ink">
+                    {heroProduct.name}
+                  </p>
+                  <p className="mt-1 text-[15px] font-extrabold text-cta-ink">
+                    {formatVnd(heroProduct.pricePerM2)}
+                    <span className="text-[12px] font-medium text-muted">/m²</span>
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
