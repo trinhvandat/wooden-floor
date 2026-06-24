@@ -1,8 +1,10 @@
 import { Phone, MessageCircle, MapPin, Clock } from "lucide-react";
-import { SETTINGS, ZALO_ENABLED } from "@/lib/settings";
+import { getSettings } from "@/lib/data/settings";
+import { isZaloEnabled } from "@/lib/data/settings.map";
 
-export function Footer() {
-  const { nap, hours, zaloUrl } = SETTINGS;
+export async function Footer() {
+  const { nap, hours, zaloUrl } = await getSettings();
+  const zaloOn = isZaloEnabled(zaloUrl);
 
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nap.address)}`;
 
@@ -40,7 +42,7 @@ export function Footer() {
 
         {/* Quick links */}
         <div className="flex flex-wrap gap-3">
-          {ZALO_ENABLED && (
+          {zaloOn && (
             <a
               href={zaloUrl}
               target="_blank"
