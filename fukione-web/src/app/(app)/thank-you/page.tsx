@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MessageCircle, Phone } from "lucide-react";
-import { SETTINGS, ZALO_ENABLED } from "@/lib/settings";
+import { getSettings } from "@/lib/data/settings";
+import { isZaloEnabled } from "@/lib/data/settings.map";
 import { ConversionTracker } from "@/components/ConversionTracker";
 
 export const metadata = {
@@ -9,8 +10,9 @@ export const metadata = {
   robots: { index: false, follow: true },
 };
 
-export default function CamOnPage() {
-  const { zaloUrl, nap } = SETTINGS;
+export default async function CamOnPage() {
+  const { zaloUrl, nap } = await getSettings();
+  const zaloOn = isZaloEnabled(zaloUrl);
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-8 bg-bg px-4 py-12 text-center">
@@ -39,7 +41,7 @@ export default function CamOnPage() {
 
       {/* ── Contact actions ──────────────────────────────── */}
       <div className="flex w-full max-w-xs flex-col gap-3">
-        {ZALO_ENABLED && (
+        {zaloOn && (
           <a
             href={zaloUrl}
             target="_blank"

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ArrowRight, MapPin, ShieldCheck, Hammer, MessageCircle } from "lucide-react";
 import { getProducts, getCollections, getProjects } from "@/lib/data/catalog";
-import { SETTINGS, ZALO_ENABLED } from "@/lib/settings";
+import { getSettings } from "@/lib/data/settings";
+import { isZaloEnabled } from "@/lib/data/settings.map";
 import { formatVnd } from "@/lib/format";
 import { BottomActionBar } from "@/components/site/BottomActionBar";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -44,10 +45,11 @@ export const metadata = {
 export const revalidate = 3600;
 
 export default async function HomePage() {
-  const [products, allCollections, allProjects] = await Promise.all([
+  const [products, allCollections, allProjects, settings] = await Promise.all([
     getProducts(),
     getCollections(),
     getProjects(),
+    getSettings(),
   ]);
   const featured = products.slice(0, 3);
   const heroProduct = products[0];
@@ -59,7 +61,7 @@ export default async function HomePage() {
     <div className="relative overflow-hidden">
       <JsonLd
         data={buildLocalBusinessJsonLd(
-          { name: SETTINGS.nap.name, address: SETTINGS.nap.address, phone: SETTINGS.nap.phone, hours: SETTINGS.hours },
+          { name: settings.nap.name, address: settings.nap.address, phone: settings.nap.phone, hours: settings.hours },
           SITE_URL,
         )}
       />
@@ -383,9 +385,9 @@ export default async function HomePage() {
               Tính chi phí ngay
               <ArrowRight className="h-[18px] w-[18px] transition-transform group-hover:translate-x-1" />
             </Link>
-            {ZALO_ENABLED && (
+            {isZaloEnabled(settings.zaloUrl) && (
               <a
-                href={SETTINGS.zaloUrl}
+                href={settings.zaloUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-[14.5px] font-bold text-trust"
