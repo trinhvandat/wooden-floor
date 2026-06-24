@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Phone, MessageCircle } from "lucide-react";
-import { SETTINGS } from "@/lib/settings";
+import { SETTINGS, ZALO_ENABLED } from "@/lib/settings";
 import { MobileNav } from "@/components/site/MobileNav";
 
 const NAV = [
@@ -40,15 +40,17 @@ export function Header() {
           >
             <Phone className="h-5 w-5" />
           </a>
-          <a
-            href={SETTINGS.zaloUrl}
-            aria-label="Chat Zalo"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-11 w-11 items-center justify-center rounded-lg text-trust transition-colors hover:bg-line"
-          >
-            <MessageCircle className="h-5 w-5" />
-          </a>
+          {ZALO_ENABLED && (
+            <a
+              href={SETTINGS.zaloUrl}
+              aria-label="Chat Zalo"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-11 w-11 items-center justify-center rounded-lg text-trust transition-colors hover:bg-line"
+            >
+              <MessageCircle className="h-5 w-5" />
+            </a>
+          )}
         </div>
       </div>
 
@@ -77,15 +79,17 @@ export function Header() {
           >
             <Phone className="h-[18px] w-[18px]" />
           </a>
-          <a
-            href={SETTINGS.zaloUrl}
-            aria-label="Chat Zalo"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-10 w-10 items-center justify-center rounded-full text-trust transition-colors hover:bg-trust-soft"
-          >
-            <MessageCircle className="h-[18px] w-[18px]" />
-          </a>
+          {ZALO_ENABLED && (
+            <a
+              href={SETTINGS.zaloUrl}
+              aria-label="Chat Zalo"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-trust transition-colors hover:bg-trust-soft"
+            >
+              <MessageCircle className="h-[18px] w-[18px]" />
+            </a>
+          )}
           <Link
             href="/bao-gia"
             className="ml-1 inline-flex h-10 items-center rounded-pill bg-cta px-5 text-[13.5px] font-bold text-ink shadow-cta transition-opacity hover:opacity-90"

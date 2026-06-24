@@ -1,5 +1,5 @@
 import { MessageCircle } from "lucide-react";
-import { SETTINGS } from "@/lib/settings";
+import { SETTINGS, ZALO_ENABLED } from "@/lib/settings";
 
 interface BottomActionBarProps {
   primaryLabel: string;
@@ -18,15 +18,17 @@ export function BottomActionBar({ primaryLabel, primaryHref }: BottomActionBarPr
       </a>
 
       {/* Teal circular Zalo button */}
-      <a
-        href={SETTINGS.zaloUrl}
-        aria-label="Chat Zalo"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full bg-trust text-white"
-      >
-        <MessageCircle className="h-5 w-5" />
-      </a>
+      {ZALO_ENABLED && (
+        <a
+          href={SETTINGS.zaloUrl}
+          aria-label="Chat Zalo"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full bg-trust text-white"
+        >
+          <MessageCircle className="h-5 w-5" />
+        </a>
+      )}
     </div>
   );
 }

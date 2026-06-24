@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, Phone, MessageCircle } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { SETTINGS } from "@/lib/settings";
+import { SETTINGS, ZALO_ENABLED } from "@/lib/settings";
 
 const NAV = [
   { label: "Sản phẩm", href: "/san-pham" },
@@ -54,15 +54,17 @@ export function MobileNav() {
               <Phone className="h-4 w-4 text-trust" />
               {SETTINGS.nap.phone}
             </a>
-            <a
-              href={SETTINGS.zaloUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-[14px] font-semibold text-ink"
-            >
-              <MessageCircle className="h-4 w-4 text-trust" />
-              Zalo tư vấn
-            </a>
+            {ZALO_ENABLED && (
+              <a
+                href={SETTINGS.zaloUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-[14px] font-semibold text-ink"
+              >
+                <MessageCircle className="h-4 w-4 text-trust" />
+                Zalo tư vấn
+              </a>
+            )}
             <Link
               href="/bao-gia"
               onClick={() => setOpen(false)}

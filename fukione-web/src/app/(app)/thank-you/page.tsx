@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MessageCircle, Phone } from "lucide-react";
-import { SETTINGS } from "@/lib/settings";
+import { SETTINGS, ZALO_ENABLED } from "@/lib/settings";
 import { ConversionTracker } from "@/components/ConversionTracker";
 
 export const metadata = {
@@ -39,15 +39,17 @@ export default function CamOnPage() {
 
       {/* ── Contact actions ──────────────────────────────── */}
       <div className="flex w-full max-w-xs flex-col gap-3">
-        <a
-          href={zaloUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex h-12 items-center justify-center gap-2 rounded-pill bg-trust text-sm font-bold text-white shadow-cta transition-opacity hover:opacity-90 active:opacity-80"
-        >
-          <MessageCircle className="h-4 w-4" />
-          Chat Zalo ngay
-        </a>
+        {ZALO_ENABLED && (
+          <a
+            href={zaloUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex h-12 items-center justify-center gap-2 rounded-pill bg-trust text-sm font-bold text-white shadow-cta transition-opacity hover:opacity-90 active:opacity-80"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Chat Zalo ngay
+          </a>
+        )}
         <a
           href={`tel:${nap.phone.replace(/\s/g, "")}`}
           className="flex h-12 items-center justify-center gap-2 rounded-pill border-2 border-trust text-sm font-bold text-trust transition-colors hover:bg-trust-soft"

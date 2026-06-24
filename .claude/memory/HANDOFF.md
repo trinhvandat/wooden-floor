@@ -1,43 +1,51 @@
-# HANDOFF — technical SEO (M4-A) ready to PR — 2026-06-24
+# HANDOFF — a11y quick-wins ready to PR; M4-A live & verified — 2026-06-24
 
 ## Current goal
-M4-A (technical SEO + structured data) is code-complete on branch `feat/seo-structured-data`
-(10 commits). About to push + open the PR (memory committed on the branch so it ships in the
-same PR). M4-B (trust/content pages) is the next slice, not started.
+a11y/conversion quick-wins are code-complete on branch `fix/a11y-conversion-quickwins` (1 commit,
+off master). About to push + PR (memory rides along). M4-A (SEO) is merged + verified live.
 
 ## Done (settled, do not redo)
-- **M4-A technical SEO** (this branch): `SITE_URL`/`BASE_OPEN_GRAPH` config, root `metadataBase` +
-  title template, per-page canonical (VN paths) + `/cam-on` noindex, dynamic `sitemap.ts` +
-  `robots.ts` (at app root), JSON-LD (LocalBusiness/Product/BreadcrumbList) via pure builders +
-  `<JsonLd>` renderer. See [[0011-seo-structured-data]], [[nextjs-opengraph-no-deep-merge]].
-- Verified: `pnpm test` 39/39, `pnpm exec tsc --noEmit` 0 errors, `pnpm lint` 0 errors / 2 warnings
-  (seed.ts no-console only). Opus whole-branch review: no Critical; the one Important (product OG
-  losing og:image because App Router replaces, not merges, `openGraph`) is FIXED via `BASE_OPEN_GRAPH`.
-- Earlier this session: M2 DB-back catalog merged (PR #8); memory PR (#9); save-memory-before-push
-  hook merged (PR #10) — feature+memory now ship in one PR via a `git push` nudge.
+- **M4-A technical SEO merged** (PR #11) — and **verified end-to-end with real DB data**: seeded 8
+  SKUs (idempotent), home/detail render real data + JSON-LD + canonical, `/sitemap.xml` (4 static +
+  8 products), `/robots.txt`, and `pnpm build` SUCCEEDS (`/products/[slug]` SSG). The deferred DB
+  gates are now PROVEN. See [[0011-seo-structured-data]], [[nextjs-opengraph-no-deep-merge]].
+- **a11y quick-wins** (this branch): CTA contrast (CtaStrip white→`text-ink`), on-brand
+  `:focus-visible` ring (2px solid cta + 2px offset — Playwright-verified), graceful-hide Zalo
+  links while `zaloUrl` is "#" (added `ZALO_ENABLED` guard). Verified: 0 dead `#` links, ring
+  renders, tsc 0 / 39 tests / lint 0.
 
 ## In progress / Next steps
-- Push `feat/seo-structured-data` + open the PR (this includes the memory commit).
-- M4-B when asked: projects gallery (`/du-an`), about (`/gioi-thieu` + Maps/NAP), blog index +
-  article detail (Articles collection) — these pages then get added to the sitemap.
+- Push `fix/a11y-conversion-quickwins` + PR.
+- M4-B when asked: trust/content pages (projects gallery `/du-an`, about `/gioi-thieu` + Maps,
+  blog from Articles) — these then join the sitemap.
 
-## Deferred follow-ups (need DATABASE_URL — before/at deploy)
-- From M4-A: `pnpm build` (proves sitemap + generateStaticParams + metadata/JSON-LD routes compile
-  end-to-end); post-deploy Google Rich Results validation (Product/Breadcrumb/LocalBusiness).
-- From M2 (still pending): `pnpm seed`; the "filter → view detail" golden e2e.
+## Known bug to fix (NOT done)
+- **`pnpm seed` silently no-ops**: `payload run src/seed.ts` exits before the async seed settles
+  (exit 0, zero output, empty DB — a "false success"). Reliable runner: **`tsx --env-file=.env
+  src/seed.ts`**. Fix the `seed` script in `fukione-web/package.json` + record a memory convention.
 
-## Deferred (YAGNI — do NOT build without a new ask)
-- Per-product dynamic OG (next/og); DB-back the Payload `settings` global (LocalBusiness reads mock
-  `SETTINGS` for now); 52-SKU real dataset + product images; hreflang.
+## Design backlog (from /design-review — pre-existing, for M5 polish / pre-go-live)
+- **Zalo OA URL needed** (user has none yet): once obtained, set `SETTINGS.zaloUrl` → links auto-
+  re-appear (guard already in place).
+- High: white-on-orange elsewhere if reintroduced; (focus + CtaStrip already fixed).
+- Medium: calculator "~" renders like a minus → use "khoảng"/"≈"; lead form should use Zod inline
+  errors (not native `required`); "Xóa bộ lọc" uses teal (reserve teal for trust); desktop layouts
+  — product detail hero is full-viewport at 1440px, `/bao-gia` is a narrow card in a wide page
+  (two-column at ≥1024px); duplicate "Nhận báo giá" CTAs on detail; ProductCard needs a real
+  `<img alt>` slot for when photos land. Nits: emoji contact links; slug `san-go-walnut` (English);
+  flat trim estimate regardless of area.
+
+## DB / deploy follow-ups
+- M2: the catalog "filter → view detail" golden e2e still doesn't exist (only `lead-funnel.spec.ts`).
+- Post-deploy: Google Rich Results Test (Product/Breadcrumb/LocalBusiness); needs a live URL.
 
 ## Context to Load (paths only, do NOT paste contents)
-- .claude/memory/decisions/0011-seo-structured-data.md
-- docs/superpowers/plans/2026-06-24-seo-structured-data.md
-- fukione-web/src/lib/seo/site.ts
-- fukione-web/src/lib/seo/jsonld.ts
+- .claude/memory/sessions/2026-06-24.md
+- fukione-web/src/lib/settings.ts
+- fukione-web/src/app/(app)/globals.css
 
 ## Blocked / Needs user input
-- None.
+- Zalo OA URL (to re-enable Zalo links) — user said they don't have it yet.
 
-ACTION: M4-A is code-complete and green. Push + PR (memory rides along), then M4-B or the
-DATABASE_URL follow-ups when asked.
+ACTION: a11y branch is green + verified. Push + PR. Then fix the `pnpm seed` runner, or M4-B, or
+the design backlog when asked.
