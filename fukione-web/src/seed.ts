@@ -1,6 +1,7 @@
 import { getPayload } from "payload";
 import config from "../payload.config";
 import { PRODUCTS, COLLECTIONS, PROJECTS } from "./lib/mock-data";
+import { SETTINGS } from "./lib/settings";
 
 // Idempotent: every entity is upserted by its unique `slug`, so re-running
 // never creates duplicates. Order matters for relationships:
@@ -80,9 +81,21 @@ async function seed() {
     }
   }
 
+  // 4. Settings global (singleton) — seed initial real values from the mock.
+  await payload.updateGlobal({
+    slug: "settings",
+    data: {
+      installPricePerM2: SETTINGS.installPricePerM2,
+      trimEstimate: SETTINGS.trimEstimate,
+      nap: SETTINGS.nap,
+      businessHours: SETTINGS.hours,
+      zaloOA: SETTINGS.zaloUrl,
+    },
+  });
+
   // eslint-disable-next-line no-console
   console.log(
-    `Seeded ${COLLECTIONS.length} collections, ${PRODUCTS.length} products, ${PROJECTS.length} projects.`,
+    `Seeded ${COLLECTIONS.length} collections, ${PRODUCTS.length} products, ${PROJECTS.length} projects, 1 settings global.`,
   );
   process.exit(0);
 }
