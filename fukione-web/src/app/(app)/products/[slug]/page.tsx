@@ -10,7 +10,7 @@ import { CalculatorWidget } from "@/components/CalculatorWidget";
 import { BottomActionBar } from "@/components/site/BottomActionBar";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildProductJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
-import { SITE_URL } from "@/lib/seo/site";
+import { SITE_URL, BASE_OPEN_GRAPH } from "@/lib/seo/site";
 
 // Next.js 16: params is a Promise
 type PageParams = Promise<{ slug: string }>;
@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: { params: PageParams }) {
     description: `${product.name} — ${formatVnd(product.pricePerM2)}/m². Sàn gỗ cao cấp tại Hà Nội, lắp đặt trọn gói.`,
     alternates: { canonical: `/san-pham/${product.slug}` },
     openGraph: {
+      ...BASE_OPEN_GRAPH,
       title: `${product.name} — FUKIONE`,
       description: `${product.name} — ${formatVnd(product.pricePerM2)}/m². Lắp đặt trọn gói tại Hà Nội.`,
     },

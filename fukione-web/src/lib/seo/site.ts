@@ -5,3 +5,12 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:30
 export function absoluteUrl(path: string): string {
   return new URL(path, SITE_URL).toString();
 }
+
+// Shared OpenGraph base — spread into every page's openGraph so the site OG
+// image, siteName, type, and locale are never lost when a page sets its own og.
+export const BASE_OPEN_GRAPH = {
+  type: "website" as const,
+  siteName: "FUKIONE",
+  locale: "vi_VN",
+  images: ["/og.png"],
+};

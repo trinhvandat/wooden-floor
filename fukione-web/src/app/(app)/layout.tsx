@@ -3,7 +3,7 @@ import { Be_Vietnam_Pro, Fraunces } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
-import { SITE_URL } from "@/lib/seo/site";
+import { SITE_URL, BASE_OPEN_GRAPH } from "@/lib/seo/site";
 
 // Body / UI — clean, reliable Vietnamese diacritics
 const sans = Be_Vietnam_Pro({
@@ -30,12 +30,7 @@ export const metadata: Metadata = {
   },
   description:
     "Sàn gỗ cao cấp, lắp đặt trọn gói tại Hà Nội. Tư vấn miễn phí, báo giá nhanh, khảo sát tận nơi.",
-  openGraph: {
-    type: "website",
-    siteName: "FUKIONE",
-    locale: "vi_VN",
-    images: ["/og.png"],
-  },
+  openGraph: BASE_OPEN_GRAPH,
   twitter: { card: "summary_large_image" },
 };
 
