@@ -4,6 +4,9 @@ import { getProducts, getCollections, getProjects } from "@/lib/data/catalog";
 import { SETTINGS } from "@/lib/settings";
 import { formatVnd } from "@/lib/format";
 import { BottomActionBar } from "@/components/site/BottomActionBar";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildLocalBusinessJsonLd } from "@/lib/seo/jsonld";
+import { SITE_URL } from "@/lib/seo/site";
 
 const REASONS = [
   {
@@ -54,6 +57,12 @@ export default async function HomePage() {
 
   return (
     <div className="relative overflow-hidden">
+      <JsonLd
+        data={buildLocalBusinessJsonLd(
+          { name: SETTINGS.nap.name, address: SETTINGS.nap.address, phone: SETTINGS.nap.phone, hours: SETTINGS.hours },
+          SITE_URL,
+        )}
+      />
       {/* Atmosphere: warm glow + film grain */}
       <div
         aria-hidden

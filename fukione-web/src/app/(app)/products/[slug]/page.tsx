@@ -8,6 +8,9 @@ import { SpecChip } from "@/components/SpecChip";
 import { SectionHeading } from "@/components/SectionHeading";
 import { CalculatorWidget } from "@/components/CalculatorWidget";
 import { BottomActionBar } from "@/components/site/BottomActionBar";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildProductJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { SITE_URL } from "@/lib/seo/site";
 
 // Next.js 16: params is a Promise
 type PageParams = Promise<{ slug: string }>;
@@ -49,6 +52,17 @@ export default async function ProductDetailPage({ params }: { params: PageParams
 
   return (
     <div className="flex flex-col gap-6 bg-bg pb-8">
+      <JsonLd data={buildProductJsonLd(product, SITE_URL)} />
+      <JsonLd
+        data={buildBreadcrumbJsonLd(
+          [
+            { name: "Trang chủ", path: "/" },
+            { name: "Sản phẩm", path: "/san-pham" },
+            { name: product.name, path: `/san-pham/${product.slug}` },
+          ],
+          SITE_URL,
+        )}
+      />
       {/* ── Gallery placeholder ────────────────────────────────── */}
       <div className="relative aspect-[4/3] w-full bg-gradient-to-br from-wood-soft to-wood" />
 
