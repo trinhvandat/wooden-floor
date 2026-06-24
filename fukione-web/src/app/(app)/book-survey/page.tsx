@@ -1,9 +1,10 @@
 import { SurveyForm } from "@/components/SurveyForm";
 
 export const metadata = {
-  title: "Đặt lịch khảo sát | FUKIONE",
+  title: "Đặt lịch khảo sát",
   description:
     "Đặt lịch khảo sát miễn phí tại nhà — đo thực tế, tư vấn sàn gỗ phù hợp, báo giá trọn gói trong ngày.",
+  alternates: { canonical: "/dat-lich-khao-sat" },
 };
 
 export default function DatLichKhaoSatPage() {

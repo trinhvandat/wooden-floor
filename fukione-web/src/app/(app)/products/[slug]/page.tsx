@@ -8,6 +8,9 @@ import { SpecChip } from "@/components/SpecChip";
 import { SectionHeading } from "@/components/SectionHeading";
 import { CalculatorWidget } from "@/components/CalculatorWidget";
 import { BottomActionBar } from "@/components/site/BottomActionBar";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildProductJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { SITE_URL, BASE_OPEN_GRAPH } from "@/lib/seo/site";
 
 // Next.js 16: params is a Promise
 type PageParams = Promise<{ slug: string }>;
@@ -24,8 +27,14 @@ export async function generateMetadata({ params }: { params: PageParams }) {
   const product = await getProductBySlug(slug);
   if (!product) return {};
   return {
-    title: `${product.name} — FUKIONE`,
+    title: product.name,
     description: `${product.name} — ${formatVnd(product.pricePerM2)}/m². Sàn gỗ cao cấp tại Hà Nội, lắp đặt trọn gói.`,
+    alternates: { canonical: `/san-pham/${product.slug}` },
+    openGraph: {
+      ...BASE_OPEN_GRAPH,
+      title: `${product.name} — FUKIONE`,
+      description: `${product.name} — ${formatVnd(product.pricePerM2)}/m². Lắp đặt trọn gói tại Hà Nội.`,
+    },
   };
 }
 
@@ -44,6 +53,17 @@ export default async function ProductDetailPage({ params }: { params: PageParams
 
   return (
     <div className="flex flex-col gap-6 bg-bg pb-8">
+      <JsonLd data={buildProductJsonLd(product, SITE_URL)} />
+      <JsonLd
+        data={buildBreadcrumbJsonLd(
+          [
+            { name: "Trang chủ", path: "/" },
+            { name: "Sản phẩm", path: "/san-pham" },
+            { name: product.name, path: `/san-pham/${product.slug}` },
+          ],
+          SITE_URL,
+        )}
+      />
       {/* ── Gallery placeholder ────────────────────────────────── */}
       <div className="relative aspect-[4/3] w-full bg-gradient-to-br from-wood-soft to-wood" />
 

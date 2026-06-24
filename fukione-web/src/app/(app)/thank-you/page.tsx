@@ -4,8 +4,9 @@ import { SETTINGS } from "@/lib/settings";
 import { ConversionTracker } from "@/components/ConversionTracker";
 
 export const metadata = {
-  title: "Cảm ơn bạn! | FUKIONE",
+  title: "Cảm ơn bạn!",
   description: "Yêu cầu của bạn đã được ghi nhận. Sale FUKIONE sẽ liên hệ trong ~15 phút.",
+  robots: { index: false, follow: true },
 };
 
 export default function CamOnPage() {
