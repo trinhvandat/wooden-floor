@@ -31,6 +31,13 @@ const MARQUEE = [
   "Tư vấn qua Zalo",
 ];
 
+export const metadata = {
+  title: { absolute: "FUKIONE — Sàn gỗ cao cấp tại Hà Nội, lắp đặt trọn gói" },
+  description:
+    "Sàn gỗ cao cấp tại Hà Nội: 8 mẫu sàn, tính chi phí nhanh, khảo sát tận nơi, lắp đặt trọn gói. Tư vấn miễn phí qua Zalo.",
+  alternates: { canonical: "/" },
+};
+
 export const revalidate = 3600;
 
 export default async function HomePage() {

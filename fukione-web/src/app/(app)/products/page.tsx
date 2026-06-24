@@ -5,8 +5,9 @@ import { getProducts } from "@/lib/data/catalog";
 export const revalidate = 3600;
 
 export const metadata = {
-  title: "Sản phẩm — FUKIONE",
+  title: "Sản phẩm",
   description: "Xem toàn bộ sàn gỗ FUKIONE. Lọc theo màu sắc, độ dày, chống nước, phòng và giá.",
+  alternates: { canonical: "/san-pham" },
 };
 
 export default async function CatalogPage() {

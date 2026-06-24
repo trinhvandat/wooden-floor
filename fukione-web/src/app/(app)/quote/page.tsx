@@ -4,9 +4,10 @@ import { getProducts } from "@/lib/data/catalog";
 export const revalidate = 3600;
 
 export const metadata = {
-  title: "Tính chi phí sàn gỗ | FUKIONE",
+  title: "Tính chi phí sàn gỗ",
   description:
     "Tính nhanh chi phí sàn gỗ theo diện tích — vật liệu, lắp đặt, phào nẹp. Nhận báo giá trong ngày.",
+  alternates: { canonical: "/bao-gia" },
 };
 
 export default async function BaoGiaPage() {

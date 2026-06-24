@@ -24,8 +24,13 @@ export async function generateMetadata({ params }: { params: PageParams }) {
   const product = await getProductBySlug(slug);
   if (!product) return {};
   return {
-    title: `${product.name} — FUKIONE`,
+    title: product.name,
     description: `${product.name} — ${formatVnd(product.pricePerM2)}/m². Sàn gỗ cao cấp tại Hà Nội, lắp đặt trọn gói.`,
+    alternates: { canonical: `/san-pham/${product.slug}` },
+    openGraph: {
+      title: `${product.name} — FUKIONE`,
+      description: `${product.name} — ${formatVnd(product.pricePerM2)}/m². Lắp đặt trọn gói tại Hà Nội.`,
+    },
   };
 }
 
