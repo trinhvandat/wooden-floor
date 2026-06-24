@@ -49,3 +49,13 @@ export type Article = {
   publishedAt: string;
   body: string;
 };
+
+export type Settings = {
+  installPricePerM2: number;
+  trimEstimate: number;
+  nap: { name: string; address: string; phone: string };
+  hours: string;
+  zaloUrl: string;
+  showroomAddress: string;
+  mapEmbed: string;
+};
