@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, MapPin, ShieldCheck, Hammer, MessageCircle } from "lucide-react";
 import { getProducts, getCollections, getProjects } from "@/lib/data/catalog";
-import { SETTINGS } from "@/lib/settings";
+import { SETTINGS, ZALO_ENABLED } from "@/lib/settings";
 import { formatVnd } from "@/lib/format";
 import { BottomActionBar } from "@/components/site/BottomActionBar";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -383,15 +383,17 @@ export default async function HomePage() {
               Tính chi phí ngay
               <ArrowRight className="h-[18px] w-[18px] transition-transform group-hover:translate-x-1" />
             </Link>
-            <a
-              href={SETTINGS.zaloUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-[14.5px] font-bold text-trust"
-            >
-              <MessageCircle className="h-[18px] w-[18px]" />
-              Hoặc tư vấn ngay qua Zalo
-            </a>
+            {ZALO_ENABLED && (
+              <a
+                href={SETTINGS.zaloUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-[14.5px] font-bold text-trust"
+              >
+                <MessageCircle className="h-[18px] w-[18px]" />
+                Hoặc tư vấn ngay qua Zalo
+              </a>
+            )}
           </div>
 
           {/* Trust micro-row */}

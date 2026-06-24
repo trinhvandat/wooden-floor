@@ -40,20 +40,22 @@ export function CtaStrip({
         {/* Primary CTA — amber fill, one per strip */}
         <a
           href={primaryHref}
-          className="inline-flex h-11 items-center justify-center rounded-pill bg-cta px-6 text-sm font-bold text-white shadow-cta transition-opacity hover:opacity-90"
+          className="inline-flex h-11 items-center justify-center rounded-pill bg-cta px-6 text-sm font-bold text-ink shadow-cta transition-opacity hover:opacity-90"
         >
           {primaryLabel}
         </a>
 
-        {/* Secondary — teal outline */}
-        <a
-          href={secondaryHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex h-11 items-center justify-center rounded-pill border-2 border-trust bg-white px-6 text-sm font-bold text-trust transition-colors hover:bg-trust-soft"
-        >
-          {secondaryLabel}
-        </a>
+        {/* Secondary — teal outline; hidden when href is unset/dead */}
+        {secondaryHref && secondaryHref !== "#" && (
+          <a
+            href={secondaryHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-11 items-center justify-center rounded-pill border-2 border-trust bg-white px-6 text-sm font-bold text-trust transition-colors hover:bg-trust-soft"
+          >
+            {secondaryLabel}
+          </a>
+        )}
       </div>
     </section>
   );

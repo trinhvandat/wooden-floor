@@ -1,5 +1,5 @@
 import { Phone, MessageCircle, MapPin, Clock } from "lucide-react";
-import { SETTINGS } from "@/lib/settings";
+import { SETTINGS, ZALO_ENABLED } from "@/lib/settings";
 
 export function Footer() {
   const { nap, hours, zaloUrl } = SETTINGS;
@@ -40,15 +40,17 @@ export function Footer() {
 
         {/* Quick links */}
         <div className="flex flex-wrap gap-3">
-          <a
-            href={zaloUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-pill border-2 border-trust px-4 py-3 text-sm font-bold text-trust transition-colors hover:bg-trust hover:text-white"
-          >
-            <MessageCircle className="h-4 w-4" />
-            Chat Zalo
-          </a>
+          {ZALO_ENABLED && (
+            <a
+              href={zaloUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 rounded-pill border-2 border-trust px-4 py-3 text-sm font-bold text-trust transition-colors hover:bg-trust hover:text-white"
+            >
+              <MessageCircle className="h-4 w-4" />
+              Chat Zalo
+            </a>
+          )}
           <a
             href={mapsUrl}
             target="_blank"
