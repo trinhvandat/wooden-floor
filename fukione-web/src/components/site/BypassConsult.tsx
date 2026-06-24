@@ -1,12 +1,14 @@
-import { SETTINGS, ZALO_ENABLED } from "@/lib/settings";
+import type { Settings } from "@/lib/types";
+import { isZaloEnabled } from "@/lib/data/settings.map";
 
-export function BypassConsult() {
-  const { zaloUrl, nap } = SETTINGS;
+export function BypassConsult({ settings }: { settings: Settings }) {
+  const { zaloUrl, nap } = settings;
+  const zaloOn = isZaloEnabled(zaloUrl);
 
   return (
     <p className="text-center text-sm text-muted">
       hoặc{" "}
-      {ZALO_ENABLED && (
+      {zaloOn && (
         <>
           <a
             href={zaloUrl}

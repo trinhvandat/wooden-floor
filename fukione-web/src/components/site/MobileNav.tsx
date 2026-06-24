@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, Phone, MessageCircle } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { SETTINGS, ZALO_ENABLED } from "@/lib/settings";
+import type { Settings } from "@/lib/types";
+import { isZaloEnabled } from "@/lib/data/settings.map";
 
 const NAV = [
   { label: "Sản phẩm", href: "/san-pham" },
@@ -13,9 +14,10 @@ const NAV = [
   { label: "Báo giá", href: "/bao-gia" },
 ];
 
-export function MobileNav() {
+export function MobileNav({ settings }: { settings: Settings }) {
   const [open, setOpen] = useState(false);
-  const tel = `tel:${SETTINGS.nap.phone.replace(/\s/g, "")}`;
+  const tel = `tel:${settings.nap.phone.replace(/\s/g, "")}`;
+  const zaloOn = isZaloEnabled(settings.zaloUrl);
 
   return (
     <>
@@ -52,11 +54,11 @@ export function MobileNav() {
               className="flex items-center gap-2 text-[14px] font-semibold text-ink"
             >
               <Phone className="h-4 w-4 text-trust" />
-              {SETTINGS.nap.phone}
+              {settings.nap.phone}
             </a>
-            {ZALO_ENABLED && (
+            {zaloOn && (
               <a
-                href={SETTINGS.zaloUrl}
+                href={settings.zaloUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-[14px] font-semibold text-ink"

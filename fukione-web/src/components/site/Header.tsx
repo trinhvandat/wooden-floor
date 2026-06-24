@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Phone, MessageCircle } from "lucide-react";
-import { SETTINGS, ZALO_ENABLED } from "@/lib/settings";
+import { getSettings } from "@/lib/data/settings";
+import { isZaloEnabled } from "@/lib/data/settings.map";
 import { MobileNav } from "@/components/site/MobileNav";
 
 const NAV = [
@@ -23,14 +24,16 @@ function Wordmark({ className = "" }: { className?: string }) {
   );
 }
 
-export function Header() {
-  const tel = `tel:${SETTINGS.nap.phone.replace(/\s/g, "")}`;
+export async function Header() {
+  const settings = await getSettings();
+  const tel = `tel:${settings.nap.phone.replace(/\s/g, "")}`;
+  const zaloOn = isZaloEnabled(settings.zaloUrl);
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-bg/80 backdrop-blur-md">
       {/* ── Mobile chrome (hamburger · logo · icons) ───────────────── */}
       <div className="flex h-14 items-center px-4 md:hidden">
-        <MobileNav />
+        <MobileNav settings={settings} />
         <Wordmark className="flex flex-1 items-center justify-center" />
         <div className="flex items-center gap-1">
           <a
@@ -40,9 +43,9 @@ export function Header() {
           >
             <Phone className="h-5 w-5" />
           </a>
-          {ZALO_ENABLED && (
+          {zaloOn && (
             <a
-              href={SETTINGS.zaloUrl}
+              href={settings.zaloUrl}
               aria-label="Chat Zalo"
               target="_blank"
               rel="noopener noreferrer"
@@ -79,9 +82,9 @@ export function Header() {
           >
             <Phone className="h-[18px] w-[18px]" />
           </a>
-          {ZALO_ENABLED && (
+          {zaloOn && (
             <a
-              href={SETTINGS.zaloUrl}
+              href={settings.zaloUrl}
               aria-label="Chat Zalo"
               target="_blank"
               rel="noopener noreferrer"

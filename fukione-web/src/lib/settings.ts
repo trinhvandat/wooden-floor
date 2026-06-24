@@ -11,6 +11,3 @@ export const SETTINGS = {
   hours: "8:00–18:00 hằng ngày",
   zaloUrl: "#",
 } as const;
-
-export const ZALO_ENABLED =
-  SETTINGS.zaloUrl.trim() !== "" && SETTINGS.zaloUrl.trim() !== "#";

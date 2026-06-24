@@ -1,12 +1,15 @@
 import { MessageCircle } from "lucide-react";
-import { SETTINGS, ZALO_ENABLED } from "@/lib/settings";
+import { getSettings } from "@/lib/data/settings";
+import { isZaloEnabled } from "@/lib/data/settings.map";
 
 interface BottomActionBarProps {
   primaryLabel: string;
   primaryHref: string;
 }
 
-export function BottomActionBar({ primaryLabel, primaryHref }: BottomActionBarProps) {
+export async function BottomActionBar({ primaryLabel, primaryHref }: BottomActionBarProps) {
+  const { zaloUrl } = await getSettings();
+  const zaloOn = isZaloEnabled(zaloUrl);
   return (
     <div className="fixed bottom-0 inset-x-0 z-50 flex items-center gap-3 border-t border-line bg-surface/96 px-4 py-3 shadow-bar backdrop-blur md:hidden">
       {/* Primary CTA — full width amber pill */}
@@ -18,9 +21,9 @@ export function BottomActionBar({ primaryLabel, primaryHref }: BottomActionBarPr
       </a>
 
       {/* Teal circular Zalo button */}
-      {ZALO_ENABLED && (
+      {zaloOn && (
         <a
-          href={SETTINGS.zaloUrl}
+          href={zaloUrl}
           aria-label="Chat Zalo"
           target="_blank"
           rel="noopener noreferrer"

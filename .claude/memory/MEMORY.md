@@ -15,6 +15,7 @@
 - [0009 — async notify, deferred channels](decisions/0009-async-notify-deferred-channels.md) — email sent via `after()` (post-response, best-effort); Zalo stays a MANUAL sales action (no automated channel/fan-out/queue — all YAGNI-deferred)
 - [0010 — DB-back catalog repository](decisions/0010-db-back-catalog-repository.md) — catalog reads Payload via `lib/data/catalog.ts` + pure mappers, mapping docs back into existing types; ISR 3600; seed 8 SKUs; productId re-enabled (coerced to number, NaN dropped); mock-data kept as seed source only
 - [0011 — SEO + structured data (M4-A)](decisions/0011-seo-structured-data.md) — SITE_URL/BASE_OPEN_GRAPH config, metadataBase + title template + VN-path canonical, app-root sitemap/robots, JSON-LD (LocalBusiness/Product/Breadcrumb) via pure builders + `<JsonLd>`; NAP from mock SETTINGS; build deferred to DB
+- [0012 — DB-back Settings global](decisions/0012-db-back-settings.md) — prices/NAP/hours/Zalo read the Payload `settings` global via cached `getSettings()` + props to client components (not Context); `businessHours`→`hours`/`zaloOA`→`zaloUrl`; `isZaloEnabled` per-render; operator edits via /admin; mock kept as seed source
 
 ## Conventions (conventions + gotchas, durable)
 - [english-only-artifacts](conventions/english-only-artifacts.md) — all project files in English; only user-Claude chat is Vietnamese
