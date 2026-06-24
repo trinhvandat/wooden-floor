@@ -1,4 +1,5 @@
 import { SurveyForm } from "@/components/SurveyForm";
+import { getSettings } from "@/lib/data/settings";
 
 export const metadata = {
   title: "Đặt lịch khảo sát",
@@ -7,7 +8,8 @@ export const metadata = {
   alternates: { canonical: "/dat-lich-khao-sat" },
 };
 
-export default function DatLichKhaoSatPage() {
+export default async function DatLichKhaoSatPage() {
+  const settings = await getSettings();
   return (
     <div className="mx-auto flex w-full max-w-xl flex-col gap-6 bg-bg px-4 pt-6">
       {/* ── Page header ─────────────────────────────────── */}
@@ -22,7 +24,7 @@ export default function DatLichKhaoSatPage() {
         </p>
       </div>
 
-      <SurveyForm />
+      <SurveyForm settings={settings} />
     </div>
   );
 }

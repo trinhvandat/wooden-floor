@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { getProducts, getProductBySlug, getCollections } from "@/lib/data/catalog";
+import { getSettings } from "@/lib/data/settings";
 import { formatVnd } from "@/lib/format";
 import { ProductCard } from "@/components/ProductCard";
 import { SpecChip } from "@/components/SpecChip";
@@ -43,7 +44,7 @@ export default async function ProductDetailPage({ params }: { params: PageParams
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const [collections, all] = await Promise.all([getCollections(), getProducts()]);
+  const [collections, all, settings] = await Promise.all([getCollections(), getProducts(), getSettings()]);
   const collection = collections.find((c) => c.productIds.includes(product.id));
   const related: Product[] = (
     collection
@@ -92,7 +93,7 @@ export default async function ProductDetailPage({ params }: { params: PageParams
       {/* id="tinh-chi-phi" so BottomActionBar's anchor scrolls here */}
       <section className="px-4" id="tinh-chi-phi">
         <SectionHeading className="mb-4">Tính chi phí</SectionHeading>
-        <CalculatorWidget variant="embedded" product={product} />
+        <CalculatorWidget variant="embedded" product={product} settings={settings} />
       </section>
 
       {/* ── Thông số kỹ thuật ──────────────────────────────────── */}

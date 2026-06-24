@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import type { Product } from "@/lib/types";
+import type { Product, Settings } from "@/lib/types";
 import { estimateCost } from "@/lib/calculator";
-import { SETTINGS } from "@/lib/settings";
 import { formatVnd } from "@/lib/format";
 import { BypassConsult } from "@/components/site/BypassConsult";
 import { LeadFormSheet } from "./LeadFormSheet";
@@ -17,9 +16,10 @@ interface CalculatorWidgetProps {
   /** Catalog for the page variant's <select>. Ignored when `product` is set. */
   products?: Product[];
   variant: "embedded" | "page";
+  settings: Settings;
 }
 
-export function CalculatorWidget({ product, products, variant }: CalculatorWidgetProps) {
+export function CalculatorWidget({ product, products, variant, settings }: CalculatorWidgetProps) {
   const list = products ?? [];
   // Active product — locked when `product` prop is provided
   const [selectedId, setSelectedId] = useState<string>(product?.id ?? list[0]?.id ?? "");
@@ -37,7 +37,7 @@ export function CalculatorWidget({ product, products, variant }: CalculatorWidge
   // Live estimate — recomputes on every render triggered by state change
   const estimate = estimateCost(
     { areaM2, pricePerM2: activeProduct.pricePerM2, withInstall },
-    SETTINGS,
+    settings,
   );
 
   const hasResult = areaM2 > 0;
@@ -190,12 +190,13 @@ export function CalculatorWidget({ product, products, variant }: CalculatorWidge
           Nhận báo giá
         </button>
 
-        <BypassConsult />
+        <BypassConsult settings={settings} />
       </div>
 
       <LeadFormSheet
         open={sheetOpen}
         onOpenChange={setSheetOpen}
+        settings={settings}
         context={
           hasResult
             ? {

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BypassConsult } from "@/components/site/BypassConsult";
+import type { Settings } from "@/lib/types";
 
 const TIME_SLOTS = ["Sáng (8:00–12:00)", "Chiều (13:00–18:00)"] as const;
 
@@ -26,7 +27,7 @@ const SURVEY_INCLUDES = [
   },
 ] as const;
 
-export function SurveyForm() {
+export function SurveyForm({ settings }: { settings: Settings }) {
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -216,7 +217,7 @@ export function SurveyForm() {
           {loading ? "Đang gửi..." : "Đặt lịch khảo sát"}
         </button>
 
-        <BypassConsult />
+        <BypassConsult settings={settings} />
       </form>
     </div>
   );

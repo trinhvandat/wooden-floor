@@ -1,5 +1,6 @@
 import { CalculatorWidget } from "@/components/CalculatorWidget";
 import { getProducts } from "@/lib/data/catalog";
+import { getSettings } from "@/lib/data/settings";
 
 export const revalidate = 3600;
 
@@ -11,7 +12,7 @@ export const metadata = {
 };
 
 export default async function BaoGiaPage() {
-  const products = await getProducts();
+  const [products, settings] = await Promise.all([getProducts(), getSettings()]);
   return (
     <div className="flex flex-col gap-6 bg-bg px-4 pt-6 max-w-xl mx-auto">
       <div className="flex flex-col gap-1.5">
@@ -25,7 +26,7 @@ export default async function BaoGiaPage() {
         </p>
       </div>
 
-      <CalculatorWidget variant="page" products={products} />
+      <CalculatorWidget variant="page" products={products} settings={settings} />
     </div>
   );
 }

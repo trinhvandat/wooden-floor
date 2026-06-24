@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BypassConsult } from "@/components/site/BypassConsult";
 import { formatVnd } from "@/lib/format";
+import type { Settings } from "@/lib/types";
 
 export interface LeadContext {
   productId?: string;
@@ -26,12 +27,14 @@ interface LeadFormSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   context?: LeadContext;
+  settings: Settings;
 }
 
 export function LeadFormSheet({
   open,
   onOpenChange,
   context,
+  settings,
 }: LeadFormSheetProps) {
   const router = useRouter();
   const [name, setName] = useState("");
@@ -210,7 +213,7 @@ export function LeadFormSheet({
             >
               {loading ? "Đang gửi..." : "Gửi yêu cầu"}
             </button>
-            <BypassConsult />
+            <BypassConsult settings={settings} />
           </SheetFooter>
         </form>
       </SheetContent>
