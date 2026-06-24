@@ -33,7 +33,7 @@
 - [vitest4-vi-hoisted](conventions/vitest4-vi-hoisted.md) — Vitest 4 hoists `vi.mock` factories above imports; wrap mock `vi.fn()`s in `vi.hoisted()`
 - [nextjs-after-for-background](conventions/nextjs-after-for-background.md) — post-response background work uses `after()` from `next/server` (not `@vercel/functions`); best-effort, not crash-safe; how to mock in Vitest
 - [payload-typed-api-data-widening](conventions/payload-typed-api-data-widening.md) — typed Payload API rejects a widened `const data={…}` (status/select/relationship/id); cast `as const`/union, type id maps `number`, coerce rel ids; run `tsc` not just lint+test on Payload writes
-- [payload-run-relative-imports](conventions/payload-run-relative-imports.md) — `payload run` (e.g. `pnpm seed`) does NOT resolve `@/`/`@payload-config` aliases; use relative imports in scripts
+- [payload-run-relative-imports](conventions/payload-run-relative-imports.md) — run seed via `tsx --env-file-if-exists` (NOT `payload run`, which silently no-ops the async script → empty DB, exit 0) + relative imports (no `@/` aliases)
 - [nextjs-opengraph-no-deep-merge](conventions/nextjs-opengraph-no-deep-merge.md) — App Router REPLACES (not deep-merges) a page's nested `openGraph`/`twitter`/`robots`; spread shared defaults (`BASE_OPEN_GRAPH`) so an override doesn't silently drop og:image
 
 ## Current

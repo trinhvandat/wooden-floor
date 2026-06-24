@@ -11,7 +11,7 @@
     "test": "vitest run",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
-    "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed.ts",
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file-if-exists=.env --env-file-if-exists=.env.local src/seed.ts",
     "test:e2e": "playwright test"
   },
   "dependencies": {
@@ -45,6 +45,7 @@
     "eslint-config-next": "16.2.9",
     "sass": "^1.101.0",
     "tailwindcss": "^4",
+    "tsx": "^4.22.4",
     "typescript": "^5",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.1.9"
