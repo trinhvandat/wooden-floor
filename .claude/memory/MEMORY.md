@@ -14,6 +14,7 @@
 - [0008 — lead funnel route handler](decisions/0008-lead-funnel-route-handler.md) — funnel via `POST /api/leads` (not Server Action/Payload hook): honeypot → Zod → DB-first → best-effort Resend email; both forms; `LeadContext.productId`
 - [0009 — async notify, deferred channels](decisions/0009-async-notify-deferred-channels.md) — email sent via `after()` (post-response, best-effort); Zalo stays a MANUAL sales action (no automated channel/fan-out/queue — all YAGNI-deferred)
 - [0010 — DB-back catalog repository](decisions/0010-db-back-catalog-repository.md) — catalog reads Payload via `lib/data/catalog.ts` + pure mappers, mapping docs back into existing types; ISR 3600; seed 8 SKUs; productId re-enabled (coerced to number, NaN dropped); mock-data kept as seed source only
+- [0011 — SEO + structured data (M4-A)](decisions/0011-seo-structured-data.md) — SITE_URL/BASE_OPEN_GRAPH config, metadataBase + title template + VN-path canonical, app-root sitemap/robots, JSON-LD (LocalBusiness/Product/Breadcrumb) via pure builders + `<JsonLd>`; NAP from mock SETTINGS; build deferred to DB
 
 ## Conventions (conventions + gotchas, durable)
 - [english-only-artifacts](conventions/english-only-artifacts.md) — all project files in English; only user-Claude chat is Vietnamese
@@ -33,6 +34,7 @@
 - [nextjs-after-for-background](conventions/nextjs-after-for-background.md) — post-response background work uses `after()` from `next/server` (not `@vercel/functions`); best-effort, not crash-safe; how to mock in Vitest
 - [payload-typed-api-data-widening](conventions/payload-typed-api-data-widening.md) — typed Payload API rejects a widened `const data={…}` (status/select/relationship/id); cast `as const`/union, type id maps `number`, coerce rel ids; run `tsc` not just lint+test on Payload writes
 - [payload-run-relative-imports](conventions/payload-run-relative-imports.md) — `payload run` (e.g. `pnpm seed`) does NOT resolve `@/`/`@payload-config` aliases; use relative imports in scripts
+- [nextjs-opengraph-no-deep-merge](conventions/nextjs-opengraph-no-deep-merge.md) — App Router REPLACES (not deep-merges) a page's nested `openGraph`/`twitter`/`robots`; spread shared defaults (`BASE_OPEN_GRAPH`) so an override doesn't silently drop og:image
 
 ## Current
 - [HANDOFF](HANDOFF.md) — latest WIP state (overwritten each session)
