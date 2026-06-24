@@ -1,51 +1,47 @@
-# HANDOFF — a11y quick-wins ready to PR; M4-A live & verified — 2026-06-24
+# HANDOFF — DB-back Settings ready to PR — 2026-06-24
 
 ## Current goal
-a11y/conversion quick-wins are code-complete on branch `fix/a11y-conversion-quickwins` (1 commit,
-off master). About to push + PR (memory rides along). M4-A (SEO) is merged + verified live.
+DB-back Settings is code-complete + DB-verified on branch `feat/db-back-settings` (about to PR,
+memory on-branch). M1–M3, M4-A, a11y, seed-fix, and DB-back Settings are all done. The next
+requested slice is conversion/desktop polish (was "slice 3").
 
 ## Done (settled, do not redo)
-- **M4-A technical SEO merged** (PR #11) — and **verified end-to-end with real DB data**: seeded 8
-  SKUs (idempotent), home/detail render real data + JSON-LD + canonical, `/sitemap.xml` (4 static +
-  8 products), `/robots.txt`, and `pnpm build` SUCCEEDS (`/products/[slug]` SSG). The deferred DB
-  gates are now PROVEN. See [[0011-seo-structured-data]], [[nextjs-opengraph-no-deep-merge]].
-- **a11y quick-wins** (this branch): CTA contrast (CtaStrip white→`text-ink`), on-brand
-  `:focus-visible` ring (2px solid cta + 2px offset — Playwright-verified), graceful-hide Zalo
-  links while `zaloUrl` is "#" (added `ZALO_ENABLED` guard). Verified: 0 dead `#` links, ring
-  renders, tsc 0 / 39 tests / lint 0.
+- **DB-back Settings** (this branch): prices/NAP/hours/Zalo now read the Payload `settings` global
+  via cached `getSettings()` (`lib/data/settings.ts`) + pure mapper; server components self-fetch,
+  client tree (Calculator/LeadFormSheet/BypassConsult/SurveyForm/MobileNav) gets a `settings` prop;
+  seed writes the global; `isZaloEnabled` per-render. See [[0012-db-back-settings]]. Verified DB
+  end-to-end: `pnpm seed` "…1 settings global", `pnpm build` exit 0, 43/43, tsc 0, lint 0.
+- Earlier today (merged): M4-A SEO (#11), a11y quick-wins (#12), `pnpm seed` runner fix (#13).
+- Earlier (merged): M2 DB-back catalog, lead funnel + async notify.
+
+## Operator action (unblocks a backlog item)
+- Set the real **Zalo OA URL** in `/admin` → Settings → all Zalo links auto-reappear (the
+  `isZaloEnabled` guard hides them while it's "#"). Same for NAP / prices / hours — now editable.
 
 ## In progress / Next steps
-- Push `fix/a11y-conversion-quickwins` + PR.
-- M4-B when asked: trust/content pages (projects gallery `/du-an`, about `/gioi-thieu` + Maps,
-  blog from Articles) — these then join the sitemap.
+- Push `feat/db-back-settings` + PR.
+- **Slice 3 — conversion/desktop polish** (the user's other chosen slice): product-detail hero is
+  full-viewport at 1440px; `/bao-gia` is a narrow card in a wide page (two-column ≥1024px);
+  calculator "~" reads as a minus (→ "khoảng"/"≈"); lead form should use Zod inline errors (not
+  native `required`); "Xóa bộ lọc" uses teal (reserve teal for trust); duplicate "Nhận báo giá"
+  CTAs on detail; ProductCard needs a real `<img alt>` slot.
+- Later: M4-B trust/content pages (projects gallery / about + Maps / blog from Articles).
 
-## Known bug to fix (NOT done)
-- **`pnpm seed` silently no-ops**: `payload run src/seed.ts` exits before the async seed settles
-  (exit 0, zero output, empty DB — a "false success"). Reliable runner: **`tsx --env-file=.env
-  src/seed.ts`**. Fix the `seed` script in `fukione-web/package.json` + record a memory convention.
-
-## Design backlog (from /design-review — pre-existing, for M5 polish / pre-go-live)
-- **Zalo OA URL needed** (user has none yet): once obtained, set `SETTINGS.zaloUrl` → links auto-
-  re-appear (guard already in place).
-- High: white-on-orange elsewhere if reintroduced; (focus + CtaStrip already fixed).
-- Medium: calculator "~" renders like a minus → use "khoảng"/"≈"; lead form should use Zod inline
-  errors (not native `required`); "Xóa bộ lọc" uses teal (reserve teal for trust); desktop layouts
-  — product detail hero is full-viewport at 1440px, `/bao-gia` is a narrow card in a wide page
-  (two-column at ≥1024px); duplicate "Nhận báo giá" CTAs on detail; ProductCard needs a real
-  `<img alt>` slot for when photos land. Nits: emoji contact links; slug `san-go-walnut` (English);
-  flat trim estimate regardless of area.
-
-## DB / deploy follow-ups
-- M2: the catalog "filter → view detail" golden e2e still doesn't exist (only `lead-funnel.spec.ts`).
-- Post-deploy: Google Rich Results Test (Product/Breadcrumb/LocalBusiness); needs a live URL.
+## Cleanup / known (not blocking)
+- `src/components/CtaStrip.tsx` is DEAD CODE (not rendered) with its own Zalo guard — delete or
+  settings-wire in a cleanup so there's one Zalo-visibility source of truth.
+- Home `metadata.description` still mentions Zalo while the CTA is hidden — self-heals once the OA
+  URL is set.
+- DB follow-ups still open: the catalog "filter → view detail" golden e2e; post-deploy Google Rich
+  Results validation.
 
 ## Context to Load (paths only, do NOT paste contents)
+- .claude/memory/decisions/0012-db-back-settings.md
+- fukione-web/src/lib/data/settings.ts
 - .claude/memory/sessions/2026-06-24.md
-- fukione-web/src/lib/settings.ts
-- fukione-web/src/app/(app)/globals.css
 
 ## Blocked / Needs user input
-- Zalo OA URL (to re-enable Zalo links) — user said they don't have it yet.
+- Zalo OA URL (operator sets it in /admin now — no longer a code dependency).
 
-ACTION: a11y branch is green + verified. Push + PR. Then fix the `pnpm seed` runner, or M4-B, or
-the design backlog when asked.
+ACTION: DB-back Settings is green + DB-verified. Push + PR, then slice 3 (conversion/desktop polish)
+or M4-B when asked.
