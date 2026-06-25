@@ -31,6 +31,16 @@ Scope decisions already settled with the user:
   `productRefs: [productRef]` but **does not set `status`**.
 - `next.config.ts` — rewrites map Vietnamese public URLs → English route folders.
 - `src/app/sitemap.ts` — enumerates static paths + product detail pages.
+- **`src/app/(app)/page.tsx` already consumes `getProjects()`** — it renders a `#du-an`
+  homepage teaser (lead + 3 secondary projects) reading only `location`/`title`/`areaM2`/
+  `id` (gradient placeholders, no `productId`/`images`), so the type change below does not
+  break its rendering.
+- **The nav "Dự án" link already exists** in `Header.tsx` + `MobileNav.tsx`, pointing to
+  the homepage anchor `/#du-an` (not a page).
+- Existing consumers that read the **stub `Project.productId` (singular)** and must be
+  updated with the type rename: `src/lib/data/catalog.test.ts`,
+  `src/lib/data/catalog.map.test.ts`, `src/lib/mock-data.ts` (`PROJECTS: Project[]`),
+  `src/seed.ts` (`productIdByMockId.get(j.productId)`).
 
 ## 3. Changes
 
@@ -73,6 +83,18 @@ Generated artifacts (types, migrations) are not hand-edited.
 - The detail page resolves `productIds` → product cards by filtering `getProducts()`
   (already cached) — no extra per-product query.
 
+**Ripple from the `productId` → `productIds` rename — update each consumer:**
+- `src/lib/mock-data.ts`: `PROJECTS` entries `productId: "p3"` → `productIds: ["p3"]`
+  (and `productId: "p7"` → `productIds: ["p7"]`). `images: []` stays valid under the new
+  type.
+- `src/seed.ts` (~line 64): map `j.productIds` → resolved refs:
+  `const productRefs = j.productIds.map((id) => productIdByMockId.get(id)).filter(Boolean)`,
+  then set `productRefs` from that array. **Also add `status: "published"`** (§3.6).
+- `src/lib/data/catalog.map.test.ts`: rewrite the `mapProject` assertions for `productIds`
+  (array) + image mapping (see §4).
+- `src/lib/data/catalog.test.ts`: update the `getProjects` assertion from
+  `projects[0].productId` to `projects[0].productIds[0]`.
+
 ### 3.3 Routes + rewrites
 
 - `src/app/(app)/projects/page.tsx` — server component; `getProjects()` → grid of
@@ -97,10 +119,14 @@ Generated artifacts (types, migrations) are not hand-edited.
   change. (If a non-same-origin media host is introduced later, add `images.remotePatterns`
   then — out of scope now.)
 
-### 3.5 Navigation
+### 3.5 Navigation & homepage teaser
 
-- Add `{ label: "Dự án", href: "/du-an" }` to `NAV_LINKS` in `src/components/site/Header.tsx`
-  and `src/components/site/MobileNav.tsx`. Footer has no nav-link list → no footer change.
+- **Repoint** the existing `Dự án` nav entry from `/#du-an` → `/du-an` in the `NAV` array of
+  both `src/components/site/Header.tsx` and `src/components/site/MobileNav.tsx` (it currently
+  targets the homepage anchor). Footer has no nav-link list → no footer change.
+- **Homepage teaser:** the existing `#du-an` section in `src/app/(app)/page.tsx` stays, with
+  a single added `Xem tất cả →` link to `/du-an` (so the teaser funnels into the full
+  gallery instead of dead-ending). No other homepage edits.
 - Internal links use the **Vietnamese public URL** (`/du-an`, `/du-an/[slug]`).
 
 ### 3.6 Seed (`src/seed.ts`)
@@ -132,7 +158,8 @@ Generated artifacts (types, migrations) are not hand-edited.
 ## 5. Out of scope (YAGNI / later M4-B slices)
 
 - About page + Google Maps (M4-B slice 2); blog from Articles (M4-B slice 3).
-- Homepage "recent installations" strip.
+- Any homepage change beyond the single `Xem tất cả →` link added to the existing `#du-an`
+  teaser (no new homepage section, no redesign of the teaser).
 - Image upload via seed / committed sample photos.
 - Filtering/pagination on the gallery (52-SKU-scale catalog has filters; a handful of
   projects does not need them).
