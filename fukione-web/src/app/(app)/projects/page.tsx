@@ -27,7 +27,7 @@ export default async function ProjectsPage() {
         )}
       />
       <div className="mx-auto w-full max-w-[1180px]">
-        <SectionHeading withUnderline>Dự án thực tế</SectionHeading>
+        <SectionHeading as="h1" withUnderline>Dự án thực tế</SectionHeading>
         {projects.length === 0 ? (
           <p className="mt-8 text-[14px] text-muted">
             Các công trình tiêu biểu sẽ sớm được cập nhật.

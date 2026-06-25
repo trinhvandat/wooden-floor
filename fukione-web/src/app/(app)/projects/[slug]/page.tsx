@@ -8,6 +8,9 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { SITE_URL, BASE_OPEN_GRAPH } from "@/lib/seo/site";
+import { getSettings } from "@/lib/data/settings";
+import { ProjectQuoteCta } from "@/components/site/ProjectQuoteCta";
+import { BottomActionBar } from "@/components/site/BottomActionBar";
 
 // Next.js 16: params is a Promise
 type PageParams = Promise<{ slug: string }>;
@@ -42,7 +45,7 @@ export default async function ProjectDetailPage({ params }: { params: PageParams
   const project = await getProjectBySlug(slug);
   if (!project) notFound();
 
-  const all = await getProducts();
+  const [all, settings] = await Promise.all([getProducts(), getSettings()]);
   const usedProducts: Product[] = all.filter((p) => project.productIds.includes(p.id));
 
   return (
@@ -108,7 +111,9 @@ export default async function ProjectDetailPage({ params }: { params: PageParams
             </div>
           </section>
         )}
+        <ProjectQuoteCta settings={settings} />
       </div>
+      <BottomActionBar primaryLabel="Nhận báo giá" primaryHref="#nhan-bao-gia" />
     </div>
   );
 }
