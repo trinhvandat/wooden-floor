@@ -1,51 +1,55 @@
-# HANDOFF — Slice 3 conversion/desktop polish ready to PR — 2026-06-25
+# HANDOFF — Projects gallery (M4-B slice 1) ready to PR — 2026-06-25
 
 ## Current goal
-Slice 3 (conversion/desktop polish) is code-complete + verified on branch `feat/conversion-polish`
-(memory saved on-branch; not yet committed/pushed). Everything through M4-A, a11y, DB-back catalog
-+ Settings, and now conversion polish is done. Next requested slice after this is M4-B (trust/content
-pages).
+Projects gallery (M4-B slice 1) is code-complete + fully verified on branch
+`feat/projects-gallery` (8 commits, memory saved on-branch; not yet pushed). Everything through
+Slice 3 conversion polish + this gallery is done. Next requested work after this is the rest of
+M4-B (about + Google Maps, blog from Articles).
 
 ## Done (settled, do not redo)
-- **Slice 3 conversion polish** (this branch), all verified (tsc 0, lint 0, 43/43, build OK,
-  Playwright 375+1440 + 0 console errors):
-  - Calculator `~` (read as minus) → "khoảng" on line-item + total (`CalculatorWidget.tsx`).
-  - "Xóa bộ lọc" teal → neutral `border-line/text-muted` (`ProductFilters.tsx`); teal reserved for trust.
-  - Duplicate "Nhận báo giá" CTAs: mobile sticky bar relabeled **"Tính chi phí"** (scrolls to calc)
-    vs calculator's "Nhận báo giá" (opens form) — `products/[slug]/page.tsx`.
-  - Product-detail desktop **two-column** (gallery left / header+calculator right), page capped
-    1180px — fixes full-viewport hero (`products/[slug]/page.tsx`).
-  - `/bao-gia` desktop **two-column** (intro left / calculator ≤420px right); mobile unchanged
-    (`quote/page.tsx`).
-  - Lead forms: native `required` → **inline Zod** (blur + submit-block), a11y wired. New
-    `lib/leads/forms.ts` + `components/site/FieldError.tsx`. See [[0013-lead-form-client-zod-validation]].
-  - ProductCard `<img alt>` was already correct (next/image + alt) → dropped from scope.
-- Earlier (merged to master): README (#14), M4-A SEO (#11), a11y (#12), seed-runner fix (#13),
-  DB-back Settings, DB-back catalog, lead funnel + async notify.
+- **Projects gallery** (this branch) — built via subagent-driven development (6 tasks + 1 gate fix),
+  all reviewed (per-task + opus whole-branch "Ready to merge: YES", no Critical/Important):
+  - Data layer completed: `Project.productId`→**`productIds: string[]`**, `images`→`{url,alt}[]`,
+    `description`; `getProjects()` PUBLISHED+`depth:1`; new `getProjectBySlug()`; `mapProject` skips
+    url-less Media. `status` select added to `Projects` collection; seed sets `status:"published"`.
+  - `/du-an` grid (`ProjectCard` + gradient fallback + empty state, `<h1>`) and `/du-an/[slug]`
+    detail (gallery, location/area chips, description, "Sản phẩm trong dự án" cross-links,
+    breadcrumb JSON-LD, generateStaticParams + ISR). Rewrites `/du-an` + `/du-an/:slug`.
+  - Detail-page **lead CTA** (`ProjectQuoteCta` opens `LeadFormSheet`, **no context → source
+    "quote"**, see [[leadformsheet-source-by-context]]) + mobile `BottomActionBar`.
+  - Nav `Dự án` repointed `/#du-an`→`/du-an`; homepage teaser got `Xem tất cả →`; sitemap extended.
+  - `SectionHeading` gained `as?:"h1"|"h2"` (default h2). See [[0014-projects-gallery]].
+  - Verified: tsc 0, lint 0 (2 pre-existing seed.ts warnings), tests 45/45, `pnpm build` exit 0
+    (`/projects` static + `/projects/[slug]` SSG), Playwright 375+1440 (0 console errors).
+- Earlier this session (merged to master): Slice 3 conversion polish (PR #16).
 
 ## In progress / Next steps
-- Commit Slice 3 (`/git-commit`), push `feat/conversion-polish`, open PR (memory ships in same PR).
-- **M4-B — trust/content pages**: projects gallery, about + Google Maps, blog from Articles collection.
-- Optional polish leftovers: `/bao-gia` desktop left column is sparse (could host trust signals);
-  empty-phone inline error says "không hợp lệ" (matches server — accepted).
+- **Push `feat/projects-gallery` + open PR** (memory ships in same PR), then `/review-pr`.
+- **M4-B remaining**: about page + Google Maps; blog from the Articles collection.
+- Deferred polish follow-ups (non-blocking, from reviews): add `depth:1` assertion to
+  `catalog.test.ts`; harden gallery `key` to `` `${img.url}-${i}` ``; desktop grid orphaned-4th-card
+  max-width; 11px detail chips → 12-13px.
 
-## Cleanup / known (not blocking)
+## Settled decisions
+- [[0014-projects-gallery]] — gallery completes the scaffolded collection; grid+detail; gradient
+  fallback; status/published seed coupling; lead CTA on every detail page.
+- [[leadformsheet-source-by-context]] — LeadFormSheet source flips on `context` presence.
+
+## Cleanup / known (not blocking, carried over)
 - `src/components/CtaStrip.tsx` is DEAD CODE (own Zalo guard) — delete or settings-wire in a cleanup.
 - Home `metadata.description` still mentions Zalo while the CTA is hidden — self-heals once OA URL set.
-- DB follow-ups still open: catalog "filter → view detail" golden e2e; post-deploy Google Rich
-  Results validation.
-
-## Operator action (unblocks backlog)
-- Set the real **Zalo OA URL** in `/admin` → Settings → Zalo links reappear (hidden while "#").
+- DB follow-ups still open: catalog "filter → view detail" golden e2e; post-deploy Google Rich Results.
 
 ## Context to Load (paths only, do NOT paste contents)
-- .claude/memory/decisions/0013-lead-form-client-zod-validation.md
-- fukione-web/src/lib/leads/forms.ts
-- fukione-web/src/components/site/FieldError.tsx
-- .claude/memory/sessions/2026-06-25.md
+- .claude/memory/decisions/0014-projects-gallery.md
+- docs/superpowers/specs/2026-06-25-projects-gallery-design.md
+- docs/superpowers/plans/2026-06-25-projects-gallery.md
+- fukione-web/src/lib/data/catalog.ts
+- fukione-web/src/components/site/ProjectQuoteCta.tsx
+- fukione-web/src/app/(app)/projects/[slug]/page.tsx
 
 ## Blocked / Needs user input
-- None for Slice 3 (green). Awaiting user go-ahead to commit/push/PR.
+- None. Branch is green + verified; awaiting push/PR.
 
-ACTION: Slice 3 is green + verified. Commit + push + PR when the user confirms, then M4-B (or the
-cleanup items) when asked.
+ACTION: Projects gallery is green + verified. Push + open PR (memory on-branch), run /review-pr,
+then M4-B about/Maps or blog when asked.

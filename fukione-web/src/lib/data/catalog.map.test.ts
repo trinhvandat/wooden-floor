@@ -49,16 +49,35 @@ describe("mapCollection", () => {
 });
 
 describe("mapProject", () => {
-  it("takes the first productRef as the single productId", () => {
+  it("maps all productRefs to productIds and populated images to {url, alt}", () => {
     const doc: ProjectDoc = {
-      id: 7, slug: "villa", title: "Villa", location: "HN", areaM2: 220, productRefs: [{ id: 3 }, { id: 5 }],
+      id: 7,
+      slug: "villa",
+      title: "Villa",
+      description: "desc",
+      location: "HN",
+      areaM2: 220,
+      productRefs: [{ id: 3 }, 5],
+      images: [
+        { id: 1, url: "/m/a.jpg", alt: "A" },
+        { id: 2, url: "/m/b.jpg", alt: "" },
+      ],
     };
     const j = mapProject(doc);
-    expect(j.productId).toBe("3");
+    expect(j.productIds).toEqual(["3", "5"]);
+    expect(j.images).toEqual([
+      { url: "/m/a.jpg", alt: "A" },
+      { url: "/m/b.jpg", alt: "" },
+    ]);
+    expect(j.description).toBe("desc");
     expect(j.areaM2).toBe(220);
   });
 
-  it("yields an empty productId when there are no refs", () => {
-    expect(mapProject({ id: 8, slug: "s", title: "S" }).productId).toBe("");
+  it("defaults to empty arrays/strings and skips images without a url", () => {
+    const j = mapProject({ id: 8, slug: "s", title: "S", images: [3, { id: 4 }] });
+    expect(j.productIds).toEqual([]);
+    expect(j.images).toEqual([]);
+    expect(j.description).toBe("");
+    expect(j.location).toBe("");
   });
 });

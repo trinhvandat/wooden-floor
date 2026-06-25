@@ -28,15 +28,18 @@ export type Collection = {
   productIds: string[];
 };
 
+export type ProjectImage = { url: string; alt: string };
+
 export type Project = {
   id: string;
   slug: string;
   /** Vietnamese project title */
   title: string;
+  description: string;
   location: string;
   areaM2: number;
-  productId: string;
-  images: string[];
+  productIds: string[];
+  images: ProjectImage[];
 };
 
 export type Article = {

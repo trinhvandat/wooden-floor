@@ -47,6 +47,23 @@ export async function getCollections(): Promise<Collection[]> {
 
 export async function getProjects(): Promise<Project[]> {
   const payload = await getPayload({ config });
-  const res = await payload.find({ collection: "projects", limit: 100, depth: 0 });
+  const res = await payload.find({
+    collection: "projects",
+    where: PUBLISHED,
+    limit: 100,
+    depth: 1,
+  });
   return (res.docs as unknown as ProjectDoc[]).map(mapProject);
+}
+
+export async function getProjectBySlug(slug: string): Promise<Project | null> {
+  const payload = await getPayload({ config });
+  const res = await payload.find({
+    collection: "projects",
+    where: { and: [PUBLISHED, { slug: { equals: slug } }] },
+    limit: 1,
+    depth: 1,
+  });
+  const doc = res.docs[0] as unknown as ProjectDoc | undefined;
+  return doc ? mapProject(doc) : null;
 }

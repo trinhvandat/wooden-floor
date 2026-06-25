@@ -17,6 +17,7 @@
 - [0011 — SEO + structured data (M4-A)](decisions/0011-seo-structured-data.md) — SITE_URL/BASE_OPEN_GRAPH config, metadataBase + title template + VN-path canonical, app-root sitemap/robots, JSON-LD (LocalBusiness/Product/Breadcrumb) via pure builders + `<JsonLd>`; NAP from mock SETTINGS; build deferred to DB
 - [0012 — DB-back Settings global](decisions/0012-db-back-settings.md) — prices/NAP/hours/Zalo read the Payload `settings` global via cached `getSettings()` + props to client components (not Context); `businessHours`→`hours`/`zaloOA`→`zaloUrl`; `isZaloEnabled` per-render; operator edits via /admin; mock kept as seed source
 - [0013 — lead-form client Zod validation](decisions/0013-lead-form-client-zod-validation.md) — lead forms validate inline with Zod reusing `leadInputSchema` field validators (no react-hook-form); `lib/leads/forms.ts` + `FieldError`; blur + submit-block, a11y wired, sends parsed/normalized values
+- [0014 — projects gallery (M4-B)](decisions/0014-projects-gallery.md) — `/du-an` grid + `/du-an/[slug]` detail completing the scaffolded `Projects` collection (productId→productIds, images {url,alt}, `status` field); gradient fallback; seed status:published; lead CTA on every detail page
 
 ## Conventions (conventions + gotchas, durable)
 - [english-only-artifacts](conventions/english-only-artifacts.md) — all project files in English; only user-Claude chat is Vietnamese
@@ -38,6 +39,7 @@
 - [payload-run-relative-imports](conventions/payload-run-relative-imports.md) — run seed via `tsx --env-file-if-exists` (NOT `payload run`, which silently no-ops the async script → empty DB, exit 0) + relative imports (no `@/` aliases)
 - [nextjs-opengraph-no-deep-merge](conventions/nextjs-opengraph-no-deep-merge.md) — App Router REPLACES (not deep-merges) a page's nested `openGraph`/`twitter`/`robots`; spread shared defaults (`BASE_OPEN_GRAPH`) so an override doesn't silently drop og:image
 - [playwright-mcp-screenshot-paths](conventions/playwright-mcp-screenshot-paths.md) — MCP screenshots save to the MCP server cwd, not the repo; pass an absolute path into a pre-created dir, then `git clean` them (don't commit)
+- [leadformsheet-source-by-context](conventions/leadformsheet-source-by-context.md) — LeadFormSheet sets lead `source` from `context` presence (`context ? "calculator" : "quote"`); pass NO context for a non-calculator quote CTA
 
 ## Current
 - [HANDOFF](HANDOFF.md) — latest WIP state (overwritten each session)
