@@ -13,7 +13,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BypassConsult } from "@/components/site/BypassConsult";
+import { FieldError } from "@/components/site/FieldError";
 import { formatVnd } from "@/lib/format";
+import { quoteFormSchema, collectFieldErrors, validateField } from "@/lib/leads/forms";
 import type { Settings } from "@/lib/types";
 
 export interface LeadContext {
@@ -44,19 +46,36 @@ export function LeadFormSheet({
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Reset transient state when the sheet closes so reopening shows a clean slate.
   function handleOpenChange(nextOpen: boolean) {
     if (!nextOpen) {
       setLoading(false);
       setError(null);
+      setErrors({});
     }
     onOpenChange(nextOpen);
+  }
+
+  // Validate one field on blur and merge/clear its inline error.
+  function handleBlur(field: "name" | "phone" | "email", value: string) {
+    const message = validateField(quoteFormSchema.shape[field], value);
+    setErrors((prev) => ({ ...prev, [field]: message ?? "" }));
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const website = String(new FormData(e.currentTarget).get("website") ?? "");
+
+    // Inline Zod validation — block submit and surface per-field errors.
+    const parsed = quoteFormSchema.safeParse({ name, phone, email });
+    if (!parsed.success) {
+      setErrors(collectFieldErrors(parsed.error));
+      return;
+    }
+    setErrors({});
+
     setLoading(true);
     setError(null);
     try {
@@ -67,9 +86,9 @@ export function LeadFormSheet({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           source: context ? "calculator" : "quote",
-          name,
-          phone,
-          email,
+          name: parsed.data.name,
+          phone: parsed.data.phone,
+          email: parsed.data.email,
           message: composedMessage,
           productId: context?.productId,
           area: context?.areaM2,
@@ -118,14 +137,15 @@ export function LeadFormSheet({
             <Input
               id="lf-name"
               type="text"
-              required
               placeholder="Nguyễn Văn A"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              onInvalid={(e) => e.currentTarget.setCustomValidity("Vui lòng điền thông tin này")}
-              onInput={(e) => e.currentTarget.setCustomValidity("")}
-              className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
+              onBlur={(e) => handleBlur("name", e.target.value)}
+              aria-invalid={!!errors.name}
+              aria-describedby={errors.name ? "lf-name-error" : undefined}
+              className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20 aria-[invalid=true]:border-red-500"
             />
+            <FieldError id="lf-name-error" message={errors.name} />
           </div>
 
           {/* SĐT */}
@@ -136,14 +156,16 @@ export function LeadFormSheet({
             <Input
               id="lf-phone"
               type="tel"
-              required
+              inputMode="tel"
               placeholder="0900 000 000"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              onInvalid={(e) => e.currentTarget.setCustomValidity("Vui lòng điền thông tin này")}
-              onInput={(e) => e.currentTarget.setCustomValidity("")}
-              className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
+              onBlur={(e) => handleBlur("phone", e.target.value)}
+              aria-invalid={!!errors.phone}
+              aria-describedby={errors.phone ? "lf-phone-error" : undefined}
+              className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20 aria-[invalid=true]:border-red-500"
             />
+            <FieldError id="lf-phone-error" message={errors.phone} />
           </div>
 
           {/* Email (optional) */}
@@ -158,8 +180,12 @@ export function LeadFormSheet({
               placeholder="email@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
+              onBlur={(e) => handleBlur("email", e.target.value)}
+              aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? "lf-email-error" : undefined}
+              className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20 aria-[invalid=true]:border-red-500"
             />
+            <FieldError id="lf-email-error" message={errors.email} />
           </div>
 
           {/* Ghi chú */}

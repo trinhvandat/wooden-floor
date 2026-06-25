@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BypassConsult } from "@/components/site/BypassConsult";
+import { FieldError } from "@/components/site/FieldError";
+import { surveyFormSchema, collectFieldErrors, validateField } from "@/lib/leads/forms";
 import type { Settings } from "@/lib/types";
 
 const TIME_SLOTS = ["Sáng (8:00–12:00)", "Chiều (13:00–18:00)"] as const;
@@ -38,10 +40,26 @@ export function SurveyForm({ settings }: { settings: Settings }) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Validate one field on blur and merge/clear its inline error.
+  function handleBlur(field: "name" | "phone" | "address", value: string) {
+    const message = validateField(surveyFormSchema.shape[field], value);
+    setErrors((prev) => ({ ...prev, [field]: message ?? "" }));
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const website = String(new FormData(e.currentTarget).get("website") ?? "");
+
+    // Inline Zod validation — block submit and surface per-field errors.
+    const parsed = surveyFormSchema.safeParse({ name, phone, address });
+    if (!parsed.success) {
+      setErrors(collectFieldErrors(parsed.error));
+      return;
+    }
+    setErrors({});
+
     setLoading(true);
     setError(null);
     try {
@@ -50,9 +68,9 @@ export function SurveyForm({ settings }: { settings: Settings }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           source: "survey",
-          name,
-          phone,
-          address,
+          name: parsed.data.name,
+          phone: parsed.data.phone,
+          address: parsed.data.address,
           preferredTime: timeSlot,
           message: note,
           website,
@@ -103,14 +121,15 @@ export function SurveyForm({ settings }: { settings: Settings }) {
           <Input
             id="sf-name"
             type="text"
-            required
             placeholder="Nguyễn Văn A"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            onInvalid={(e) => e.currentTarget.setCustomValidity("Vui lòng điền thông tin này")}
-            onInput={(e) => e.currentTarget.setCustomValidity("")}
-            className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
+            onBlur={(e) => handleBlur("name", e.target.value)}
+            aria-invalid={!!errors.name}
+            aria-describedby={errors.name ? "sf-name-error" : undefined}
+            className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20 aria-[invalid=true]:border-red-500"
           />
+          <FieldError id="sf-name-error" message={errors.name} />
         </div>
 
         {/* SĐT */}
@@ -124,14 +143,16 @@ export function SurveyForm({ settings }: { settings: Settings }) {
           <Input
             id="sf-phone"
             type="tel"
-            required
+            inputMode="tel"
             placeholder="0900 000 000"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            onInvalid={(e) => e.currentTarget.setCustomValidity("Vui lòng điền thông tin này")}
-            onInput={(e) => e.currentTarget.setCustomValidity("")}
-            className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
+            onBlur={(e) => handleBlur("phone", e.target.value)}
+            aria-invalid={!!errors.phone}
+            aria-describedby={errors.phone ? "sf-phone-error" : undefined}
+            className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20 aria-[invalid=true]:border-red-500"
           />
+          <FieldError id="sf-phone-error" message={errors.phone} />
         </div>
 
         {/* Địa chỉ */}
@@ -145,14 +166,15 @@ export function SurveyForm({ settings }: { settings: Settings }) {
           <Input
             id="sf-address"
             type="text"
-            required
             placeholder="Số nhà, đường, quận/huyện, thành phố"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            onInvalid={(e) => e.currentTarget.setCustomValidity("Vui lòng điền thông tin này")}
-            onInput={(e) => e.currentTarget.setCustomValidity("")}
-            className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20"
+            onBlur={(e) => handleBlur("address", e.target.value)}
+            aria-invalid={!!errors.address}
+            aria-describedby={errors.address ? "sf-address-error" : undefined}
+            className="rounded-input border-line bg-field text-ink placeholder:text-muted/60 focus-visible:border-trust focus-visible:ring-trust/20 aria-[invalid=true]:border-red-500"
           />
+          <FieldError id="sf-address-error" message={errors.address} />
         </div>
 
         {/* Khung giờ */}
