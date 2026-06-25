@@ -155,7 +155,7 @@ export function CalculatorWidget({ product, products, variant, settings }: Calcu
                 )}
                 <div className="flex justify-between">
                   <span>Phào nẹp (ước tính)</span>
-                  <span>~{formatVnd(estimate.trim)}</span>
+                  <span>khoảng {formatVnd(estimate.trim)}</span>
                 </div>
               </div>
 
@@ -168,7 +168,7 @@ export function CalculatorWidget({ product, products, variant, settings }: Calcu
                   TẠM TÍNH
                 </span>
                 <span className="text-[15px] font-extrabold text-ink">
-                  ~{formatVnd(estimate.total)}
+                  khoảng {formatVnd(estimate.total)}
                 </span>
               </div>
 
