@@ -21,5 +21,14 @@ export const Projects: CollectionConfig = {
       relationTo: 'products',
       hasMany: true,
     },
+    {
+      name: 'status',
+      type: 'select',
+      defaultValue: 'draft',
+      options: [
+        { label: 'Draft', value: 'draft' },
+        { label: 'Published', value: 'published' },
+      ],
+    },
   ],
 }

@@ -273,6 +273,7 @@ export interface Project {
   areaM2?: number | null;
   images?: (number | Media)[] | null;
   productRefs?: (number | Product)[] | null;
+  status?: ('draft' | 'published') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -516,6 +517,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   areaM2?: T;
   images?: T;
   productRefs?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

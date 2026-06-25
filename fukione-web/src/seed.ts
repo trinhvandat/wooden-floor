@@ -61,13 +61,17 @@ async function seed() {
 
   // 3. Projects
   for (const j of PROJECTS) {
-    const productRef = productIdByMockId.get(j.productId);
+    const productRefs = j.productIds
+      .map((id) => productIdByMockId.get(id))
+      .filter((id): id is number => id != null);
     const data = {
       title: j.title,
       slug: j.slug,
+      description: j.description,
       location: j.location,
       areaM2: j.areaM2,
-      ...(productRef ? { productRefs: [productRef] } : {}),
+      status: "published" as const,
+      productRefs: productRefs.length ? productRefs : undefined,
     };
     const existing = await payload.find({
       collection: "projects",

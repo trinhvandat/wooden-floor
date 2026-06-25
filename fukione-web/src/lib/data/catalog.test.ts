@@ -4,7 +4,7 @@ const { findMock } = vi.hoisted(() => ({ findMock: vi.fn() }));
 vi.mock("@payload-config", () => ({ default: {} }));
 vi.mock("payload", () => ({ getPayload: vi.fn(async () => ({ find: findMock })) }));
 
-import { getProducts, getProductBySlug, getCollections, getProjects } from "./catalog";
+import { getProducts, getProductBySlug, getCollections, getProjects, getProjectBySlug } from "./catalog";
 
 beforeEach(() => findMock.mockReset());
 
@@ -49,9 +49,26 @@ describe("getCollections", () => {
 });
 
 describe("getProjects", () => {
-  it("maps project docs", async () => {
+  it("maps published project docs", async () => {
     findMock.mockResolvedValue({ docs: [{ id: 7, slug: "p", title: "P", productRefs: [10] }] });
     const projects = await getProjects();
-    expect(projects[0].productId).toBe("10");
+    expect(projects[0].productIds).toEqual(["10"]);
+    expect(findMock).toHaveBeenCalledWith(
+      expect.objectContaining({ collection: "projects", where: { status: { equals: "published" } } }),
+    );
+  });
+});
+
+describe("getProjectBySlug", () => {
+  it("returns the mapped project when found", async () => {
+    findMock.mockResolvedValue({ docs: [{ id: 7, slug: "villa", title: "Villa", productRefs: [10] }] });
+    const project = await getProjectBySlug("villa");
+    expect(project?.slug).toBe("villa");
+    expect(project?.productIds).toEqual(["10"]);
+  });
+
+  it("returns null when not found", async () => {
+    findMock.mockResolvedValue({ docs: [] });
+    expect(await getProjectBySlug("nope")).toBeNull();
   });
 });
