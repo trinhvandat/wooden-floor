@@ -1,47 +1,51 @@
-# HANDOFF — DB-back Settings ready to PR — 2026-06-24
+# HANDOFF — Slice 3 conversion/desktop polish ready to PR — 2026-06-25
 
 ## Current goal
-DB-back Settings is code-complete + DB-verified on branch `feat/db-back-settings` (about to PR,
-memory on-branch). M1–M3, M4-A, a11y, seed-fix, and DB-back Settings are all done. The next
-requested slice is conversion/desktop polish (was "slice 3").
+Slice 3 (conversion/desktop polish) is code-complete + verified on branch `feat/conversion-polish`
+(memory saved on-branch; not yet committed/pushed). Everything through M4-A, a11y, DB-back catalog
++ Settings, and now conversion polish is done. Next requested slice after this is M4-B (trust/content
+pages).
 
 ## Done (settled, do not redo)
-- **DB-back Settings** (this branch): prices/NAP/hours/Zalo now read the Payload `settings` global
-  via cached `getSettings()` (`lib/data/settings.ts`) + pure mapper; server components self-fetch,
-  client tree (Calculator/LeadFormSheet/BypassConsult/SurveyForm/MobileNav) gets a `settings` prop;
-  seed writes the global; `isZaloEnabled` per-render. See [[0012-db-back-settings]]. Verified DB
-  end-to-end: `pnpm seed` "…1 settings global", `pnpm build` exit 0, 43/43, tsc 0, lint 0.
-- Earlier today (merged): M4-A SEO (#11), a11y quick-wins (#12), `pnpm seed` runner fix (#13).
-- Earlier (merged): M2 DB-back catalog, lead funnel + async notify.
-
-## Operator action (unblocks a backlog item)
-- Set the real **Zalo OA URL** in `/admin` → Settings → all Zalo links auto-reappear (the
-  `isZaloEnabled` guard hides them while it's "#"). Same for NAP / prices / hours — now editable.
+- **Slice 3 conversion polish** (this branch), all verified (tsc 0, lint 0, 43/43, build OK,
+  Playwright 375+1440 + 0 console errors):
+  - Calculator `~` (read as minus) → "khoảng" on line-item + total (`CalculatorWidget.tsx`).
+  - "Xóa bộ lọc" teal → neutral `border-line/text-muted` (`ProductFilters.tsx`); teal reserved for trust.
+  - Duplicate "Nhận báo giá" CTAs: mobile sticky bar relabeled **"Tính chi phí"** (scrolls to calc)
+    vs calculator's "Nhận báo giá" (opens form) — `products/[slug]/page.tsx`.
+  - Product-detail desktop **two-column** (gallery left / header+calculator right), page capped
+    1180px — fixes full-viewport hero (`products/[slug]/page.tsx`).
+  - `/bao-gia` desktop **two-column** (intro left / calculator ≤420px right); mobile unchanged
+    (`quote/page.tsx`).
+  - Lead forms: native `required` → **inline Zod** (blur + submit-block), a11y wired. New
+    `lib/leads/forms.ts` + `components/site/FieldError.tsx`. See [[0013-lead-form-client-zod-validation]].
+  - ProductCard `<img alt>` was already correct (next/image + alt) → dropped from scope.
+- Earlier (merged to master): README (#14), M4-A SEO (#11), a11y (#12), seed-runner fix (#13),
+  DB-back Settings, DB-back catalog, lead funnel + async notify.
 
 ## In progress / Next steps
-- Push `feat/db-back-settings` + PR.
-- **Slice 3 — conversion/desktop polish** (the user's other chosen slice): product-detail hero is
-  full-viewport at 1440px; `/bao-gia` is a narrow card in a wide page (two-column ≥1024px);
-  calculator "~" reads as a minus (→ "khoảng"/"≈"); lead form should use Zod inline errors (not
-  native `required`); "Xóa bộ lọc" uses teal (reserve teal for trust); duplicate "Nhận báo giá"
-  CTAs on detail; ProductCard needs a real `<img alt>` slot.
-- Later: M4-B trust/content pages (projects gallery / about + Maps / blog from Articles).
+- Commit Slice 3 (`/git-commit`), push `feat/conversion-polish`, open PR (memory ships in same PR).
+- **M4-B — trust/content pages**: projects gallery, about + Google Maps, blog from Articles collection.
+- Optional polish leftovers: `/bao-gia` desktop left column is sparse (could host trust signals);
+  empty-phone inline error says "không hợp lệ" (matches server — accepted).
 
 ## Cleanup / known (not blocking)
-- `src/components/CtaStrip.tsx` is DEAD CODE (not rendered) with its own Zalo guard — delete or
-  settings-wire in a cleanup so there's one Zalo-visibility source of truth.
-- Home `metadata.description` still mentions Zalo while the CTA is hidden — self-heals once the OA
-  URL is set.
-- DB follow-ups still open: the catalog "filter → view detail" golden e2e; post-deploy Google Rich
+- `src/components/CtaStrip.tsx` is DEAD CODE (own Zalo guard) — delete or settings-wire in a cleanup.
+- Home `metadata.description` still mentions Zalo while the CTA is hidden — self-heals once OA URL set.
+- DB follow-ups still open: catalog "filter → view detail" golden e2e; post-deploy Google Rich
   Results validation.
 
+## Operator action (unblocks backlog)
+- Set the real **Zalo OA URL** in `/admin` → Settings → Zalo links reappear (hidden while "#").
+
 ## Context to Load (paths only, do NOT paste contents)
-- .claude/memory/decisions/0012-db-back-settings.md
-- fukione-web/src/lib/data/settings.ts
-- .claude/memory/sessions/2026-06-24.md
+- .claude/memory/decisions/0013-lead-form-client-zod-validation.md
+- fukione-web/src/lib/leads/forms.ts
+- fukione-web/src/components/site/FieldError.tsx
+- .claude/memory/sessions/2026-06-25.md
 
 ## Blocked / Needs user input
-- Zalo OA URL (operator sets it in /admin now — no longer a code dependency).
+- None for Slice 3 (green). Awaiting user go-ahead to commit/push/PR.
 
-ACTION: DB-back Settings is green + DB-verified. Push + PR, then slice 3 (conversion/desktop polish)
-or M4-B when asked.
+ACTION: Slice 3 is green + verified. Commit + push + PR when the user confirms, then M4-B (or the
+cleanup items) when asked.

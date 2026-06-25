@@ -225,7 +225,7 @@ export function ProductFilters({ products }: { products: Product[] }) {
               <button
                 type="button"
                 onClick={clearAll}
-                className="mt-2 rounded-pill border-2 border-trust px-5 py-2 text-[13px] font-bold text-trust hover:bg-trust-soft"
+                className="mt-2 rounded-pill border-2 border-line px-5 py-2 text-[13px] font-bold text-muted hover:border-ink hover:text-ink"
               >
                 Xóa bộ lọc
               </button>
