@@ -316,6 +316,12 @@ export default async function HomePage() {
                 Hàng nghìn ngôi nhà Hà Nội đã chọn FUKIONE
               </h2>
             </div>
+            <Link
+              href="/du-an"
+              className="text-[13px] font-bold text-cta hover:underline"
+            >
+              Xem tất cả →
+            </Link>
           </div>
 
           <div className="mt-12 grid gap-6 lg:grid-cols-12">

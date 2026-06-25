@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
-import { getProducts } from "@/lib/data/catalog";
+import { getProducts, getProjects } from "@/lib/data/catalog";
 import { absoluteUrl } from "@/lib/seo/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticPaths = ["/", "/san-pham", "/bao-gia", "/dat-lich-khao-sat"];
+  const staticPaths = ["/", "/san-pham", "/bao-gia", "/dat-lich-khao-sat", "/du-an"];
   const staticEntries: MetadataRoute.Sitemap = staticPaths.map((p) => ({
     url: absoluteUrl(p),
     changeFrequency: "weekly",
@@ -17,5 +17,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticEntries, ...productEntries];
+  const projects = await getProjects();
+  const projectEntries: MetadataRoute.Sitemap = projects.map((p) => ({
+    url: absoluteUrl(`/du-an/${p.slug}`),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticEntries, ...productEntries, ...projectEntries];
 }
