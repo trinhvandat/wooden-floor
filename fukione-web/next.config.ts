@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
       { source: "/bao-gia", destination: "/quote" },
       { source: "/dat-lich-khao-sat", destination: "/book-survey" },
       { source: "/cam-on", destination: "/thank-you" },
+      { source: "/du-an", destination: "/projects" },
     ];
   },
 };

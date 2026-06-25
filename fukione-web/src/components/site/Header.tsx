@@ -7,7 +7,7 @@ import { MobileNav } from "@/components/site/MobileNav";
 const NAV = [
   { label: "Sản phẩm", href: "/san-pham" },
   { label: "Bộ sưu tập", href: "/#bo-suu-tap" },
-  { label: "Dự án", href: "/#du-an" },
+  { label: "Dự án", href: "/du-an" },
   { label: "Báo giá", href: "/bao-gia" },
 ];
 
