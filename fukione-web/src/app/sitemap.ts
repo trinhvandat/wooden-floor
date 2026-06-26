@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import { getProducts, getProjects } from "@/lib/data/catalog";
+import { getArticles } from "@/lib/data/articles";
 import { absoluteUrl } from "@/lib/seo/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticPaths = ["/", "/san-pham", "/bao-gia", "/dat-lich-khao-sat", "/du-an", "/gioi-thieu"];
+  const staticPaths = ["/", "/san-pham", "/bao-gia", "/dat-lich-khao-sat", "/du-an", "/gioi-thieu", "/tin-tuc"];
   const staticEntries: MetadataRoute.Sitemap = staticPaths.map((p) => ({
     url: absoluteUrl(p),
     changeFrequency: "weekly",
@@ -24,5 +25,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticEntries, ...productEntries, ...projectEntries];
+  const articles = await getArticles();
+  const articleEntries: MetadataRoute.Sitemap = articles.map((a) => ({
+    url: absoluteUrl(`/tin-tuc/${a.slug}`),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticEntries, ...productEntries, ...projectEntries, ...articleEntries];
 }
