@@ -25,6 +25,7 @@ export function extractMapSrc(mapEmbed: string): string | null {
   }
   if (url.protocol !== "https:") return null;
   if (!GOOGLE_MAPS_HOSTS.has(url.hostname)) return null;
-  if (!url.pathname.startsWith("/maps")) return null;
+  const path = url.pathname;
+  if (path !== "/maps" && !path.startsWith("/maps/")) return null;
   return url.toString();
 }
