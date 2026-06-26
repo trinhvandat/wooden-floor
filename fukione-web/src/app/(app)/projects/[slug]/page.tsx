@@ -9,7 +9,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { SITE_URL, BASE_OPEN_GRAPH } from "@/lib/seo/site";
 import { getSettings } from "@/lib/data/settings";
-import { ProjectQuoteCta } from "@/components/site/ProjectQuoteCta";
+import { LeadCtaSection } from "@/components/site/LeadCtaSection";
 import { BottomActionBar } from "@/components/site/BottomActionBar";
 
 // Next.js 16: params is a Promise
@@ -111,7 +111,11 @@ export default async function ProjectDetailPage({ params }: { params: PageParams
             </div>
           </section>
         )}
-        <ProjectQuoteCta settings={settings} />
+        <LeadCtaSection
+          settings={settings}
+          title="Muốn một công trình tương tự?"
+          body="Để lại thông tin — FUKIONE sẽ tư vấn và báo giá cho không gian của bạn."
+        />
       </div>
       <BottomActionBar primaryLabel="Nhận báo giá" primaryHref="#nhan-bao-gia" />
     </div>
