@@ -2,7 +2,7 @@
 // 8 products spanning all filter dimensions: thicknessMm (8|12), waterproof (true|false),
 // varied color and roomTypes so catalog filters have real data to work with.
 
-import type { Collection, Product, Project } from "./types";
+import type { Collection, Product, Project, RichTextContent } from "./types";
 
 // ---------------------------------------------------------------------------
 // Products
@@ -234,5 +234,75 @@ export const PROJECTS: Project[] = [
     areaM2: 95,
     productIds: [],
     images: [],
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Articles
+// ---------------------------------------------------------------------------
+
+function lexicalBody(heading: string, paragraphs: string[]): RichTextContent {
+  const text = (t: string) => ({
+    type: "text", text: t, detail: 0, format: 0, mode: "normal", style: "", version: 1,
+  });
+  return {
+    root: {
+      type: "root",
+      direction: "ltr",
+      format: "",
+      indent: 0,
+      version: 1,
+      children: [
+        { type: "heading", tag: "h2", direction: "ltr", format: "", indent: 0, version: 1, children: [text(heading)] },
+        ...paragraphs.map((p) => ({
+          type: "paragraph", direction: "ltr", format: "", indent: 0, version: 1, textFormat: 0, children: [text(p)],
+        })),
+      ],
+    },
+  };
+}
+
+export interface MockArticle {
+  slug: string;
+  title: string;
+  excerpt: string;
+  tags: string[];
+  publishedAt: string;
+  body: RichTextContent;
+}
+
+export const ARTICLES: MockArticle[] = [
+  {
+    slug: "chon-san-go-chong-nuoc",
+    title: "Cách chọn sàn gỗ chống nước cho căn hộ",
+    excerpt: "Tiêu chí chọn sàn gỗ chống nước bền đẹp cho phòng khách và bếp.",
+    tags: ["chống nước", "kinh nghiệm"],
+    publishedAt: "2026-06-10T00:00:00.000Z",
+    body: lexicalBody("Vì sao nên chọn sàn gỗ chống nước", [
+      "Sàn gỗ chống nước phù hợp với khí hậu ẩm của Hà Nội, hạn chế cong vênh.",
+      "Hãy ưu tiên cốt gỗ HDF lõi xanh và lớp phủ chống xước cho khu vực đi lại nhiều.",
+    ]),
+  },
+  {
+    slug: "bao-duong-san-go-dung-cach",
+    title: "Bảo dưỡng sàn gỗ đúng cách",
+    excerpt: "Những lưu ý đơn giản giúp sàn gỗ bền màu theo năm tháng.",
+    tags: ["bảo dưỡng", "mẹo"],
+    publishedAt: "2026-06-05T00:00:00.000Z",
+    body: lexicalBody("Bảo dưỡng sàn gỗ tại nhà", [
+      "Lau sàn bằng khăn ẩm vắt khô, tránh đổ nước trực tiếp lên bề mặt.",
+      "Dùng chân đế nỉ cho bàn ghế để tránh trầy xước khi di chuyển.",
+    ]),
+  },
+  {
+    slug: "san-go-cho-phong-ngu",
+    title: "Chọn màu sàn gỗ cho phòng ngủ ấm cúng",
+    excerpt: "Gợi ý phối màu sàn gỗ giúp phòng ngủ ấm áp, thư giãn.",
+    tags: ["phối màu", "phòng ngủ"],
+    publishedAt: "2026-05-28T00:00:00.000Z",
+    body: lexicalBody("Phối màu sàn gỗ cho phòng ngủ", [
+      "Tông nâu ấm và vân gỗ tự nhiên tạo cảm giác gần gũi cho không gian nghỉ ngơi.",
+      "Kết hợp sàn màu trung tính với nội thất sáng để phòng ngủ rộng và thoáng hơn.",
+    ]),
   },
 ];
