@@ -18,6 +18,7 @@
 - [0012 — DB-back Settings global](decisions/0012-db-back-settings.md) — prices/NAP/hours/Zalo read the Payload `settings` global via cached `getSettings()` + props to client components (not Context); `businessHours`→`hours`/`zaloOA`→`zaloUrl`; `isZaloEnabled` per-render; operator edits via /admin; mock kept as seed source
 - [0013 — lead-form client Zod validation](decisions/0013-lead-form-client-zod-validation.md) — lead forms validate inline with Zod reusing `leadInputSchema` field validators (no react-hook-form); `lib/leads/forms.ts` + `FieldError`; blur + submit-block, a11y wired, sends parsed/normalized values
 - [0014 — projects gallery (M4-B)](decisions/0014-projects-gallery.md) — `/du-an` grid + `/du-an/[slug]` detail completing the scaffolded `Projects` collection (productId→productIds, images {url,alt}, `status` field); gradient fallback; seed status:published; lead CTA on every detail page
+- [0015 — about page + Maps (M4-B)](decisions/0015-about-page-maps.md) — `/gioi-thieu` story+trust+showroom map+CTA; reuses `Settings` NAP/mapEmbed; `extractMapSrc` safe-iframe; `ProjectQuoteCta`→shared `LeadCtaSection`; map renders only when `mapEmbed` configured
 
 ## Conventions (conventions + gotchas, durable)
 - [english-only-artifacts](conventions/english-only-artifacts.md) — all project files in English; only user-Claude chat is Vietnamese
@@ -40,6 +41,7 @@
 - [nextjs-opengraph-no-deep-merge](conventions/nextjs-opengraph-no-deep-merge.md) — App Router REPLACES (not deep-merges) a page's nested `openGraph`/`twitter`/`robots`; spread shared defaults (`BASE_OPEN_GRAPH`) so an override doesn't silently drop og:image
 - [playwright-mcp-screenshot-paths](conventions/playwright-mcp-screenshot-paths.md) — MCP screenshots save to the MCP server cwd, not the repo; pass an absolute path into a pre-created dir, then `git clean` them (don't commit)
 - [leadformsheet-source-by-context](conventions/leadformsheet-source-by-context.md) — LeadFormSheet sets lead `source` from `context` presence (`context ? "calculator" : "quote"`); pass NO context for a non-calculator quote CTA
+- [safe-embed-iframe-validation](conventions/safe-embed-iframe-validation.md) — operator-supplied embeds (mapEmbed) → host-allowlist URL validator → controlled `<iframe>`; never `dangerouslySetInnerHTML`; unit-test bypass vectors
 
 ## Current
 - [HANDOFF](HANDOFF.md) — latest WIP state (overwritten each session)
