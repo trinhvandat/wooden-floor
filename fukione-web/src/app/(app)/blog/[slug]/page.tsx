@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: PageParams }) {
       ...BASE_OPEN_GRAPH,
       title: `${article.seo.title} — FUKIONE`,
       description: article.seo.description,
-      ...(article.coverImage ? { images: [article.coverImage.url] } : {}),
+      ...(article.coverImage ? { images: [{ url: article.coverImage.url, alt: article.coverImage.alt }] } : {}),
     },
   };
 }

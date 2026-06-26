@@ -95,4 +95,12 @@ describe("buildArticleJsonLd", () => {
     ) as Record<string, unknown>;
     expect("image" in ld).toBe(false);
   });
+
+  it("omits datePublished when publishedAt is empty", () => {
+    const ld = buildArticleJsonLd(
+      { title: "X", excerpt: "y", slug: "x", publishedAt: "" },
+      "https://fukione.vn",
+    ) as Record<string, unknown>;
+    expect("datePublished" in ld).toBe(false);
+  });
 });

@@ -64,6 +64,7 @@ export function buildBreadcrumbJsonLd(
   };
 }
 
+/** Build BlogPosting JSON-LD for a blog article. */
 export function buildArticleJsonLd(
   a: { title: string; excerpt: string; slug: string; publishedAt: string; image?: string },
   siteUrl: string,
@@ -74,7 +75,7 @@ export function buildArticleJsonLd(
     "@type": "BlogPosting",
     headline: a.title,
     description: a.excerpt,
-    datePublished: a.publishedAt,
+    ...(a.publishedAt ? { datePublished: a.publishedAt } : {}),
     mainEntityOfPage: url,
     author: { "@type": "Organization", name: "FUKIONE" },
     publisher: { "@type": "Organization", name: "FUKIONE" },
