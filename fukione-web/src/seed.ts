@@ -1,6 +1,6 @@
 import { getPayload } from "payload";
 import config from "../payload.config";
-import { PRODUCTS, COLLECTIONS, PROJECTS } from "./lib/mock-data";
+import { PRODUCTS, COLLECTIONS, PROJECTS, ARTICLES } from "./lib/mock-data";
 import { SETTINGS } from "./lib/settings";
 
 // Idempotent: every entity is upserted by its unique `slug`, so re-running
@@ -85,6 +85,29 @@ async function seed() {
     }
   }
 
+  // 3b. Articles
+  for (const a of ARTICLES) {
+    const data = {
+      title: a.title,
+      slug: a.slug,
+      excerpt: a.excerpt,
+      tags: a.tags,
+      publishedAt: a.publishedAt,
+      body: a.body,
+      status: "published" as const,
+    };
+    const existing = await payload.find({
+      collection: "articles",
+      where: { slug: { equals: a.slug } },
+      limit: 1,
+    });
+    if (existing.docs.length) {
+      await payload.update({ collection: "articles", id: existing.docs[0].id, data });
+    } else {
+      await payload.create({ collection: "articles", data });
+    }
+  }
+
   // 4. Settings global (singleton) — seed initial real values from the mock.
   await payload.updateGlobal({
     slug: "settings",
@@ -99,7 +122,7 @@ async function seed() {
 
   // eslint-disable-next-line no-console
   console.log(
-    `Seeded ${COLLECTIONS.length} collections, ${PRODUCTS.length} products, ${PROJECTS.length} projects, 1 settings global.`,
+    `Seeded ${COLLECTIONS.length} collections, ${PRODUCTS.length} products, ${PROJECTS.length} projects, ${ARTICLES.length} articles, 1 settings global.`,
   );
   process.exit(0);
 }

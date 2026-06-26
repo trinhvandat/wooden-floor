@@ -3,6 +3,7 @@ import {
   buildLocalBusinessJsonLd,
   buildProductJsonLd,
   buildBreadcrumbJsonLd,
+  buildArticleJsonLd,
 } from "./jsonld";
 import type { Product } from "@/lib/types";
 
@@ -65,5 +66,41 @@ describe("buildBreadcrumbJsonLd", () => {
     expect(items).toHaveLength(2);
     expect(items[0].position).toBe(1);
     expect(items[1].item).toBe("https://fukione.vn/san-pham");
+  });
+});
+
+describe("buildArticleJsonLd", () => {
+  it("builds a BlogPosting with headline, date, url, and optional image", () => {
+    const ld = buildArticleJsonLd(
+      {
+        title: "Sàn gỗ cho phòng tắm",
+        excerpt: "Chọn sàn chống nước.",
+        slug: "san-go-cho-phong-tam",
+        publishedAt: "2026-06-12T00:00:00.000Z",
+        image: "/m/a.jpg",
+      },
+      "https://fukione.vn",
+    ) as Record<string, unknown>;
+    expect(ld["@type"]).toBe("BlogPosting");
+    expect(ld.headline).toBe("Sàn gỗ cho phòng tắm");
+    expect(ld.datePublished).toBe("2026-06-12T00:00:00.000Z");
+    expect(ld.mainEntityOfPage).toBe("https://fukione.vn/tin-tuc/san-go-cho-phong-tam");
+    expect(ld.image).toBe("https://fukione.vn/m/a.jpg");
+  });
+
+  it("omits image when not provided", () => {
+    const ld = buildArticleJsonLd(
+      { title: "X", excerpt: "y", slug: "x", publishedAt: "2026-01-01T00:00:00.000Z" },
+      "https://fukione.vn",
+    ) as Record<string, unknown>;
+    expect("image" in ld).toBe(false);
+  });
+
+  it("omits datePublished when publishedAt is empty", () => {
+    const ld = buildArticleJsonLd(
+      { title: "X", excerpt: "y", slug: "x", publishedAt: "" },
+      "https://fukione.vn",
+    ) as Record<string, unknown>;
+    expect("datePublished" in ld).toBe(false);
   });
 });

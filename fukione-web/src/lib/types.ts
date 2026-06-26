@@ -42,15 +42,33 @@ export type Project = {
   images: ProjectImage[];
 };
 
-export type Article = {
+/** Lexical editor-state shape from the Payload richText `body` field (what <RichText data> accepts). */
+export type RichTextContent = {
+  root: {
+    type: string;
+    children: { type: string; version: number; [k: string]: unknown }[];
+    direction: ("ltr" | "rtl") | null;
+    format: "" | "left" | "start" | "center" | "right" | "end" | "justify";
+    indent: number;
+    version: number;
+  };
+  [k: string]: unknown;
+};
+
+export type ArticleSummary = {
   id: string;
   slug: string;
   /** Vietnamese article title */
   title: string;
-  summary: string;
-  coverImage: string;
-  publishedAt: string;
-  body: string;
+  excerpt: string;
+  coverImage: { url: string; alt: string } | null;
+  publishedAt: string; // ISO string ("" if unset)
+  tags: string[];
+};
+
+export type Article = ArticleSummary & {
+  body: RichTextContent;
+  seo: { title: string; description: string };
 };
 
 export type Settings = {
