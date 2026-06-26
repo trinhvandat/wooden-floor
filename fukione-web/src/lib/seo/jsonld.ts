@@ -63,3 +63,21 @@ export function buildBreadcrumbJsonLd(
     })),
   };
 }
+
+export function buildArticleJsonLd(
+  a: { title: string; excerpt: string; slug: string; publishedAt: string; image?: string },
+  siteUrl: string,
+) {
+  const url = new URL(`/tin-tuc/${a.slug}`, siteUrl).toString();
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: a.title,
+    description: a.excerpt,
+    datePublished: a.publishedAt,
+    mainEntityOfPage: url,
+    author: { "@type": "Organization", name: "FUKIONE" },
+    publisher: { "@type": "Organization", name: "FUKIONE" },
+    ...(a.image ? { image: new URL(a.image, siteUrl).toString() } : {}),
+  };
+}
