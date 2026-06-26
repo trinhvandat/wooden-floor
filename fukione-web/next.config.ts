@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
       { source: "/cam-on", destination: "/thank-you" },
       { source: "/du-an", destination: "/projects" },
       { source: "/du-an/:slug", destination: "/projects/:slug" },
+      { source: "/gioi-thieu", destination: "/about" },
     ];
   },
 };

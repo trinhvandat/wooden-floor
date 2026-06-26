@@ -5,8 +5,14 @@ import { LeadFormSheet } from "@/components/LeadFormSheet";
 import { BypassConsult } from "@/components/site/BypassConsult";
 import type { Settings } from "@/lib/types";
 
-/** Lead CTA for the project detail page — opens the shared quote sheet (source: "quote"). */
-export function ProjectQuoteCta({ settings }: { settings: Settings }) {
+interface LeadCtaSectionProps {
+  settings: Settings;
+  title: string;
+  body: string;
+}
+
+/** Shared lead CTA — opens the quote sheet with no context (records source: "quote"). */
+export function LeadCtaSection({ settings, title, body }: LeadCtaSectionProps) {
   const [open, setOpen] = useState(false);
   return (
     <section
@@ -14,10 +20,10 @@ export function ProjectQuoteCta({ settings }: { settings: Settings }) {
       className="scroll-mt-20 rounded-card border border-line bg-surface p-6 text-center"
     >
       <h2 className="font-display text-[19px] font-extrabold leading-tight text-ink">
-        Muốn một công trình tương tự?
+        {title}
       </h2>
       <p className="mx-auto mt-1.5 max-w-md text-[13.5px] leading-relaxed text-muted">
-        Để lại thông tin — FUKIONE sẽ tư vấn và báo giá cho không gian của bạn.
+        {body}
       </p>
       <button
         type="button"

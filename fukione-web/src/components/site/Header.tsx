@@ -8,6 +8,7 @@ const NAV = [
   { label: "Sản phẩm", href: "/san-pham" },
   { label: "Bộ sưu tập", href: "/#bo-suu-tap" },
   { label: "Dự án", href: "/du-an" },
+  { label: "Giới thiệu", href: "/gioi-thieu" },
   { label: "Báo giá", href: "/bao-gia" },
 ];
 

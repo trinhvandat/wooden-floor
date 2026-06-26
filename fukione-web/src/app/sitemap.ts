@@ -3,7 +3,7 @@ import { getProducts, getProjects } from "@/lib/data/catalog";
 import { absoluteUrl } from "@/lib/seo/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticPaths = ["/", "/san-pham", "/bao-gia", "/dat-lich-khao-sat", "/du-an"];
+  const staticPaths = ["/", "/san-pham", "/bao-gia", "/dat-lich-khao-sat", "/du-an", "/gioi-thieu"];
   const staticEntries: MetadataRoute.Sitemap = staticPaths.map((p) => ({
     url: absoluteUrl(p),
     changeFrequency: "weekly",
